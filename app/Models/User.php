@@ -11,9 +11,11 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
+        'branch',
         'name',
         'email',
         'password',
+        'role',
     ];
 
     protected $hidden = [
