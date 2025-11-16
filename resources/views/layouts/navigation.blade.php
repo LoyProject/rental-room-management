@@ -11,12 +11,76 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex items-center">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    <!-- Site Dropdown -->
+                    <x-dropdown align="left" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-600 bg-white hover:text-gray-800 focus:outline-none transition ease-in-out duration-150">
+                                {{ __('Site') }}
+                                <svg class="ml-1 h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('sites.index')">
+                                {{ __('Site List') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('sites.create')">
+                                {{ __('Add Site') }}
+                            </x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
+
+                    <!-- Block Dropdown -->
+                    <x-dropdown align="left" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-600 bg-white hover:text-gray-800 focus:outline-none transition ease-in-out duration-150">
+                                {{ __('Block') }}
+                                <svg class="ml-1 h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('blocks.index')">
+                                {{ __('Block List') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('blocks.create')">
+                                {{ __('Add Block') }}
+                            </x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
+
+                    <!-- Customer Dropdown -->
+                    <x-dropdown align="left" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-600 bg-white hover:text-gray-800 focus:outline-none transition ease-in-out duration-150">
+                                {{ __('Customer') }}
+                                <svg class="ml-1 h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('customers.index')">
+                                {{ __('Customer List') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('customers.create')">
+                                {{ __('Add Customer') }}
+                            </x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
                 </div>
             </div>
+
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -70,6 +134,39 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            <!-- Site -->
+            <div class="mt-1 border-t border-gray-200 pt-2">
+                <div class="px-4 text-xs text-gray-500">{{ __('Site') }}</div>
+                <x-responsive-nav-link :href="route('sites.index')">
+                    {{ __('Site List') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('sites.create')">
+                    {{ __('Add Site') }}
+                </x-responsive-nav-link>
+            </div>
+
+            <!-- Block -->
+            <div class="mt-1 border-t border-gray-200 pt-2">
+                <div class="px-4 text-xs text-gray-500">{{ __('Block') }}</div>
+                <x-responsive-nav-link :href="route('blocks.index')">
+                    {{ __('Block List') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('blocks.create')">
+                    {{ __('Add Block') }}
+                </x-responsive-nav-link>
+            </div>
+
+            <!-- Customer -->
+            <div class="mt-1 border-t border-gray-200 pt-2">
+                <div class="px-4 text-xs text-gray-500">{{ __('Customer') }}</div>
+                <x-responsive-nav-link :href="route('customers.index')">
+                    {{ __('Customer List') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('customers.create')">
+                    {{ __('Add Customer') }}
+                </x-responsive-nav-link>
+            </div>
         </div>
 
         <!-- Responsive Settings Options -->
