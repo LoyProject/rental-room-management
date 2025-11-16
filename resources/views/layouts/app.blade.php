@@ -68,10 +68,10 @@
                         </button>
 
                         <div x-show="openSite" x-cloak class="mt-1 space-y-1 px-2">
-                            <a href="{{ route('sites.index') }}" class="block px-3 py-2 rounded-md text-sm {{ request()->routeIs('sites.index') ? 'bg-purple-50 text-purple-800' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"></a>
+                            <a href="{{ route('sites.index') }}" class="block px-3 py-2 rounded-md text-sm {{ request()->routeIs('sites.index') ? 'bg-purple-50 text-purple-800' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                                 Site List
                             </a>
-                            <a href="{{ route('create') }}" class="block px-3 py-2 rounded-md text-sm {{ request()->routeIs('sites.create') ? 'bg-purple-50 text-purple-800' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                            <a href="{{ route('sites.create') }}" class="block px-3 py-2 rounded-md text-sm {{ request()->routeIs('sites.create') ? 'bg-purple-50 text-purple-800' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                                 Add Site
                             </a>
                         </div>
