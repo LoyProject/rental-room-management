@@ -46,84 +46,33 @@
                         Dashboard
                     </a>
 
+                    <a href="{{ route('sites.index') }}" class="group flex items-center px-2 py-2 text-base font-medium rounded-md hover:bg-gray-100 {{ request()->routeIs('sites.index') ? 'bg-purple-100 text-purple-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                        <svg class="mr-4 h-6 w-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2-1.343-2-3-2zm0 10c-4.418 0-8-1.79-8-4V6c0-2.21 3.582-4 8-4s8 1.79 8 4v8c0 2.21-3.582 4-8 4z" />
+                        </svg>
+                        Sites
+                    </a>
+
+                    <a href="{{ route('blocks.index') }}" class="group flex items-center px-2 py-2 text-base font-medium rounded-md hover:bg-gray-100 {{ request()->routeIs('blocks.index') ? 'bg-purple-100 text-purple-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                        <svg class="mr-4 h-6 w-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h3m10-14h3a2 2 0 012 2v10a2 2 0 01-2 2h-3m-10 0h4m-4-4h6m-6-4h6m2-4v.01M7 16v.01" />
+                        </svg>
+                        Blocks
+                    </a>
+
+                    <a href="{{ route('customers.index') }}" class="group flex items-center px-2 py-2 text-base font-medium rounded-md hover:bg-gray-100 {{ request()->routeIs('customers.index') ? 'bg-purple-100 text-purple-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                        <svg class="mr-4 h-6 w-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Customers
+                    </a>
+
                     <a href="{{ route('profile.edit') }}" class="group flex items-center px-2 py-2 text-base font-medium rounded-md hover:bg-gray-100 {{ request()->routeIs('profile.edit') ? 'bg-purple-100 text-purple-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                         <svg class="mr-4 h-6 w-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         Profile
                     </a>
-
-                    <!-- Site dropdown -->
-                    <div class="mt-4">
-                        <button @click="openSite = !openSite" type="button" class="w-full flex items-center justify-between px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('sites.*') ? 'bg-purple-50 text-purple-800' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                            <div class="flex items-center">
-                                <svg class="mr-4 h-5 w-5 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a1 1 0 001 1h16a1 1 0 001-1V7M7 7V5a2 2 0 012-2h6a2 2 0 012 2v2" />
-                                </svg>
-                                <span>Site</span>
-                            </div>
-                            <svg :class="openSite ? 'transform rotate-180' : ''" class="h-4 w-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-
-                        <div x-show="openSite" x-cloak class="mt-1 space-y-1 px-2">
-                            <a href="{{ route('sites.index') }}" class="block px-3 py-2 rounded-md text-sm {{ request()->routeIs('sites.index') ? 'bg-purple-50 text-purple-800' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                                Site List
-                            </a>
-                            <a href="{{ route('sites.create') }}" class="block px-3 py-2 rounded-md text-sm {{ request()->routeIs('sites.create') ? 'bg-purple-50 text-purple-800' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                                Add Site
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Block dropdown -->
-                    <div class="mt-4">
-                        <button @click="openBlock = !openBlock" type="button" class="w-full flex items-center justify-between px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('blocks.*') ? 'bg-purple-50 text-purple-800' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                            <div class="flex items-center">
-                                <svg class="mr-4 h-5 w-5 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7v10a1 1 0 01-1 1H5a1 1 0 01-1-1V7m16 0L12 3 4 7" />
-                                </svg>
-                                <span>Block</span>
-                            </div>
-                            <svg :class="openBlock ? 'transform rotate-180' : ''" class="h-4 w-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-
-                        <div x-show="openBlock" x-cloak class="mt-1 space-y-1 px-2">
-                            <a href="{{ route('blocks.index') }}" class="block px-3 py-2 rounded-md text-sm {{ request()->routeIs('blocks.index') ? 'bg-purple-50 text-purple-800' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                                Block List
-                            </a>
-                            <a href="{{ route('blocks.create') }}" class="block px-3 py-2 rounded-md text-sm {{ request()->routeIs('blocks.create') ? 'bg-purple-50 text-purple-800' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                                Add Block
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Customer dropdown -->
-                    <div class="mt-4">
-                        <button @click="openCustomer = !openCustomer" type="button" class="w-full flex items-center justify-between px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('customers.*') ? 'bg-purple-50 text-purple-800' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                            <div class="flex items-center">
-                                <svg class="mr-4 h-5 w-5 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11c1.657 0 3-1.343 3-3S17.657 5 16 5s-3 1.343-3 3 1.343 3 3 3zM6 21v-1a4 4 0 014-4h4a4 4 0 014 4v1" />
-                                </svg>
-                                <span>Customer</span>
-                            </div>
-                            <svg :class="openCustomer ? 'transform rotate-180' : ''" class="h-4 w-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-
-                        <div x-show="openCustomer" x-cloak class="mt-1 space-y-1 px-2">
-                            <a href="{{ route('customers.index') }}" class="block px-3 py-2 rounded-md text-sm {{ request()->routeIs('customers.index') ? 'bg-purple-50 text-purple-800' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                                Customer List
-                            </a>
-                            <a href="{{ route('customers.create') }}" class="block px-3 py-2 rounded-md text-sm {{ request()->routeIs('customers.create') ? 'bg-purple-50 text-purple-800' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                                Add Customer
-                            </a>
-                        </div>
-                    </div>
                 </nav>
             </aside>
 
