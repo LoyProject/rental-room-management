@@ -15,7 +15,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->integer('water_price')->default(0);
             $table->integer('electric_price')->default(0);
-            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

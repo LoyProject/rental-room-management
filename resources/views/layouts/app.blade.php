@@ -21,7 +21,7 @@
                 <div class="m-4 shrink-0 flex items-center justify-between">
                     <div class="flex items-center">
                         <a href="{{ route('dashboard') }}">
-                            <x-application-logo class="block h-12 w-auto fill-current text-gray-800" />
+                            <x-application-logo class="block fill-current text-gray-800" />
                         </a>
                         <div class="ms-3 font-semibold text-lg text-gray-700">
                             {{ config('app.name', 'Laravel') }}

@@ -1,1 +1,1 @@
-<img src="{{ Storage::url('logo/logo.png') }}" {{ $attributes->merge(['alt' => 'Application Logo']) }}>
+<img src="{{ Vite::asset('resources/assets/logo/logo.png') }}" alt="Application Logo" {{ $attributes->merge(['class' => 'h-12 w-auto']) }}>

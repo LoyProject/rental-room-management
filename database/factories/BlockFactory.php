@@ -16,7 +16,6 @@ class BlockFactory extends Factory
             'description' => $this->faker->sentence(),
             'water_price' => $this->faker->randomFloat(2, 0, 100),
             'electric_price' => $this->faker->randomFloat(2, 0, 100),
-            'status' => true,
         ];
     }
 }

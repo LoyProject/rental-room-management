@@ -24,18 +24,16 @@ class DatabaseSeeder extends Seeder
             'site_id' => 1,
             'name' => 'Default Block',
             'description' => 'This is the default block.',
-            'water_price' => 10.00,
-            'electric_price' => 15.00,
-            'status' => true,
+            'water_price' => 2800.00,
+            'electric_price' => 1500.00,
         ]);
 
         Block::factory()->create([
             'site_id' => 1,
             'name' => 'Secondary Block',
             'description' => 'This is the secondary block.',
-            'water_price' => 12.00,
-            'electric_price' => 18.00,
-            'status' => true,
+            'water_price' => 2300.00,
+            'electric_price' => 1800.00,
         ]);
 
         User::factory()->create([

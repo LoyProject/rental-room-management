@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Site;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -16,6 +17,10 @@ class Block extends Model
         'description',
         'water_price',
         'electric_price',
-        'status',
     ];
+
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
+    }
 }
