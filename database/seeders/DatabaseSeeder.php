@@ -14,14 +14,6 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        User::factory()->create([
-            'site_id' => '1',
-            'name' => 'Super Admin',
-            'email' => 'admin@gmail.com',
-            'password' => bcrypt('admin123'),
-            'role' => 'admin',
-        ]);
-
         Site::factory()->create([
             'name' => 'Default Site',
             'phone' => '0123456789',
@@ -44,6 +36,14 @@ class DatabaseSeeder extends Seeder
             'water_price' => 12.00,
             'electric_price' => 18.00,
             'status' => true,
+        ]);
+
+        User::factory()->create([
+            'site_id' => '1',
+            'name' => 'Super Admin',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('admin123'),
+            'role' => 'admin',
         ]);
     }
 }
