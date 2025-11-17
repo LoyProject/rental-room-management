@@ -9,7 +9,7 @@ class BlockController extends Controller
 {
     public function index()
     {
-        $blocks = Block::all();
+        $blocks = Block::latest()->paginate(10);
         return view('blocks.index', compact('blocks'));
     }
 

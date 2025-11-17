@@ -11,7 +11,7 @@
     </x-slot>
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <div class="mb-6">
                 <input type="text" id="search" placeholder="Search sites..." class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200">
             </div>
