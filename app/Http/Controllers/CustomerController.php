@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
-<<<<<<< HEAD
-=======
 use App\Models\Block;
->>>>>>> 90aeabddc124acde0b37061f1f9383da8c503bcc
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -17,67 +14,41 @@ class CustomerController extends Controller
         return view('customers.index', compact('customers'));
     }
 
-<<<<<<< HEAD
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-=======
     public function create()
     {
         $blocks = Block::all();
         return view('customers.create', compact('blocks'));
     }
 
->>>>>>> 90aeabddc124acde0b37061f1f9383da8c503bcc
-    public function show(Customer $customer)
+    public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'block_id' => 'required|exists:blocks,id',
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:25',
+            'house_price' => 'required|integer|min:0',
+            'wifi_price' => 'required|integer|min:0',
+            'garbage_price' => 'required|integer|min:0',
+            'old_water_bill' => 'nullable|integer|min:0',
+            'old_electric_bill' => 'nullable|integer|min:0',
+            
+        ]);
+
+        Customer::create($validated);
+        return redirect()->route('customers.index')->with('success', 'Customer created successfully.');
     }
 
-<<<<<<< HEAD
-    /**
-     * Show the form for editing the specified resource.
-     */
-=======
->>>>>>> 90aeabddc124acde0b37061f1f9383da8c503bcc
     public function edit(Customer $customer)
     {
-        //
+        $blocks = Block::all();
+        return view('customers.edit', compact('customer', 'blocks'));
     }
 
-<<<<<<< HEAD
-    /**
-     * Update the specified resource in storage.
-     */
-=======
->>>>>>> 90aeabddc124acde0b37061f1f9383da8c503bcc
     public function update(Request $request, Customer $customer)
     {
         //
     }
 
-<<<<<<< HEAD
-    /**
-     * Remove the specified resource from storage.
-     */
-=======
->>>>>>> 90aeabddc124acde0b37061f1f9383da8c503bcc
     public function destroy(Customer $customer)
     {
         //

@@ -86,7 +86,7 @@
             <div class="flex-1 min-w-0">
                 <!-- Page Heading -->
                 @isset($header)
-                    <header class="bg-white shadow mx-2 sm:mx-4 lg:mx-6 mt-4 rounded-lg">
+                    <header class="bg-white shadow mx-2 sm:mx-4 lg:mx-6 mt-4 rounded-lg sticky top-0 z-10">
                         <div class="mx-auto py-4 px-4 sm:px-6 lg:px-8">
                             {{ $header }}
                         </div>

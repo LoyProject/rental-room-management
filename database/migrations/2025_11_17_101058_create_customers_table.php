@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('block_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->string('phone')->nullable();
+            $table->string('phone');
             $table->unsignedInteger('house_price')->default('0');
             $table->unsignedInteger('wifi_price')->default('0');
             $table->unsignedInteger('garbage_price')->default('0');
