@@ -10,7 +10,7 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $customers = Customer::latest()->paginate(10);
+        $customers = Customer::with('block')->latest()->paginate(10);
         return view('customers.index', compact('customers'));
     }
 
@@ -26,11 +26,11 @@ class CustomerController extends Controller
             'block_id' => 'required|exists:blocks,id',
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:25',
-            'house_price' => 'required|integer|min:0',
-            'wifi_price' => 'required|integer|min:0',
+            'house_price' => 'required|numeric|min:0',
+            'wifi_price' => 'required|numeric|min:0',
             'garbage_price' => 'required|integer|min:0',
-            'old_water_bill' => 'nullable|integer|min:0',
-            'old_electric_bill' => 'nullable|integer|min:0',
+            'old_water_number' => 'nullable|integer|min:0',
+            'old_electric_number' => 'nullable|integer|min:0',
             
         ]);
 
@@ -46,11 +46,24 @@ class CustomerController extends Controller
 
     public function update(Request $request, Customer $customer)
     {
-        //
+        $validated = $request->validate([
+            'block_id' => 'required|exists:blocks,id',
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:25',
+            'house_price' => 'required|numeric|min:0',
+            'wifi_price' => 'required|numeric|min:0',
+            'garbage_price' => 'required|integer|min:0',
+            'old_water_number' => 'nullable|integer|min:0',
+            'old_electric_number' => 'nullable|integer|min:0',
+        ]);
+
+        $customer->update($validated);
+        return redirect()->route('customers.index')->with('success', 'Customer updated successfully.');
     }
 
     public function destroy(Customer $customer)
     {
-        //
+        $customer->delete();
+        return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.');
     }
 }

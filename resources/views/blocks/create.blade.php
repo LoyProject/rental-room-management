@@ -49,8 +49,8 @@
                     </div>
 
                     <div>
-                        <label for="water_price" class="block text-sm font-medium text-gray-700">Water Price <span class="text-red-600">*</span></label>
-                        <input id="water_price" name="water_price" type="number" step="0.01" value="{{ old('water_price') }}" required
+                        <label for="water_price" class="block text-sm font-medium text-gray-700">Water Price (KHR) <span class="text-red-600">*</span></label>
+                        <input id="water_price" name="water_price" type="number" step="100" min="0" value="{{ old('water_price') }}" required
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                         @error('water_price')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -58,8 +58,8 @@
                     </div>
 
                     <div>
-                        <label for="electric_price" class="block text-sm font-medium text-gray-700">Electric Price <span class="text-red-600">*</span></label>
-                        <input id="electric_price" name="electric_price" type="number" step="0.01" value="{{ old('electric_price') }}" required
+                        <label for="electric_price" class="block text-sm font-medium text-gray-700">Electric Price (KHR) <span class="text-red-600">*</span></label>
+                        <input id="electric_price" name="electric_price" type="number" step="100" min="0" value="{{ old('electric_price') }}" required
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                         @error('electric_price')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>

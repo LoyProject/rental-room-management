@@ -39,7 +39,7 @@
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Block
-                                ID</th>
+                                Name</th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name
                             </th>
@@ -57,10 +57,10 @@
                                 Garbage Price</th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Old
-                                Water Bill</th>
+                                Water Number</th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Old
-                                Electric Bill</th>
+                                Electric Number</th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Action</th>
@@ -70,17 +70,14 @@
                         @foreach ($customers as $customer)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->id }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->block_id }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->block->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->phone }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->house_price }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->wifi_price }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->garbage_price }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->old_water_bill }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->old_electric_bill }}
-                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->house_price, 2, '.', ',') }} USD</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->wifi_price, 2, '.', ',') }} USD</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->garbage_price, 0, '.', ',') }} KHR</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->old_water_number, 0, '.', ',') }} m³</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->old_electric_number, 0, '.', ',') }} kWh</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <a href="{{ route('customers.edit', $customer) }}"
                                     class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a>

@@ -52,8 +52,8 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
-                            <label for="house_price" class="block text-sm font-medium text-gray-700">House Price <span class="text-red-600">*</span></label>
-                            <input id="house_price" name="house_price" type="number" step="0.01" value="{{ old('house_price') }}" required
+                            <label for="house_price" class="block text-sm font-medium text-gray-700">House Price (USD) <span class="text-red-600">*</span></label>
+                            <input id="house_price" name="house_price" type="number" step="0.01" min="0" value="{{ old('house_price') }}" required
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                             @error('house_price')
                                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -61,8 +61,8 @@
                         </div>
 
                         <div>
-                            <label for="wifi_price" class="block text-sm font-medium text-gray-700">Wifi Price <span class="text-red-600">*</span></label>
-                            <input id="wifi_price" name="wifi_price" type="number" step="0.01" value="{{ old('wifi_price') }}" required
+                            <label for="wifi_price" class="block text-sm font-medium text-gray-700">Wifi Price (USD) <span class="text-red-600">*</span></label>
+                            <input id="wifi_price" name="wifi_price" type="number" step="0.01" min="0" value="{{ old('wifi_price') }}" required
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                             @error('wifi_price')
                                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -70,8 +70,8 @@
                         </div>
 
                         <div>
-                            <label for="garbage_price" class="block text-sm font-medium text-gray-700">Garbage Price <span class="text-red-600">*</span></label>
-                            <input id="garbage_price" name="garbage_price" type="number" step="0.01" value="{{ old('garbage_price') }}" required
+                            <label for="garbage_price" class="block text-sm font-medium text-gray-700">Garbage Price (KHR) <span class="text-red-600">*</span></label>
+                            <input id="garbage_price" name="garbage_price" type="number" step="100" min="0" value="{{ old('garbage_price') }}" required
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                             @error('garbage_price')
                                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -81,19 +81,19 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
-                            <label for="old_water_bill" class="block text-sm font-medium text-gray-700">Old Water Bill</label>
-                            <input id="old_water_bill" name="old_water_bill" type="number" step="0.01" value="{{ old('old_water_bill') }}"
+                            <label for="old_water_number" class="block text-sm font-medium text-gray-700">Old Water Number (m³)</label>
+                            <input id="old_water_number" name="old_water_number" type="number" min="0" value="{{ old('old_water_number') }}"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                            @error('old_water_bill')
+                            @error('old_water_number')
                                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="old_electric_bill" class="block text-sm font-medium text-gray-700">Old Electric Bill</label>
-                            <input id="old_electric_bill" name="old_electric_bill" type="number" step="0.01" value="{{ old('old_electric_bill') }}"
+                            <label for="old_electric_number" class="block text-sm font-medium text-gray-700">Old Electric number (kWh)</label>
+                            <input id="old_electric_number" name="old_electric_number" type="number" min="0" value="{{ old('old_electric_number') }}"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                            @error('old_electric_bill')
+                            @error('old_electric_number')
                                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                             @enderror
                         </div>

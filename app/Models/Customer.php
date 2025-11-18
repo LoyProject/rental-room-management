@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Block;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -17,7 +18,12 @@ class Customer extends Model
         'house_price',
         'wifi_price',
         'garbage_price',
-        'old_water_bill',
-        'old_electric_bill',
+        'old_water_number',
+        'old_electric_number',
     ];
+
+    public function block()
+    {
+        return $this->belongsTo(Block::class);
+    }
 }

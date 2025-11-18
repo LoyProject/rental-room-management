@@ -18,25 +18,26 @@ return new class extends Migration
             $table->date('from_date');
             $table->date('to_date');
 
-            $table->unsignedInteger('house_price')->default(0);
-            $table->unsignedInteger('wifi_price')->default(0);
-            $table->unsignedInteger('garbage_price')->default(0);
+            $table->decimal('house_price', 8, 2)->default(0);
+            $table->decimal('wifi_price', 8, 2)->default(0);
+            $table->integer('garbage_price')->default(0);
 
-            $table->unsignedInteger('old_water_bill')->default(0);
-            $table->unsignedInteger('new_water_bill')->default(0);            
-            $table->unsignedInteger('total_used_water')->default(0);
+            $table->integer('old_water_number')->default(0);
+            $table->integer('new_water_number')->default(0);            
+            $table->integer('total_used_water')->default(0);
 
-            $table->unsignedInteger('old_electric_bill')->default(0);
-            $table->unsignedInteger('new_electric_bill')->default(0);
-            $table->unsignedInteger('total_used_electric')->default(0);
+            $table->integer('old_electric_number')->default(0);
+            $table->integer('new_electric_number')->default(0);
+            $table->integer('total_used_electric')->default(0);
 
-            $table->unsignedInteger('water_unit_price')->default(0);
-            $table->unsignedInteger('total_amount_water')->default(0);
+            $table->integer('water_unit_price')->default(0);
+            $table->integer('total_amount_water')->default(0);
 
-            $table->unsignedInteger('electric_unit_price')->default(0);
-            $table->unsignedInteger('total_amount_electric')->default(0);
+            $table->integer('electric_unit_price')->default(0);
+            $table->integer('total_amount_electric')->default(0);
             
-            $table->unsignedInteger('total_amount')->default(0);
+            $table->decimal('total_amount_usd', 8, 2)->default(0);
+            $table->integer('total_amount_khr')->default(0);
             
             $table->timestamps();
         });
