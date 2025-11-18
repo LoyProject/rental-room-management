@@ -13,11 +13,11 @@ return new class extends Migration
             $table->foreignId('block_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('phone')->nullable();
-            $table->string('house_price')->default('0');
-            $table->string('wifi_price')->default('0');
-            $table->string('garbage_price')->default('0');
-            $table->string('old_water_bill')->nullable();
-            $table->string('old_electric_bill')->nullable();
+            $table->unsignedInteger('house_price')->default('0');
+            $table->unsignedInteger('wifi_price')->default('0');
+            $table->unsignedInteger('garbage_price')->default('0');
+            $table->unsignedInteger('old_water_bill')->nullable();
+            $table->unsignedInteger('old_electric_bill')->nullable();
             $table->timestamps();
         });
     }
