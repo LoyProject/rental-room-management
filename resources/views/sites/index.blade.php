@@ -1,50 +1,47 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex flex-wrap justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Sites Management') }}
-            </h2>
-            <a href="{{ route('sites.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 active:bg-blue-600 disabled:opacity-25 transition">
-                {{ __('Create Site') }}
+@extends('layouts.app')
+
+@section('title', 'Manage Sites')
+
+@section('content')
+    <x-success-alert />
+    
+    <div class="mb-4 p-4 bg-white shadow-md rounded-md flex flex-col sm:flex-row justify-between items-center gap-4">
+        <form action="{{ route('sites.index') }}" method="GET" class="w-full sm:max-w-md">
+            <div class="flex flex-row items-center gap-2 w-full">
+                <input type="text" name="search" placeholder="Search sites..."
+                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    value="{{ request('search') }}">
+                <button type="submit" class="bg-gray-800 text-white px-6 py-2 hover:bg-gray-900 rounded-md">Search</button>
+                <a href="{{ route('sites.index') }}" class="font-semibold text-sm text-gray-600 hover:underline px-4 py-2 rounded-md">Clear</a>
+            </div>
+        </form>
+
+        <div class="w-full sm:w-auto flex justify-end">
+            <a href="{{ route('sites.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 w-full sm:w-auto text-center whitespace-nowrap">
+                New Site
             </a>
         </div>
-    </x-slot>
+    </div>
 
-    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <div class="mb-6">
-                <input type="text" id="search" placeholder="Search sites..." class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200">
-            </div>
-
-            <script>
-                document.getElementById('search').addEventListener('keyup', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    document.querySelectorAll('tbody tr').forEach(row => {
-                        const text = row.textContent.toLowerCase();
-                        row.style.display = text.includes(searchTerm) ? '' : 'none';
-                    });
-                });
-            </script>
-
-            <!-- Table for medium+ screens -->
-            <div class="hidden md:block overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-blue-50">
+    <div class="bg-white shadow-md rounded-lg">
+        <div class="overflow-x-auto">
+            <table class="w-full table-auto">
+                <thead class="bg-gray-300">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th class="px-6 py-3 text-left font-semibold text-gray-700">ID</th>
+                        <th class="px-6 py-3 text-left font-semibold text-gray-700">Name</th>
+                        <th class="px-6 py-3 text-left font-semibold text-gray-700">Phone</th>
+                        <th class="px-6 py-3 text-left font-semibold text-gray-700">Address</th>
+                        <th class="px-6 py-3 text-left font-semibold text-gray-700">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="bg-gray-50 divide-y divide-gray-200">
-                    @foreach ($sites as $site)
-                        <tr>
+                <tbody class="text-gray-600">
+                    @forelse ($sites as $site)
+                        <tr class="border-b hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $site->id }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $site->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $site->phone }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $site->address }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $site->address ?? 'N/A' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <a href="{{ route('sites.edit', $site) }}" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a>
                                 <form action="{{ route('sites.destroy', $site) }}" method="POST" class="inline">
@@ -54,14 +51,17 @@
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center px-6 py-4">No sites found.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
-            </div>
-
-            <div class="mt-4">
-                {{ $sites->links() }}
-            </div>
         </div>
     </div>
-</x-app-layout>
+
+    <div class="mt-6">
+        {{ $sites->links() }}
+    </div>
+@endsection

@@ -1,74 +1,48 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex flex-wrap justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Customer Management') }}
-            </h2>
-            <a href="{{ route('customers.create') }}"
-                class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 active:bg-blue-600 disabled:opacity-25 transition">
-                {{ __('Create Customer') }}
+@extends('layouts.app')
+
+@section('title', 'Manage Customers')
+
+@section('content')
+    <x-success-alert />
+    
+    <div class="mb-4 p-4 bg-white shadow-md rounded-md flex flex-col sm:flex-row justify-between items-center gap-4">
+        <form action="{{ route('customers.index') }}" method="GET" class="w-full sm:max-w-md">
+            <div class="flex flex-row items-center gap-2 w-full">
+                <input type="text" name="search" placeholder="Search customers..."
+                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    value="{{ request('search') }}">
+                <button type="submit" class="bg-gray-800 text-white px-6 py-2 hover:bg-gray-900 rounded-md">Search</button>
+                <a href="{{ route('customers.index') }}" class="font-semibold text-sm text-gray-600 hover:underline px-4 py-2 rounded-md">Clear</a>
+            </div>
+        </form>
+
+        <div class="w-full sm:w-auto flex justify-end">
+            <a href="{{ route('customers.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 w-full sm:w-auto text-center whitespace-nowrap">
+                New Customer
             </a>
         </div>
-    </x-slot>
+    </div>
 
-    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-
-        <div class="mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <div class="mb-6">
-                <input type="text" id="search" placeholder="Search customers..."
-                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200">
-            </div>
-
-            <script>
-                document.getElementById('search').addEventListener('keyup', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    document.querySelectorAll('tbody tr').forEach(row => {
-                        const text = row.textContent.toLowerCase();
-                        row.style.display = text.includes(searchTerm) ? '' : 'none';
-                    });
-                });
-            </script>
-
-            <!-- Table for medium+ screens -->
-            <div class="hidden md:block overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-blue-50">
-                        <tr>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID
-                            </th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Block
-                                Name</th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name
-                            </th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone
-                            </th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">House
-                                Price</th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">WI-FI
-                                Price</th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                                Garbage Price</th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Old
-                                Water Number</th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Old
-                                Electric Number</th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-gray-50 divide-y divide-gray-200">
-                        @foreach ($customers as $customer)
-                        <tr>
+    <div class="bg-white shadow-md rounded-lg">
+        <div class="overflow-x-auto">
+            <table class="w-full table-auto">
+                <thead class="bg-gray-300">
+                    <tr>
+                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ID</th>
+                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">Block Name</th>
+                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">Name</th>
+                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">Phone</th>
+                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">House Price</th>
+                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">WI-FI Price</th>
+                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">Garbage Price</th>
+                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">Old Water Number</th>
+                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">Old Electric Number</th>
+                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-600">
+                    @forelse ($customers as $customer)
+                        <tr class="border-b hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->id }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->block->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->name }}</td>
@@ -79,57 +53,25 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->old_water_number, 0, '.', ',') }} m³</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->old_electric_number, 0, '.', ',') }} kWh</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="{{ route('customers.edit', $customer) }}"
-                                    class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a>
+                                <a href="{{ route('customers.edit', $customer) }}" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a>
                                 <form action="{{ route('customers.destroy', $customer) }}" method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900"
-                                        onclick="return confirm('Are you sure you want to delete this customer?')">Delete</button>
+                                    <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure you want to delete this customer?')">Delete</button>
                                 </form>
                             </td>
                         </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Card list for small screens -->
-            <div class="block md:hidden space-y-4">
-                @foreach ($customers as $customer)
-                <div class="p-4 border rounded-lg bg-white shadow">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <div class="font-medium text-lg text-gray-900">{{ $customer->name }}</div>
-                            <div class="text-sm text-gray-500">Block: {{ $customer->block_id }}</div>
-                        </div>
-                        <div class="text-sm text-gray-500">ID: {{ $customer->id }}</div>
-                    </div>
-
-                    <div class="mt-3 text-sm text-gray-700">
-                        <div>Phone: {{ $customer->phone }}</div>
-                        <div>House: {{ $customer->house_price }}</div>
-                        <div>WI-FI: {{ $customer->wifi_price }}</div>
-                    </div>
-
-                    <div class="mt-3 flex items-center gap-3">
-                        <a href="{{ route('customers.edit', $customer) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                        <form action="{{ route('customers.destroy', $customer) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure you want to delete this customer?')">Delete</button>
-                        </form>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-
-            <!-- Pagination -->
-            <div class="mt-4">
-                {{ $customers->links() }}
-            </div>
+                    @empty
+                        <tr>
+                            <td colspan="10" class="text-center px-6 py-4">No customers found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
-    </div>
 
-</x-app-layout>
+    <div class="mt-6">
+        {{ $customers->links() }}
+    </div>
+@endsection

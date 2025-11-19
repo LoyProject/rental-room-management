@@ -3,19 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\Block;
+use App\Models\Site;
 use Illuminate\Http\Request;
 
 class BlockController extends Controller
 {
     public function index()
     {
-        $blocks = Block::with('site')->latest()->paginate(10);
+        $query = Block::query();
+
+        if (request('search')) {
+            $searchTerm = '%' . request('search') . '%';
+            $query->where('name', 'like', $searchTerm)
+                ->orWhere('description', 'like', $searchTerm)
+                ->orWhere('water_price', 'like', $searchTerm)
+                ->orWhere('electric_price', 'like', $searchTerm)
+                ->orWhereHas('site', function ($q) use ($searchTerm) {
+                    $q->where('name', 'like', $searchTerm);
+                });
+        }
+
+        $blocks = $query->with('site')->latest()->paginate(10)->withQueryString();
+        
         return view('blocks.index', compact('blocks'));
     }
 
     public function create()
     {
-        $sites = \App\Models\Site::all();
+        $sites = Site::all();
         return view('blocks.create', compact('sites'));
     }
 
@@ -36,7 +51,7 @@ class BlockController extends Controller
 
     public function edit(Block $block)
     {
-        $sites = \App\Models\Site::all();
+        $sites = Site::all();
         return view('blocks.edit', compact('block', 'sites'));
     }
 

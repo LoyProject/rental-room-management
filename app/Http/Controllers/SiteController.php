@@ -9,7 +9,17 @@ class SiteController extends Controller
 {
     public function index()
     {
-        $sites = Site::latest()->paginate(10);
+        $query = Site::query();
+
+        if (request('search')) {
+            $searchTerm = '%' . request('search') . '%';
+            $query->where('name', 'like', $searchTerm)
+                ->orWhere('phone', 'like', $searchTerm)
+                ->orWhere('address', 'like', $searchTerm);
+        }
+
+        $sites = $query->latest()->paginate(10)->withQueryString();
+
         return view('sites.index', compact('sites'));
     }
 
@@ -22,7 +32,7 @@ class SiteController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => 'required|string|max:25',
             'address' => 'nullable|string',
         ]);
 
@@ -33,7 +43,6 @@ class SiteController extends Controller
 
     public function edit(Site $site)
     {
-        $site = Site::findOrFail($site->id);
         return view('sites.edit', compact('site'));
     }
 
@@ -41,7 +50,7 @@ class SiteController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => 'required|string|max:25',
             'address' => 'nullable|string',
         ]);
 

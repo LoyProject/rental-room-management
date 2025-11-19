@@ -10,7 +10,24 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $customers = Customer::with('block')->latest()->paginate(10);
+        $query = Customer::query();
+
+        if (request('search')) {
+            $searchTerm = '%' . request('search') . '%';
+            $query->where('name', 'like', $searchTerm)
+                ->orWhere('phone', 'like', $searchTerm)
+                ->orWhere('house_price', 'like', $searchTerm)
+                ->orWhere('wifi_price', 'like', $searchTerm)
+                ->orWhere('garbage_price', 'like', $searchTerm)
+                ->orWhere('old_water_number', 'like', $searchTerm)
+                ->orWhere('old_electric_number', 'like', $searchTerm)
+                ->orWhereHas('block', function ($q) use ($searchTerm) {
+                    $q->where('name', 'like', $searchTerm);
+                });
+        }
+
+        $customers = $query->with('block')->latest()->paginate(10)->withQueryString();
+
         return view('customers.index', compact('customers'));
     }
 
