@@ -93,17 +93,35 @@
             <div class="flex-1 min-w-0">
                 <!-- Page Heading -->
                 @isset($header)
-                    <header class="bg-white shadow mx-2 sm:mx-4 lg:mx-6 mt-4 rounded-lg sticky top-0 z-10">
+                    <header class="bg-white shadow top-0 z-10">
                         <div class="mx-auto py-4 px-4 sm:px-6 lg:px-8">
                             {{ $header }}
                         </div>
                     </header>
                 @endisset
-
                 <!-- Page Content -->
-                <main class="mx-2 sm:mx-4 lg:mx-6 mt-4">
+                <main class="mx-2 sm:mx-4 lg:mx-6 mt-4 pb-4 overflow-auto" style="max-height: calc(100vh - 6rem);">
                     {{ $slot }}
                 </main>
+
+                <footer class="bg-white border-t p-4 w-full">
+                    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6">
+                            <div class="text-sm text-gray-600">
+                                &copy; {{ date('Y') }} {{ config('app.name', 'Laravel') }}. All rights reserved.
+                            </div>
+                            <div class="text-sm text-gray-500 mt-1 sm:mt-0">
+                                Version: {{ config('app.version', env('APP_VERSION', '1.0.0')) }}
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-6">
+                            <div class="text-sm text-gray-600">
+                                Develop by: {{ config('app.developer', env('APP_DEVELOPER', 'Your Name')) }}
+                            </div>
+                        </div>
+                    </div>
+                </footer>
             </div>
         </div>
     </body>
