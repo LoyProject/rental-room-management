@@ -60,27 +60,27 @@
             </div>
         </aside>
 
-        <div class="flex-1 flex flex-col w-full">
+        <div class="flex-1 min-w-0 flex flex-col">
             <header class="bg-white shadow p-4 flex justify-between items-center">
-                <div class="flex items-center space-x-4">
-                    <button @click="sidebarOpen = !sidebarOpen" class="md:hidden text-gray-500 focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                    </button>
-                    <h1 class="text-xl font-semibold">@yield('title', 'Dashboard')</h1>
-                </div>
+            <div class="flex items-center space-x-4">
+                <button @click="sidebarOpen = !sidebarOpen" class="md:hidden text-gray-500 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+                <h1 class="text-xl font-semibold">@yield('title', 'Dashboard')</h1>
+            </div>
 
-                <div class="md:hidden w-6"></div>
+            <div class="md:hidden w-6"></div>
             </header>
 
-            <main class="flex-grow p-6 overflow-y-auto">
-                @yield('content')
+            <main class="flex-1 p-6 overflow-y-auto">
+            @yield('content')
             </main>
 
-            <footer class="bg-white shadow p-4 text-center text-sm text-gray-500">
-                <div class="container flex items-center justify-between">
-                    <span>&copy; {{ date('Y') }} Room Rental Management. All rights reserved.</span>
-                    <span>Developed by: <b>Loy Team</b></span>
-                </div>
+            <footer class="bg-white shadow p-4 text-center text-sm text-gray-500 mt-auto">
+            <div class="container flex items-center justify-between">
+                <span>&copy; {{ date('Y') }} Room Rental Management. All rights reserved.</span>
+                <span>Developed by: <b>Loy Team</b></span>
+            </div>
             </footer>
         </div>
     </div>
