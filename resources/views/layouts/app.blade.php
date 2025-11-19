@@ -14,11 +14,14 @@
         <aside 
             class="fixed inset-y-0 left-0 z-30 w-64 bg-gray-800 text-white transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0"
             :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}">
-            <div class="p-4 border-b border-gray-700">
-                @auth
-                    <div class="font-bold text-lg text-white">{{ auth()->user()->name }}</div>
-                    <div class="text-sm text-gray-400">{{ ucfirst(auth()->user()->role) }}</div>
-                @endauth
+            <div class="p-4 border-b border-gray-700 items-center flex justify-start space-x-4">
+                <a href="{{ route('dashboard') }}"><x-application-logo class="h-10 w-auto" /></a>
+                <div>
+                    @auth
+                        <div class="font-bold text-lg text-white">{{ auth()->user()->name }}</div>
+                        <div class="text-sm text-gray-400">{{ ucfirst(auth()->user()->role) }}</div>
+                    @endauth
+                </div>
             </div>
             
             <nav class="flex-grow p-4">

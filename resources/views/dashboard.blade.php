@@ -1,10 +1,8 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
+@section('title', 'Dashboard')
+
+@section('content')
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -77,56 +75,56 @@
             </div>
         </div>
     </div>
-</x-app-layout>
 
-<!-- Chart.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    (function () {
-        const labels = {!! json_encode($monthlyLabels ?? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']) !!};
-        const data = {!! json_encode(array_map('floatval', array_merge([500], array_slice($monthlyRevenueData ?? [300,500,690,400,340,900,320,770,11000,9000,200,950], 1)))) !!};
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        (function () {
+            const labels = {!! json_encode($monthlyLabels ?? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']) !!};
+            const data = {!! json_encode(array_map('floatval', array_merge([500], array_slice($monthlyRevenueData ?? [300,500,690,400,340,900,320,770,11000,9000,200,950], 1)))) !!};
 
-        const ctx = document.getElementById('monthlyRevenueChart');
-        if (!ctx) return;
+            const ctx = document.getElementById('monthlyRevenueChart');
+            if (!ctx) return;
 
-        new Chart(ctx.getContext('2d'), {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Revenue',
-                    data: data,
-                    fill: true,
-                    backgroundColor: 'rgba(250, 204, 21, 0.12)',
-                    borderColor: 'rgba(250, 204, 21, 1)',
-                    pointBackgroundColor: 'rgba(250, 204, 21, 1)',
-                    tension: 0.35,
-                    pointRadius: 3,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function (value) { return '$' + value; }
-                        }
-                    }
+            new Chart(ctx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Revenue',
+                        data: data,
+                        fill: true,
+                        backgroundColor: 'rgba(250, 204, 21, 0.12)',
+                        borderColor: 'rgba(250, 204, 21, 1)',
+                        pointBackgroundColor: 'rgba(250, 204, 21, 1)',
+                        tension: 0.35,
+                        pointRadius: 3,
+                    }]
                 },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function (ctx) {
-                                const val = (ctx.parsed && ctx.parsed.y !== undefined) ? ctx.parsed.y : ctx.parsed;
-                                return '$' + val;
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) { return '$' + value; }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) {
+                                    const val = (ctx.parsed && ctx.parsed.y !== undefined) ? ctx.parsed.y : ctx.parsed;
+                                    return '$' + val;
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
-    })();
-</script>
+            });
+        })();
+    </script>
+@endsection
