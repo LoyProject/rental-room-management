@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('sites', SiteController::class);
     Route::resource('blocks', BlockController::class);
     Route::resource('customers', CustomerController::class);
+    Route::resource('users', UserController::class);
 });
 
 require __DIR__.'/auth.php';

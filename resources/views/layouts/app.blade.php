@@ -26,27 +26,53 @@
             
             <nav class="flex-grow p-4">
                 <a href="{{ route('dashboard') }}" 
-                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
+                    class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
                         {{ Route::is('dashboard') ? 'bg-purple-700' : '' }}">
-                    Dashboard
+                    <svg class="w-5 h-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3 10l9-7 9 7v8a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-8z"/>
+                    </svg>
+                    <span>ទំព័រដើម</span>
                 </a>
 
                 <a href="{{ route('sites.index') }}" 
-                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
+                    class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
                         {{ Route::is('sites.*') ? 'bg-purple-700' : '' }}">
-                    Sites
+                    <svg class="w-5 h-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3 6l7-3 7 3 7-3v14l-7 3-7-3-7 3V6z"/>
+                    </svg>
+                    <span>តំបន់</span>
                 </a>
 
                 <a href="{{ route('blocks.index') }}" 
-                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
+                    class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
                         {{ Route::is('blocks.*') ? 'bg-purple-700' : '' }}">
-                    Blocks
+                    <svg class="w-5 h-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="3" width="8" height="8"/>
+                        <rect x="13" y="3" width="8" height="8"/>
+                        <rect x="3" y="13" width="8" height="8"/>
+                        <rect x="13" y="13" width="8" height="8"/>
+                    </svg>
+                    <span>ប្លុក</span>
                 </a>
 
                 <a href="{{ route('customers.index') }}" 
-                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
+                    class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
                         {{ Route::is('customers.*') ? 'bg-purple-700' : '' }}">
-                    Customers
+                    <svg class="w-5 h-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="9" cy="8" r="3"/>
+                        <path d="M2 20c1.5-4 5.5-6 7-6s5.5 2 7 6"/>
+                        <path d="M17 11a3 3 0 110-6 3 3 0 010 6z"/>
+                    </svg>
+                    <span>អតិថិជន</span>
+                </a>
+                <a href="{{ route('users.index') }}" 
+                    class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
+                        {{ Route::is('users.*') ? 'bg-purple-700' : '' }}">
+                    <svg class="w-5 h-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="8" r="3"/>
+                        <path d="M6 20c0-3 3-5 6-5s6 2 6 5"/>
+                    </svg>
+                    <span>អ្នកប្រើប្រាស់</span>
                 </a>
             </nav>
 
@@ -54,7 +80,7 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="w-full text-left block py-2.5 px-4 rounded transition duration-200 hover:bg-red-700">
-                        Logout
+                        ចាកចេញ
                     </button>
                 </form>
             </div>
@@ -66,7 +92,7 @@
                     <button @click="sidebarOpen = !sidebarOpen" class="md:hidden text-gray-500 focus:outline-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
-                    <h1 class="text-xl font-semibold">@yield('title', 'Dashboard')</h1>
+                    <h1 class="text-xl font-semibold">@yield('title', 'ទំព័រដើម')</h1>
                 </div>
 
                 <div class="md:hidden w-6"></div>
