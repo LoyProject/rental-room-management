@@ -81,6 +81,30 @@
     <script>
         (function () {
             const labels = {!! json_encode($monthlyLabels ?? ['មករា','កុម្ភៈ','មីនា','មេសា','ឧសភា','មិថុនា','កក្កដា','សីហា','កញ្ញា','តុលា','វិច្ឆិកា','ធ្នូ']) !!};
+
+            // Load Hanuman font from Google Fonts (if not already loaded) and apply to Chart.js and canvas
+            (function () {
+                const href = "https://fonts.googleapis.com/css2?family=Hanuman&display=swap";
+                if (!document.querySelector('link[href="' + href + '"]')) {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = href;
+                    document.head.appendChild(link);
+                }
+
+                const fontFamily = "'Hanuman', 'Noto Sans Khmer', 'Khmer OS', sans-serif";
+
+                // Set Chart.js default font (if Chart is available)
+                if (window.Chart && Chart.defaults && Chart.defaults.font) {
+                    Chart.defaults.font.family = fontFamily;
+                }
+
+                // Ensure the canvas uses the font
+                const canvas = document.getElementById('monthlyRevenueChart');
+                if (canvas) {
+                    canvas.style.fontFamily = fontFamily;
+                }
+            })();
             const data = {!! json_encode(array_map('floatval', array_merge([500], array_slice($monthlyRevenueData ?? [300,500,690,400,340,900,320,770,11000,9000,200,950], 1)))) !!};
 
             const ctx = document.getElementById('monthlyRevenueChart');

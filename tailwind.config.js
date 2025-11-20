@@ -12,7 +12,8 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                // Add Khmer font as the default sans so Tailwind's `font-sans` uses it
+                sans: ['"Hanuman"', ...defaultTheme.fontFamily.sans],
             },
         },
     },

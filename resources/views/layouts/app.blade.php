@@ -102,11 +102,10 @@
                 @yield('content')
             </main>
 
-            <footer class="bg-white shadow p-4 text-center text-sm text-gray-500">
-                <div class="container flex items-center justify-between">
-                    <span>&copy; {{ date('Y') }} Room Rental Management. All rights reserved.</span>
-                    <span>Developed by: <b>Loy Team</b></span>
-                </div>
+            <footer class="bg-white shadow p-4 text-center text-sm text-gray-500 flex items-center justify-between">
+                    <span>&copy; {{ date('Y') }} All rights reserved.</span>
+                    <span>Room Rental Management System</span>
+                    <span>Developed by: <b class="text-blue-900">Loy Team</b></span>
             </footer>
         </div>
     </div>

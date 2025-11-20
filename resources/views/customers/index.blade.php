@@ -17,7 +17,7 @@
         </form>
 
         <div class="w-full sm:w-auto flex justify-end">
-            <a href="{{ route('customers.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 w-full sm:w-auto text-center whitespace-nowrap">
+            <a href="{{ route('customers.create') }}" class="bg-blue-100 text-blue-700 px-4 py-2 rounded-md hover:bg-blue-700 hover:text-white w-full sm:w-auto text-center whitespace-nowrap">
                 អតិថិជនថ្មី
             </a>
         </div>
@@ -64,7 +64,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10" class="text-center px-6 py-4">គ្មានអតិថិជនទេ។</td>
+                            <td colspan="10" class="text-center px-6 py-4">គ្មានអតិថិជនទេ</td>
                         </tr>
                     @endforelse
                 </tbody>
