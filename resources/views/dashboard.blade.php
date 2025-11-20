@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard')
+@section('title', '​ទំព័រដើម')
 
 @section('content')
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -15,7 +15,7 @@
                             </svg>
                         </div>
                         <div class="ms-4">
-                            <p class="text-sm font-medium text-gray-500">Total Sites</p>
+                            <p class="text-sm font-medium text-gray-500">តំបន់សរុប</p>
                             <p class="text-2xl font-semibold text-gray-900">{{ $totalSites ?? 0 }}</p>
                         </div>
                     </div>
@@ -24,13 +24,13 @@
                 <!-- Total Blocks -->
                 <div class="bg-white border rounded-lg p-4 shadow-sm">
                     <div class="flex items-center">
-                        <div class="inline-flex items-center justify-center h-12 w-12 rounded-md bg-indigo-50 text-indigo-600">
+                        <div class="inline-flex items-center justify-center h-12 w-12 rounded-md bg-blue-50 text-blue-600">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7v10a1 1 0 01-1 1H5a1 1 0 01-1-1V7m16 0L12 3 4 7" />
                             </svg>
                         </div>
                         <div class="ms-4">
-                            <p class="text-sm font-medium text-gray-500">Total Blocks</p>
+                            <p class="text-sm font-medium text-gray-500">ប្លុកសរុប</p>
                             <p class="text-2xl font-semibold text-gray-900">{{ $totalBlocks ?? 0 }}</p>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                             </svg>
                         </div>
                         <div class="ms-4">
-                            <p class="text-sm font-medium text-gray-500">Total Customers</p>
+                            <p class="text-sm font-medium text-gray-500">អតិថិជនសរុប</p>
                             <p class="text-2xl font-semibold text-gray-900">{{ $totalCustomers ?? 0 }}</p>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                             </svg>
                         </div>
                         <div class="ms-4">
-                            <p class="text-sm font-medium text-gray-500">Total Income</p>
+                            <p class="text-sm font-medium text-gray-500">ចំណូលសរុប</p>
                             <p class="text-2xl font-semibold text-gray-900">${{ number_format($totalIncomes ?? 0, 2) }}</p>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
             </div>
         </div>
         <div class="mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Monthly Revenue</h3>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">ចំណូលប្រចាំខែ</h3>
 
             <div class="bg-white border rounded-lg p-4 shadow-sm">
                 <canvas id="monthlyRevenueChart" class="w-full" height="400"></canvas>
@@ -80,7 +80,31 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         (function () {
-            const labels = {!! json_encode($monthlyLabels ?? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']) !!};
+            const labels = {!! json_encode($monthlyLabels ?? ['មករា','កុម្ភៈ','មីនា','មេសា','ឧសភា','មិថុនា','កក្កដា','សីហា','កញ្ញា','តុលា','វិច្ឆិកា','ធ្នូ']) !!};
+
+            // Load Hanuman font from Google Fonts (if not already loaded) and apply to Chart.js and canvas
+            (function () {
+                const href = "https://fonts.googleapis.com/css2?family=Hanuman&display=swap";
+                if (!document.querySelector('link[href="' + href + '"]')) {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = href;
+                    document.head.appendChild(link);
+                }
+
+                const fontFamily = "'Hanuman', 'Noto Sans Khmer', 'Khmer OS', sans-serif";
+
+                // Set Chart.js default font (if Chart is available)
+                if (window.Chart && Chart.defaults && Chart.defaults.font) {
+                    Chart.defaults.font.family = fontFamily;
+                }
+
+                // Ensure the canvas uses the font
+                const canvas = document.getElementById('monthlyRevenueChart');
+                if (canvas) {
+                    canvas.style.fontFamily = fontFamily;
+                }
+            })();
             const data = {!! json_encode(array_map('floatval', array_merge([500], array_slice($monthlyRevenueData ?? [300,500,690,400,340,900,320,770,11000,9000,200,950], 1)))) !!};
 
             const ctx = document.getElementById('monthlyRevenueChart');
