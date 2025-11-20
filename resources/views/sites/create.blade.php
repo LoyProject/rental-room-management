@@ -37,12 +37,12 @@
 
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3 mt-4">
                     <a href="{{ route('sites.index') }}"
-                    class="w-full sm:w-auto text-center sm:text-left text-xs text-gray-600 hover:underline px-3 py-2 rounded-md">
+                    class="w-full sm:w-auto text-center sm:text-left text-sm text-gray-600 hover:underline px-3 py-2 rounded-md">
                         បោះបង់
                     </a>
 
                     <button type="submit"
-                            class="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-200">
+                            class="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-sm text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-200">
                         បង្កើតថ្មី
                     </button>
                 </div>

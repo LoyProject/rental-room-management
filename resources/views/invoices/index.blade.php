@@ -49,9 +49,10 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $invoice->customer->name ?? 'N/A' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($invoice->total_amount_water, 0, '.', ',') }} រៀល</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($invoice->total_amount_electric, 0, '.', ',') }} រៀល</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">{{ number_format($invoice->total_amount_usd, 2, '.', ',') }} ដុល្លារ</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">{{ number_format($invoice->total_amount_khr, 0, '.', ',') }} រៀល</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($invoice->total_amount_usd, 2, '.', ',') }} ដុល្លារ</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($invoice->total_amount_khr, 0, '.', ',') }} រៀល</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <a href="{{ route('invoices.print', $invoice) }}" class="text-green-600 hover:text-green-900 mr-3">បោះពុម្ព</a>
                                 <a href="{{ route('invoices.edit', $invoice) }}" class="text-blue-600 hover:text-blue-900 mr-3">កែប្រែ</a>
                                 <form action="{{ route('invoices.destroy', $invoice) }}" method="POST" class="inline">
                                     @csrf

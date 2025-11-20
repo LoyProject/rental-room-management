@@ -4,6 +4,15 @@
 
 @section('content')
     <div class="bg-white shadow-md rounded-lg p-6">
+        <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 hidden">
+            <div class="bg-white p-6 rounded-md shadow-md flex items-center gap-3">
+                <svg class="animate-spin h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                </svg>
+                <span class="font-medium text-gray-700">កំពុងដំណើរការ...</span>
+            </div>
+        </div>
         <form action="{{ route('invoices.store') }}" method="POST">
             @csrf
 
@@ -134,7 +143,7 @@
                     <a href="{{ route('invoices.index') }}"
                         class="text-sm text-gray-600 hover:underline px-3 py-2">បោះបង់</a>
                     <button type="submit"
-                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500">
+                        class="px-4 py-2 bg-blue-600 text-sm text-white rounded-md hover:bg-blue-500">
                         បង្កើតថ្មី
                     </button>
                 </div>
@@ -145,55 +154,64 @@
     <script>
         document.getElementById('invoice_date').value = new Date().toISOString().slice(0, 10);
 
-        document.getElementById('block_id').addEventListener('change', function () {
-            let blockId = this.value;
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingOverlay = document.getElementById('loading-overlay');
 
-            fetch(`/customers-by-block/${blockId}`)
-                .then(res => res.json())
-                .then(data => {
-                    let customerSelect = document.getElementById('customer_id');
-                    customerSelect.innerHTML = '<option value="" disabled selected>ជ្រើសរើសអតិថិជន</option>';
+            document.getElementById('customer_id').addEventListener('change', function () {
+                let customerId = this.value;
+                if(!customerId) return;
 
-                    data.forEach(customer => {
-                        customerSelect.innerHTML += `<option value="${customer.id}">${customer.name}</option>`;
+                loadingOverlay.classList.remove('hidden');
+
+                const customerInfoPromise = fetch(`/customer-info/${customerId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        document.querySelector('input[name="house_price"]').value = data.house_price ?? '';
+                        document.querySelector('input[name="wifi_price"]').value = data.wifi_price ?? '';
+                        document.querySelector('input[name="garbage_price"]').value = data.garbage_price ?? '';
+                        document.querySelector('input[name="old_water_number"]').value = data.old_water_number ?? '';
+                        document.querySelector('input[name="old_electric_number"]').value = data.old_electric_number ?? '';
                     });
-                });
+
+                Promise.all([customerInfoPromise])
+                    .finally(() => {
+                        loadingOverlay.classList.add('hidden');
+                    });
+            });
         });
 
-        document.getElementById('customer_id').addEventListener('change', function () {
-            let customerId = this.value;
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingOverlay = document.getElementById('loading-overlay');
 
-            fetch(`/customer-info/${customerId}`)
-                .then(res => res.json())
-                .then(data => {
-                    document.querySelector('input[name="house_price"]').value = data.house_price ?? '';
-                    document.querySelector('input[name="wifi_price"]').value = data.wifi_price ?? '';
-                    document.querySelector('input[name="garbage_price"]').value = data.garbage_price ?? '';
-                    document.querySelector('input[name="old_water_number"]').value = data.old_water_number ?? '';
-                    document.querySelector('input[name="old_electric_number"]').value = data.old_electric_number ?? '';
-                });
-        });
+            document.getElementById('block_id').addEventListener('change', function () {
+                let blockId = this.value;
+                if(!blockId) return;
 
-        document.getElementById('block_id').addEventListener('change', function () {
-            let blockId = this.value;
+                loadingOverlay.classList.remove('hidden');
 
-            fetch(`/customers-by-block/${blockId}`)
-                .then(res => res.json())
-                .then(data => {
-                    let customerSelect = document.getElementById('customer_id');
-                    customerSelect.innerHTML = '<option value="" disabled selected>ជ្រើសរើសអតិថិជន</option>';
+                const customersPromise = fetch(`/customers-by-block/${blockId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        let customerSelect = document.getElementById('customer_id');
+                        customerSelect.innerHTML = '<option value="" disabled selected>ជ្រើសរើសអតិថិជន</option>';
 
-                    data.forEach(customer => {
-                        customerSelect.innerHTML += `<option value="${customer.id}">${customer.name}</option>`;
+                        data.forEach(customer => {
+                            customerSelect.innerHTML += `<option value="${customer.id}">${customer.name}</option>`;
+                        });
                     });
-                });
 
-            fetch(`/block-info/${blockId}`)
-                .then(res => res.json())
-                .then(data => {
-                    document.querySelector('input[name="water_unit_price"]').value = data.water_unit_price ?? '';
-                    document.querySelector('input[name="electric_unit_price"]').value = data.electric_unit_price ?? '';
-                });
+                const blockInfoPromise = fetch(`/block-info/${blockId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        document.querySelector('input[name="water_unit_price"]').value = data.water_unit_price ?? '';
+                        document.querySelector('input[name="electric_unit_price"]').value = data.electric_unit_price ?? '';
+                    });
+
+                Promise.all([customersPromise, blockInfoPromise])
+                    .finally(() => {
+                        loadingOverlay.classList.add('hidden');
+                    });
+            });
         });
 
         document.addEventListener('DOMContentLoaded', function() {

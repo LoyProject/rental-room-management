@@ -73,9 +73,10 @@ class InvoiceController extends Controller
             'total_amount_khr'      => 'nullable|numeric|min:0',
         ]);
 
-        Invoice::create($validated);
+        $invoice = Invoice::create($validated);
 
-        return redirect()->route('invoices.index')->with('success', 'Invoice created successfully.');
+        // After creating, redirect to the printable invoice view so user can immediately print
+        return redirect()->route('invoices.print', $invoice->id)->with('success', 'Invoice created successfully.');
     }
 
     public function edit(Invoice $invoice)
@@ -121,6 +122,13 @@ class InvoiceController extends Controller
         $invoice->update($validated);
 
         return redirect()->route('invoices.index')->with('success', 'Invoice updated successfully.');
+    }
+
+    public function print(Invoice $invoice)
+    {
+        $invoice->load(['block', 'customer']);
+
+        return view('invoices.print', compact('invoice'));
     }
 
     public function destroy(Invoice $invoice)

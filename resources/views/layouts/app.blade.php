@@ -124,4 +124,20 @@
         </div>
     </div>
 </body>
+<script>
+    function openInvoicePrint(url) {
+        try {
+            // Reuse previously opened print window if available and not closed
+            if (window._invoicePrintWindow && !window._invoicePrintWindow.closed) {
+                window._invoicePrintWindow.location.href = url;
+                window._invoicePrintWindow.focus();
+            } else {
+                window._invoicePrintWindow = window.open(url, 'invoicePrint');
+            }
+        } catch (e) {
+            // Fallback to a simple open call
+            window.open(url, 'invoicePrint');
+        }
+    }
+</script>
 </html>

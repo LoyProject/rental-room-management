@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('blocks', BlockController::class);
     Route::resource('customers', CustomerController::class);
     Route::resource('users', UserController::class);
+    Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
     Route::resource('invoices', InvoiceController::class);
 });
 

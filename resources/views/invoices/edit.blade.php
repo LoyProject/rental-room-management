@@ -122,7 +122,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                <label class="block text-sm font-medium">តម្លៃទឹក / ១ ខ្នាត (រៀល) <span class="text-red-600">*</span></label>
+                <label class="block text-sm font-medium">តម្លៃទឹក / 1 m³ (រៀល) <span class="text-red-600">*</span></label>
                 <div class="grid grid-cols-2 gap-2">
                     <input type="number" id="water_unit_price" name="water_unit_price" min="0"
                     class="mt-1 block w-full border-gray-300 rounded-md" required
@@ -134,7 +134,7 @@
                 </div>
                 </div>
                 <div>
-                <label class="block text-sm font-medium">តម្លៃអគ្គិសនី / ១ ខ្នាត (រៀល) <span class="text-red-600">*</span></label>
+                <label class="block text-sm font-medium">តម្លៃអគ្គិសនី / 1 kWh (រៀល) <span class="text-red-600">*</span></label>
                 <div class="grid grid-cols-2 gap-2">
                     <input type="number" id="electric_unit_price" name="electric_unit_price" min="0"
                     class="mt-1 block w-full border-gray-300 rounded-md" required
@@ -164,8 +164,11 @@
 
             <div class="flex justify-end gap-3 mt-4">
                 <a href="{{ route('invoices.index') }}" class="text-sm text-gray-600 hover:underline px-3 py-2">បោះបង់</a>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500">
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-sm text-white rounded-md hover:bg-blue-500">
                     យល់ព្រម
+                </button>
+                <button type="button" onclick="openInvoicePrint('{{ route('invoices.print', $invoice->id) }}');" class="px-4 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-500">
+                    បោះពុម្ព
                 </button>
             </div>
 

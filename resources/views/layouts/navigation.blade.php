@@ -135,7 +135,7 @@
 
             <!-- Site -->
             <div class="mt-1 border-t border-gray-200 pt-2">
-                <div class="px-4 text-xs text-gray-500">{{ __('Site') }}</div>
+                <div class="px-4 text-sm text-gray-500">{{ __('Site') }}</div>
                 <x-responsive-nav-link :href="route('sites.index')">
                     {{ __('Site List') }}
                 </x-responsive-nav-link>
@@ -146,7 +146,7 @@
 
             <!-- Block -->
             <div class="mt-1 border-t border-gray-200 pt-2">
-                <div class="px-4 text-xs text-gray-500">{{ __('Block') }}</div>
+                <div class="px-4 text-sm text-gray-500">{{ __('Block') }}</div>
                 <x-responsive-nav-link :href="route('blocks.index')">
                     {{ __('Block List') }}
                 </x-responsive-nav-link>
@@ -157,7 +157,7 @@
 
             <!-- Customer -->
             <div class="mt-1 border-t border-gray-200 pt-2">
-                <div class="px-4 text-xs text-gray-500">{{ __('Customer') }}</div>
+                <div class="px-4 text-sm text-gray-500">{{ __('Customer') }}</div>
                 <x-responsive-nav-link :href="route('customers.index')">
                     {{ __('Customer List') }}
                 </x-responsive-nav-link>

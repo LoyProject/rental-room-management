@@ -53,7 +53,6 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->old_water_number, 0, '.', ',') }} m³</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->old_electric_number, 0, '.', ',') }} kWh</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="" class="text-green-600 hover:text-green-900 mr-4">វិក័យប័ត្រ</a>
                                 <a href="{{ route('customers.edit', $customer) }}" class="text-blue-600 hover:text-blue-900 mr-4">កែប្រែ</a>
                                 <form action="{{ route('customers.destroy', $customer) }}" method="POST" class="inline">
                                     @csrf
