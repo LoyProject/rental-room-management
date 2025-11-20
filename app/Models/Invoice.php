@@ -29,7 +29,8 @@ class Invoice extends Model
         'total_amount_water',
         'electric_unit_price',
         'total_amount_electric',
-        'total_amount',
+        'total_amount_usd',
+        'total_amount_khr',
     ];
     
     public function block()

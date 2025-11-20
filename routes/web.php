@@ -5,6 +5,7 @@ use App\Http\Controllers\SiteController;
 use App\Http\Controllers\BlockController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,14 +21,15 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/customers-by-block/{block_id}', [CustomerController::class, 'getByBlock']);
+    Route::get('/customer-info/{id}', [CustomerController::class, 'getCustomerInfo']);
+    Route::get('/block-info/{id}', [BlockController::class, 'getBlockInfo']);
 
     Route::resource('sites', SiteController::class);
     Route::resource('blocks', BlockController::class);
     Route::resource('customers', CustomerController::class);
     Route::resource('users', UserController::class);
+    Route::resource('invoices', InvoiceController::class);
 });
 
 require __DIR__.'/auth.php';

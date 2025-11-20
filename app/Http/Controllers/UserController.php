@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Site;
 use Illuminate\Http\Request;
 
 
@@ -27,28 +28,28 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
+        $users = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
         return view('users.index', compact('users'));
     }
 
     public function create()
     {
-        return view('users.create');
+        $sites = Site::all();
+        return view('users.create', compact('sites'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
+            'site_id'  => ['nullable', 'exists:sites,id'],
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role'     => ['required', Rule::in(['user','admin','super_admin'])],
+            'role'     => ['required', Rule::in(['user','admin'])],
         ]);
 
         $data['password'] = Hash::make($data['password']);
-
-        // Role is required by validation; no fallback needed here.
 
         $user = User::create($data);
 
@@ -57,12 +58,14 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        $sites = Site::all();
+        return view('users.edit', compact('user', 'sites'));
     }
 
     public function update(Request $request, User $user)
     {
         $data = $request->validate([
+            'site_id'  => ['nullable', 'exists:sites,id'],
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],

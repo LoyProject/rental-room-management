@@ -11,7 +11,8 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'branch',
+        'id',
+        'site_id',
         'name',
         'email',
         'password',
@@ -29,5 +30,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
     }
 }

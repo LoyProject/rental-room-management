@@ -83,4 +83,23 @@ class CustomerController extends Controller
         $customer->delete();
         return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.');
     }
+   
+    public function getByBlock($block_id)
+    {
+        $customers = Customer::where('block_id', $block_id)->get();
+        return response()->json($customers);
+    }
+    
+    public function getCustomerInfo($id)
+    {
+        $customer = Customer::find($id);
+
+        return response()->json([
+            'house_price' => $customer->house_price,
+            'wifi_price' => $customer->wifi_price,
+            'garbage_price' => $customer->garbage_price,
+            'old_water_number' => $customer->old_water_number,
+            'old_electric_number' => $customer->old_electric_number,
+        ]);
+    }
 }

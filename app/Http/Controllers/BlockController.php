@@ -75,4 +75,18 @@ class BlockController extends Controller
         $block->delete();
         return redirect()->route('blocks.index')->with('success', 'Block deleted successfully.');
     }
+
+    public function getBlockInfo($id)
+    {
+        $block = Block::find($id);
+
+        if (!$block) {
+            return response()->json(['error' => 'Block not found'], 404);
+        }
+
+        return response()->json([
+            'water_unit_price' => $block->water_price,
+            'electric_unit_price' => $block->electric_price,
+        ]);
+    }
 }

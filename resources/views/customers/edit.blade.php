@@ -126,7 +126,7 @@
 
                     <button type="submit"
                         class="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-200">
-                        កែប្រែ
+                        យល់ព្រម
                     </button>
                 </div>
             </div>

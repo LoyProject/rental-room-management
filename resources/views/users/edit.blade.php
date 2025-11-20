@@ -10,6 +10,20 @@
 
             <div class="grid grid-cols-1 gap-6">
                 <div>
+                    <label for="site_id" class="block text-sm font-medium text-gray-700">ឈ្មោះតំបន់ <span class="text-red-600">*</span></label>
+                    <select id="site_id" name="site_id" required autofocus
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        <option value="" disabled {{ old('site_id', $user->site_id) ? '' : 'selected' }}>ជ្រើសរើសតំបន់​​</option>
+                        @foreach($sites as $site)
+                            <option value="{{ $site->id }}" {{ (old('site_id', $user->site_id) == $site->id) ? 'selected' : '' }}>{{ $site->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('site_id')
+                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
                     <label for="name" class="block text-sm font-medium text-gray-700">ឈ្មោះអ្នកប្រើប្រាស់<span class="text-red-600">*</span></label>
                     <input id="name" name="name" type="text" value="{{ old('name', $user->name) }}" required autofocus
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
