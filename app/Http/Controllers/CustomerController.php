@@ -17,7 +17,6 @@ class CustomerController extends Controller
             $query->where('name', 'like', $searchTerm)
                 ->orWhere('phone', 'like', $searchTerm)
                 ->orWhere('house_price', 'like', $searchTerm)
-                ->orWhere('wifi_price', 'like', $searchTerm)
                 ->orWhere('garbage_price', 'like', $searchTerm)
                 ->orWhere('old_water_number', 'like', $searchTerm)
                 ->orWhere('old_electric_number', 'like', $searchTerm)
@@ -44,7 +43,6 @@ class CustomerController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:25',
             'house_price' => 'required|numeric|min:0',
-            'wifi_price' => 'required|numeric|min:0',
             'garbage_price' => 'required|integer|min:0',
             'old_water_number' => 'nullable|integer|min:0',
             'old_electric_number' => 'nullable|integer|min:0',
@@ -68,7 +66,6 @@ class CustomerController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:25',
             'house_price' => 'required|numeric|min:0',
-            'wifi_price' => 'required|numeric|min:0',
             'garbage_price' => 'required|integer|min:0',
             'old_water_number' => 'nullable|integer|min:0',
             'old_electric_number' => 'nullable|integer|min:0',
@@ -106,7 +103,6 @@ class CustomerController extends Controller
 
         return response()->json([
             'house_price' => $customer->house_price,
-            'wifi_price' => $customer->wifi_price,
             'garbage_price' => $customer->garbage_price,
             'old_water_number' => $customer->old_water_number,
             'old_electric_number' => $customer->old_electric_number,

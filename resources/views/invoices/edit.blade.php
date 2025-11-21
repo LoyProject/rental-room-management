@@ -3,163 +3,172 @@
 @section('title', 'កែប្រែវិក្កយបត្រ')
 
 @section('content')
-    <div class="bg-white shadow-md rounded-lg p-6">
+    <div class="bg-white shadow-md rounded-lg p-6 min-h-full">
         <x-loading-overlay />
 
         <form action="{{ route('invoices.update', $invoice->id) }}" method="POST">
             @csrf
             @method('PUT')
 
-            <div class="grid grid-cols-1 gap-6">
-            <div>
-                <label for="block_id" class="block text-sm font-medium text-gray-700">
-                    ប្លុក <span class="text-red-600">*</span>
-                </label>
-                <select id="block_id" name="block_id" required
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring-blue-200">
-                    <option value="" disabled>ជ្រើសរើសប្លុក</option>
-                    @foreach($blocks as $block)
-                        <option value="{{ $block->id }}" {{ old('block_id', $invoice->block_id) == $block->id ? 'selected' : '' }}>
-                           {{ $block->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+            <div class="grid grid-cols-1 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label for="block_id" class="block text-sm font-medium text-gray-700">
+                            ប្លុក <span class="text-red-600">*</span>
+                        </label>
+                        <select id="block_id" name="block_id" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring-blue-200">
+                            <option value="" disabled {{ old('block_id', $invoice->block_id) ? '' : 'selected' }}>ជ្រើសរើសប្លុក</option>
+                            @foreach($blocks as $block)
+                                <option value="{{ $block->id }}" {{ (string)old('block_id', $invoice->block_id) === (string)$block->id ? 'selected' : '' }}>
+                                    {{ $block->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
-            <div>
-                <label for="customer_id" class="block text-sm font-medium text-gray-700">
-                    អតិថិជន <span class="text-red-600">*</span>
-                </label>
-                <select id="customer_id" name="customer_id" required
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring-blue-200">
-                    <option value="" disabled>ជ្រើសរើសអតិថិជន</option>
-                    @if($invoice->customer)
-                        <option value="{{ $invoice->customer->id }}" selected>{{ $invoice->customer->name }}</option>
-                    @endif
-                </select>
-            </div>
+                    <div>
+                        <label for="customer_id" class="block text-sm font-medium text-gray-700">
+                            អតិថិជន <span class="text-red-600">*</span>
+                        </label>
+                        <select id="customer_id" name="customer_id" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring-blue-200">
+                            {{-- Ensure current customer is present and selected; optionally include other customers if provided --}}
+                            <option value="" disabled {{ old('customer_id', $invoice->customer_id) ? '' : 'selected' }}>ជ្រើសរើសអតិថិជន</option>
+                            @if(isset($customers) && count($customers))
+                                @foreach($customers as $customer)
+                                    <option value="{{ $customer->id }}" {{ (string)old('customer_id', $invoice->customer_id) === (string)$customer->id ? 'selected' : '' }}>
+                                        {{ $customer->name }}
+                                    </option>
+                                @endforeach
+                            @else
+                                @if($invoice->customer)
+                                    <option value="{{ $invoice->customer->id }}" selected>{{ $invoice->customer->name }}</option>
+                                @endif
+                            @endif
+                        </select>
+                    </div>
 
-            <div>
-                <label for="invoice_date" class="block text-sm font-medium text-gray-700">
-                    កាលបរិច្ឆេទវិក្កយបត្រ <span class="text-red-600">*</span>
-                </label>
-                <input type="date" id="invoice_date" name="invoice_date" required
-                    value="{{ old('invoice_date', isset($invoice->invoice_date) ? ( \Carbon\Carbon::parse($invoice->invoice_date)->format('Y-m-d') ) : '' ) }}"
-                    class="mt-1 block w-full rounded-md border-gray-300">
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label for="from_date" class="block text-sm font-medium text-gray-700">ពីថ្ងៃ <span class="text-red-600">*</span></label>
-                    <input type="date" name="from_date" class="mt-1 block w-full border-gray-300 rounded-md" required
-                        value="{{ old('from_date', isset($invoice->from_date) ? \Carbon\Carbon::parse($invoice->from_date)->format('Y-m-d') : '') }}">
-                </div>
-                <div>
-                    <label for="to_date" class="block text-sm font-medium text-gray-700">ដល់ថ្ងៃ <span class="text-red-600">*</span></label>
-                    <input type="date" name="to_date" class="mt-1 block w-full border-gray-300 rounded-md" required
-                        value="{{ old('to_date', isset($invoice->to_date) ? \Carbon\Carbon::parse($invoice->to_date)->format('Y-m-d') : '') }}">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                    <label for="house_price" class="block text-sm font-medium">តម្លៃផ្ទះ (ដុល្លារ) <span class="text-red-600">*</span></label>
-                    <input type="number" id="house_price" name="house_price" step="0.01" min="0" class="mt-1 block w-full border-gray-300 rounded-md" required
-                        value="{{ old('house_price', $invoice->house_price) }}">
-                </div>
-                <div>
-                    <label for="wifi_price" class="block text-sm font-medium">តម្លៃអ៊ីនធឺណិត (ដុល្លារ) <span class="text-red-600">*</span></label>
-                    <input type="number" id="wifi_price" name="wifi_price" step="0.01" min="0" class="mt-1 block w-full border-gray-300 rounded-md" required
-                        value="{{ old('wifi_price', $invoice->wifi_price) }}">
-                </div>
-                <div>
-                    <label for="garbage_price" class="block text-sm font-medium">សំរាម (រៀល) <span class="text-red-600">*</span></label>
-                    <input type="number" id="garbage_price" name="garbage_price" step="100"  min="0" class="mt-1 block w-full border-gray-300 rounded-md" required
-                        value="{{ old('garbage_price', $invoice->garbage_price) }}">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium">ទឹក (ចាស់ / ថ្មី) <span class="text-red-600">*</span></label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <input type="number" id="old_water_number" name="old_water_number" min="0" placeholder="ចំនួនចាស់"
-                            class="mt-1 block w-full border-gray-300 rounded-md" required
-                            value="{{ old('old_water_number', $invoice->old_water_number) }}">
-                        <input type="number" id="new_water_number" name="new_water_number" min="0" placeholder="ចំនួនថ្មី"
-                            class="mt-1 block w-full border-gray-300 rounded-md" required
-                            value="{{ old('new_water_number', $invoice->new_water_number) }}">
-
-                        <input type="number" id="total_used_water" name="total_used_water"
-                            class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" readonly
-                            value="{{ old('total_used_water', $invoice->total_used_water) }}">
+                    <div>
+                        <label for="invoice_date" class="block text-sm font-medium text-gray-700">
+                            កាលបរិច្ឆេទវិក្កយបត្រ <span class="text-red-600">*</span>
+                        </label>
+                        <input type="date" id="invoice_date" name="invoice_date" required
+                            class="mt-1 block w-full rounded-md border-gray-300"
+                            value="{{ old('invoice_date', \Carbon\Carbon::parse($invoice->invoice_date)->format('Y-m-d')) }}">
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium">អគ្គិសនី (ចាស់ / ថ្មី) <span class="text-red-600">*</span></label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <input type="number" id="old_electric_number" name="old_electric_number" min="0" placeholder="ចំនួនចាស់"
-                            class="mt-1 block w-full border-gray-300 rounded-md" required
-                            value="{{ old('old_electric_number', $invoice->old_electric_number) }}">
-                        <input type="number" id="new_electric_number" name="new_electric_number" min="0" placeholder="ចំនួនថ្មី"
-                            class="mt-1 block w-full border-gray-300 rounded-md" required
-                            value="{{ old('new_electric_number', $invoice->new_electric_number) }}">
-
-                        <input type="number" id="total_used_electric" name="total_used_electric"
-                            class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" readonly
-                            value="{{ old('total_used_electric', $invoice->total_used_electric) }}">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="from_date" class="block text-sm font-medium text-gray-700">ពីថ្ងៃ <span class="text-red-600">*</span></label>
+                        <input type="date" name="from_date" class="mt-1 block w-full border-gray-300 rounded-md" required
+                            value="{{ old('from_date', \Carbon\Carbon::parse($invoice->from_date)->format('Y-m-d')) }}">
+                    </div>
+                    <div>
+                        <label for="to_date" class="block text-sm font-medium text-gray-700">ដល់ថ្ងៃ <span class="text-red-600">*</span></label>
+                        <input type="date" name="to_date" class="mt-1 block w-full border-gray-300 rounded-md" required
+                            value="{{ old('to_date', \Carbon\Carbon::parse($invoice->to_date)->format('Y-m-d')) }}">
                     </div>
                 </div>
-            </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium">តម្លៃទឹក / 1 m³ (រៀល) <span class="text-red-600">*</span></label>
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="number" id="water_unit_price" name="water_unit_price" min="0"
-                            class="mt-1 block w-full border-gray-300 rounded-md" required
-                            value="{{ old('water_unit_price', $invoice->water_unit_price) }}">
-
-                        <input type="number" id="total_amount_water" name="total_amount_water"
-                            class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" readonly
-                            value="{{ old('total_amount_water', $invoice->total_amount_water) }}">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="house_price" class="block text-sm font-medium">តម្លៃផ្ទះ (ដុល្លារ) <span class="text-red-600">*</span></label>
+                        <input type="number" id="house_price" name="house_price" step="0.01" min="0" class="mt-1 block w-full border-gray-300 rounded-md" required
+                            value="{{ old('house_price', $invoice->house_price) }}">
+                    </div>
+                    <div>
+                        <label for="garbage_price" class="block text-sm font-medium">សំរាម (រៀល) <span class="text-red-600">*</span></label>
+                        <input type="number" id="garbage_price" name="garbage_price" step="100"  min="0" class="mt-1 block w-full border-gray-300 rounded-md" required
+                            value="{{ old('garbage_price', $invoice->garbage_price) }}">
                     </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium">តម្លៃអគ្គិសនី / 1 kWh (រៀល) <span class="text-red-600">*</span></label>
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="number" id="electric_unit_price" name="electric_unit_price" min="0"
-                            class="mt-1 block w-full border-gray-300 rounded-md" required
-                            value="{{ old('electric_unit_price', $invoice->electric_unit_price) }}">
 
-                        <input type="number" id="total_amount_electric" name="total_amount_electric"
-                            class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" readonly
-                            value="{{ old('total_amount_electric', $invoice->total_amount_electric) }}">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium">ចំនួនទឹក (ចាស់ / ថ្មី / សរុប) <span class="text-red-600">*</span></label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <input type="number" id="old_water_number" name="old_water_number" min="0"
+                                class="mt-1 block w-full border-gray-300 rounded-md" required
+                                value="{{ old('old_water_number', $invoice->old_water_number) }}">
+                            <input type="number" id="new_water_number" name="new_water_number" min="0"
+                                class="mt-1 block w-full border-gray-300 rounded-md" required
+                                value="{{ old('new_water_number', $invoice->new_water_number) }}">
+
+                            <input type="number" id="total_used_water" name="total_used_water"
+                                class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" readonly
+                                value="{{ old('total_used_water', $invoice->total_used_water) }}">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium">ចំនួនអគ្គិសនី (ចាស់ / ថ្មី / សរុប) <span class="text-red-600">*</span></label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <input type="number" id="old_electric_number" name="old_electric_number" min="0"
+                                class="mt-1 block w-full border-gray-300 rounded-md" required
+                                value="{{ old('old_electric_number', $invoice->old_electric_number) }}">
+                            <input type="number" id="new_electric_number" name="new_electric_number" min="0"
+                                class="mt-1 block w-full border-gray-300 rounded-md" required
+                                value="{{ old('new_electric_number', $invoice->new_electric_number) }}">
+
+                            <input type="number" id="total_used_electric" name="total_used_electric"
+                                class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" readonly
+                                value="{{ old('total_used_electric', $invoice->total_used_electric) }}">
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label for="total_amount_usd" class="block text-sm font-medium">ចំនួនទឹកប្រាក់សរុប (ដុល្លារ)</label>
-                    <input type="number" id="total_amount_usd" name="total_amount_usd"
-                        class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" readonly
-                        value="{{ old('total_amount_usd', $invoice->total_amount_usd) }}">
-                </div>
-                <div>
-                    <label for="total_amount_khr" class="block text-sm font-medium">ចំនួនទឹកប្រាក់សរុប (រៀល)</label>
-                    <input type="number" id="total_amount_khr" name="total_amount_khr"
-                        class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" readonly
-                        value="{{ old('total_amount_khr', $invoice->total_amount_khr) }}">
-                </div>
-            </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium">តម្លៃទឹក / ១ m³ (រៀល) <span class="text-red-600">*</span></label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" id="water_unit_price" name="water_unit_price" min="0"
+                                class="mt-1 block w-full border-gray-300 rounded-md" required
+                                value="{{ old('water_unit_price', $invoice->water_unit_price) }}">
 
-            <div class="flex justify-end gap-3 mt-4">
-                <a href="{{ route('invoices.index') }}" class="text-sm text-gray-600 hover:underline px-3 py-2">បោះបង់</a>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-sm text-white rounded-md hover:bg-blue-500">
-                    យល់ព្រម
-                </button>
+                            <input type="number" id="total_amount_water" name="total_amount_water"
+                                class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" readonly
+                                value="{{ old('total_amount_water', $invoice->total_amount_water) }}">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">តម្លៃអគ្គិសនី / ១ kWh (រៀល) <span class="text-red-600">*</span></label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" id="electric_unit_price" name="electric_unit_price" min="0"
+                                class="mt-1 block w-full border-gray-300 rounded-md" required
+                                value="{{ old('electric_unit_price', $invoice->electric_unit_price) }}">
+
+                            <input type="number" id="total_amount_electric" name="total_amount_electric"
+                                class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" readonly
+                                value="{{ old('total_amount_electric', $invoice->total_amount_electric) }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="total_amount_usd" class="block text-sm font-bold">ចំនួនទឹកប្រាក់សរុប (ដុល្លារ)</label>
+                        <input type="number" id="total_amount_usd" name="total_amount_usd"
+                            class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md font-bold text-green-600" readonly
+                            value="{{ old('total_amount_usd', $invoice->total_amount_usd) }}">
+                    </div>
+                    <div>
+                        <label for="total_amount_khr" class="block text-sm font-bold">ចំនួនទឹកប្រាក់សរុប (រៀល)</label>
+                        <input type="number" id="total_amount_khr" name="total_amount_khr"
+                            class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md font-bold text-green-600" readonly
+                            value="{{ old('total_amount_khr', $invoice->total_amount_khr) }}">
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-3 mt-4">
+                    <a href="{{ route('invoices.index') }}"
+                        class="text-sm text-gray-600 hover:underline px-3 py-2">បោះបង់</a>
+                    <button type="submit"
+                        class="px-4 py-2 bg-blue-600 text-sm text-white rounded-md hover:bg-blue-500">
+                        កែប្រែ
+                    </button>
+                </div>
             </div>
         </form>
     </div>
@@ -179,7 +188,6 @@
                     .then(res => res.json())
                     .then(data => {
                         document.querySelector('input[name="house_price"]').value = data.house_price ?? '';
-                        document.querySelector('input[name="wifi_price"]').value = data.wifi_price ?? '';
                         document.querySelector('input[name="garbage_price"]').value = data.garbage_price ?? '';
                         document.querySelector('input[name="old_water_number"]').value = data.old_water_number ?? '';
                         document.querySelector('input[name="old_electric_number"]').value = data.old_electric_number ?? '';
@@ -210,13 +218,45 @@
                         data.forEach(customer => {
                             customerSelect.innerHTML += `<option value="${customer.id}">${customer.name}</option>`;
                         });
+                        
+                        let oldWaterInput = document.getElementById('old_water_number');
+                        let oldElectricInput = document.getElementById('old_electric_number');
+                        let housePriceInput = document.getElementById('house_price');
+                        let garbagePriceInput = document.getElementById('garbage_price');
+                        let newWaterInput = document.getElementById('new_water_number');
+                        let newElectricInput = document.getElementById('new_electric_number');
+                        let waterUnitInput = document.getElementById('water_unit_price');
+                        let electricUnitInput = document.getElementById('electric_unit_price');
+                        let totalUsedWaterInput = document.getElementById('total_used_water');
+                        let totalUsedElectricInput = document.getElementById('total_used_electric');
+                        let totalAmountWaterInput = document.getElementById('total_amount_water');
+                        let totalAmountElectricInput = document.getElementById('total_amount_electric');
+                        let totalAmountUsdInput = document.getElementById('total_amount_usd');
+                        let totalAmountKhrInput = document.getElementById('total_amount_khr');
+                        
+                        totalAmountUsdInput.value = '';
+                        totalAmountKhrInput.value = '';
+                        totalUsedWaterInput.value = '';
+                        totalUsedElectricInput.value = '';
+                        totalAmountWaterInput.value = '';
+                        totalAmountElectricInput.value = '';
+                        waterUnitInput.value = '';
+                        electricUnitInput.value = '';
+                        newWaterInput.value = '';
+                        newElectricInput.value = '';
+                        housePriceInput.value = '';
+                        garbagePriceInput.value = '';
+                        oldWaterInput.value = '';
+                        oldElectricInput.value = '';
                     });
 
                 const blockInfoPromise = fetch(`/block-info/${blockId}`)
                     .then(res => res.json())
                     .then(data => {
-                        document.querySelector('input[name="water_unit_price"]').value = data.water_unit_price ?? '';
-                        document.querySelector('input[name="electric_unit_price"]').value = data.electric_unit_price ?? '';
+                        document.getElementById('customer_id').addEventListener('change', function () {
+                            document.querySelector('input[name="water_unit_price"]').value = data.water_unit_price ?? '';
+                            document.querySelector('input[name="electric_unit_price"]').value = data.electric_unit_price ?? '';
+                        });
                     });
 
                 Promise.all([customersPromise, blockInfoPromise])
@@ -237,7 +277,6 @@
                 let electricUnit = parseFloat(document.getElementById('electric_unit_price').value) || 0;
 
                 let housePrice = parseFloat(document.getElementById('house_price').value) || 0;
-                let wifiPrice = parseFloat(document.getElementById('wifi_price').value) || 0;
                 let garbagePrice = parseFloat(document.getElementById('garbage_price').value) || 0;
 
                 let totalUsedWater = Math.max(newWater - oldWater, 0);
@@ -246,7 +285,7 @@
                 let totalWater = totalUsedWater * waterUnit;
                 let totalElectric = totalUsedElectric * electricUnit;
 
-                let totalUsd = housePrice + wifiPrice;
+                let totalUsd = housePrice;
                 let totalKhr = Math.ceil((garbagePrice + totalWater + totalElectric) / 500) * 500;
 
                 document.getElementById('total_used_water').value = totalUsedWater;
@@ -259,7 +298,7 @@
             }
 
             ['old_water_number','new_water_number','old_electric_number','new_electric_number',
-            'water_unit_price','electric_unit_price','house_price','wifi_price','garbage_price']
+            'water_unit_price','electric_unit_price','house_price', 'garbage_price']
             .forEach(id => {
                 let el = document.getElementById(id);
                 if(el) el.addEventListener('input', calculateInvoice);

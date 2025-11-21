@@ -34,6 +34,19 @@
                     <span>ទំព័រដើម</span>
                 </a>
 
+                <a href="{{ route('invoices.index') }}" 
+                    class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
+                        {{ Route::is('invoices.*') ? 'bg-purple-700' : '' }}">
+                    <svg class="w-5 h-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 8v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a2 2 0 0 1 2-2h11"/>
+                        <path d="M21 8h-7a2 2 0 0 0-2 2v8" />
+                        <path d="M7 12h6" />
+                        <path d="M7 16h6" />
+                        <path d="M5 4l1.5 2 1.5-2 1.5 2L11 4l1.5 2L14 4l1.5 2L18 4" />
+                    </svg>
+                    <span>វិក្កយបត្រ</span>
+                </a>
+
                 <a href="{{ route('sites.index') }}" 
                     class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
                         {{ Route::is('sites.*') ? 'bg-purple-700' : '' }}">
@@ -64,19 +77,6 @@
                         <path d="M17 11a3 3 0 110-6 3 3 0 010 6z"/>
                     </svg>
                     <span>អតិថិជន</span>
-                </a>
-
-                <a href="{{ route('invoices.index') }}" 
-                    class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
-                        {{ Route::is('invoices.*') ? 'bg-purple-700' : '' }}">
-                    <svg class="w-5 h-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M21 8v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a2 2 0 0 1 2-2h11"/>
-                        <path d="M21 8h-7a2 2 0 0 0-2 2v8" />
-                        <path d="M7 12h6" />
-                        <path d="M7 16h6" />
-                        <path d="M5 4l1.5 2 1.5-2 1.5 2L11 4l1.5 2L14 4l1.5 2L18 4" />
-                    </svg>
-                    <span>វិក្កយបត្រ</span>
                 </a>
 
                 <a href="{{ route('users.index') }}" 

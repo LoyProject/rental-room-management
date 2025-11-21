@@ -1,44 +1,46 @@
 @extends('layouts.app')
 
-@section('title', 'បង្កើតវិក្ក័យបត្រថ្មី')
+@section('title', 'បង្កើតវិក្កយបត្រថ្មី')
 
 @section('content')
-    <div class="bg-white shadow-md rounded-lg p-6">
+    <div class="bg-white shadow-md rounded-lg p-6 min-h-full">
         <x-loading-overlay />
         
         <form action="{{ route('invoices.store') }}" method="POST">
             @csrf
 
-            <div class="grid grid-cols-1 gap-6">
-                <div>
-                    <label for="block_id" class="block text-sm font-medium text-gray-700">
-                        ប្លុក <span class="text-red-600">*</span>
-                    </label>
-                    <select id="block_id" name="block_id" required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring-blue-200">
-                        <option value="" disabled selected>ជ្រើសរើសប្លុក</option>
-                        @foreach($blocks as $block)
-                            <option value="{{ $block->id }}">{{ $block->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+            <div class="grid grid-cols-1 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label for="block_id" class="block text-sm font-medium text-gray-700">
+                            ប្លុក <span class="text-red-600">*</span>
+                        </label>
+                        <select id="block_id" name="block_id" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring-blue-200">
+                            <option value="" disabled selected>ជ្រើសរើសប្លុក</option>
+                            @foreach($blocks as $block)
+                                <option value="{{ $block->id }}">{{ $block->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                <div>
-                    <label for="customer_id" class="block text-sm font-medium text-gray-700">
-                        អតិថិជន <span class="text-red-600">*</span>
-                    </label>
-                    <select id="customer_id" name="customer_id" required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring-blue-200">
-                        <option value="" disabled selected>ជ្រើសរើសអតិថិជន</option>  
-                    </select>
-                </div>
+                    <div>
+                        <label for="customer_id" class="block text-sm font-medium text-gray-700">
+                            អតិថិជន <span class="text-red-600">*</span>
+                        </label>
+                        <select id="customer_id" name="customer_id" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring-blue-200">
+                            <option value="" disabled selected>ជ្រើសរើសអតិថិជន</option>  
+                        </select>
+                    </div>
 
-                <div>
-                    <label for="invoice_date" class="block text-sm font-medium text-gray-700">
-                        កាលបរិច្ឆេទវិក្កយបត្រ <span class="text-red-600">*</span>
-                    </label>
-                    <input type="date" id="invoice_date" name="invoice_date" required
-                        class="mt-1 block w-full rounded-md border-gray-300">
+                    <div>
+                        <label for="invoice_date" class="block text-sm font-medium text-gray-700">
+                            កាលបរិច្ឆេទវិក្កយបត្រ <span class="text-red-600">*</span>
+                        </label>
+                        <input type="date" id="invoice_date" name="invoice_date" required
+                            class="mt-1 block w-full rounded-md border-gray-300">
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -52,14 +54,10 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label for="house_price" class="block text-sm font-medium">តម្លៃផ្ទះ (ដុល្លារ) <span class="text-red-600">*</span></label>
                         <input type="number" id="house_price" name="house_price" step="0.01" min="0" class="mt-1 block w-full border-gray-300 rounded-md" required>
-                    </div>
-                    <div>
-                        <label for="wifi_price" class="block text-sm font-medium">តម្លៃអ៊ីនធឺណិត (ដុល្លារ) <span class="text-red-600">*</span></label>
-                        <input type="number" id="wifi_price" name="wifi_price" step="0.01" min="0" class="mt-1 block w-full border-gray-300 rounded-md" required>
                     </div>
                     <div>
                         <label for="garbage_price" class="block text-sm font-medium">សំរាម (រៀល) <span class="text-red-600">*</span></label>
@@ -69,11 +67,11 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium">ទឹក (ចាស់ / ថ្មី) <span class="text-red-600">*</span></label>
+                        <label class="block text-sm font-medium">ចំនួនទឹក (ចាស់ / ថ្មី / សរុប) <span class="text-red-600">*</span></label>
                         <div class="grid grid-cols-3 gap-2">
-                            <input type="number" id="old_water_number" name="old_water_number" min="0" placeholder="ចំនួនចាស់"
+                            <input type="number" id="old_water_number" name="old_water_number" min="0"
                                 class="mt-1 block w-full border-gray-300 rounded-md" required>
-                            <input type="number" id="new_water_number" name="new_water_number" min="0" placeholder="ចំនួនថ្មី"
+                            <input type="number" id="new_water_number" name="new_water_number" min="0"
                                 class="mt-1 block w-full border-gray-300 rounded-md" required>
 
                             <input type="number" id="total_used_water" name="total_used_water" 
@@ -82,11 +80,11 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium">អគ្គិសនី (ចាស់ / ថ្មី) <span class="text-red-600">*</span></label>
+                        <label class="block text-sm font-medium">ចំនួនអគ្គិសនី (ចាស់ / ថ្មី / សរុប) <span class="text-red-600">*</span></label>
                         <div class="grid grid-cols-3 gap-2">
-                            <input type="number" id="old_electric_number" name="old_electric_number" min="0" placeholder="ចំនួនចាស់"
+                            <input type="number" id="old_electric_number" name="old_electric_number" min="0"
                                 class="mt-1 block w-full border-gray-300 rounded-md" required>
-                            <input type="number" id="new_electric_number" name="new_electric_number" min="0" placeholder="ចំនួនថ្មី"
+                            <input type="number" id="new_electric_number" name="new_electric_number" min="0"
                                 class="mt-1 block w-full border-gray-300 rounded-md" required>
 
                             <input type="number" id="total_used_electric" name="total_used_electric" 
@@ -97,7 +95,7 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium">តម្លៃទឹក / ១ ខ្នាត (រៀល) <span class="text-red-600">*</span></label>
+                        <label class="block text-sm font-medium">តម្លៃទឹក / ១ m³ (រៀល) <span class="text-red-600">*</span></label>
                         <div class="grid grid-cols-2 gap-2">
                             <input type="number" id="water_unit_price" name="water_unit_price" min="0" 
                                 class="mt-1 block w-full border-gray-300 rounded-md" required>
@@ -107,7 +105,7 @@
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium">តម្លៃអគ្គិសនី / ១ ខ្នាត (រៀល) <span class="text-red-600">*</span></label>
+                        <label class="block text-sm font-medium">តម្លៃអគ្គិសនី / ១ kWh (រៀល) <span class="text-red-600">*</span></label>
                         <div class="grid grid-cols-2 gap-2">
                             <input type="number" id="electric_unit_price" name="electric_unit_price" min="0" 
                                 class="mt-1 block w-full border-gray-300 rounded-md" required>
@@ -120,14 +118,14 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label for="total_amount_usd" class="block text-sm font-medium">ចំនួនទឹកប្រាក់សរុប (ដុល្លារ)</label>
+                        <label for="total_amount_usd" class="block text-sm font-bold">ចំនួនទឹកប្រាក់សរុប (ដុល្លារ)</label>
                         <input type="number" id="total_amount_usd" name="total_amount_usd" 
-                            class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" readonly> 
+                            class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md font-bold text-green-600" readonly> 
                     </div>
                     <div>
-                        <label for="total_amount_khr" class="block text-sm font-medium">ចំនួនទឹកប្រាក់សរុប (រៀល)</label>
+                        <label for="total_amount_khr" class="block text-sm font-bold">ចំនួនទឹកប្រាក់សរុប (រៀល)</label>
                         <input type="number" id="total_amount_khr" name="total_amount_khr" 
-                            class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" readonly> 
+                            class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md font-bold text-green-600" readonly> 
                     </div>
                 </div>
 
@@ -139,7 +137,6 @@
                         បង្កើតថ្មី
                     </button>
                 </div>
-
             </div>
         </form>
     </div>
@@ -159,7 +156,6 @@
                     .then(res => res.json())
                     .then(data => {
                         document.querySelector('input[name="house_price"]').value = data.house_price ?? '';
-                        document.querySelector('input[name="wifi_price"]').value = data.wifi_price ?? '';
                         document.querySelector('input[name="garbage_price"]').value = data.garbage_price ?? '';
                         document.querySelector('input[name="old_water_number"]').value = data.old_water_number ?? '';
                         document.querySelector('input[name="old_electric_number"]').value = data.old_electric_number ?? '';
@@ -190,13 +186,45 @@
                         data.forEach(customer => {
                             customerSelect.innerHTML += `<option value="${customer.id}">${customer.name}</option>`;
                         });
+
+                        let oldWaterInput = document.getElementById('old_water_number');
+                        let oldElectricInput = document.getElementById('old_electric_number');
+                        let housePriceInput = document.getElementById('house_price');
+                        let garbagePriceInput = document.getElementById('garbage_price');
+                        let newWaterInput = document.getElementById('new_water_number');
+                        let newElectricInput = document.getElementById('new_electric_number');
+                        let waterUnitInput = document.getElementById('water_unit_price');
+                        let electricUnitInput = document.getElementById('electric_unit_price');
+                        let totalUsedWaterInput = document.getElementById('total_used_water');
+                        let totalUsedElectricInput = document.getElementById('total_used_electric');
+                        let totalAmountWaterInput = document.getElementById('total_amount_water');
+                        let totalAmountElectricInput = document.getElementById('total_amount_electric');
+                        let totalAmountUsdInput = document.getElementById('total_amount_usd');
+                        let totalAmountKhrInput = document.getElementById('total_amount_khr');
+                        
+                        totalAmountUsdInput.value = '';
+                        totalAmountKhrInput.value = '';
+                        totalUsedWaterInput.value = '';
+                        totalUsedElectricInput.value = '';
+                        totalAmountWaterInput.value = '';
+                        totalAmountElectricInput.value = '';
+                        waterUnitInput.value = '';
+                        electricUnitInput.value = '';
+                        newWaterInput.value = '';
+                        newElectricInput.value = '';
+                        housePriceInput.value = '';
+                        garbagePriceInput.value = '';
+                        oldWaterInput.value = '';
+                        oldElectricInput.value = '';
                     });
 
                 const blockInfoPromise = fetch(`/block-info/${blockId}`)
                     .then(res => res.json())
                     .then(data => {
-                        document.querySelector('input[name="water_unit_price"]').value = data.water_unit_price ?? '';
-                        document.querySelector('input[name="electric_unit_price"]').value = data.electric_unit_price ?? '';
+                        document.getElementById('customer_id').addEventListener('change', function () {
+                            document.querySelector('input[name="water_unit_price"]').value = data.water_unit_price ?? '';
+                            document.querySelector('input[name="electric_unit_price"]').value = data.electric_unit_price ?? '';
+                        });
                     });
 
                 Promise.all([customersPromise, blockInfoPromise])
@@ -217,7 +245,6 @@
                 let electricUnit = parseFloat(document.getElementById('electric_unit_price').value) || 0;
 
                 let housePrice = parseFloat(document.getElementById('house_price').value) || 0;
-                let wifiPrice = parseFloat(document.getElementById('wifi_price').value) || 0;
                 let garbagePrice = parseFloat(document.getElementById('garbage_price').value) || 0;
 
                 let totalUsedWater = Math.max(newWater - oldWater, 0);
@@ -226,7 +253,7 @@
                 let totalWater = totalUsedWater * waterUnit;
                 let totalElectric = totalUsedElectric * electricUnit;
 
-                let totalUsd = housePrice + wifiPrice;
+                let totalUsd = housePrice;
                 let totalKhr = Math.ceil((garbagePrice + totalWater + totalElectric) / 500) * 500;
 
                 document.getElementById('total_used_water').value = totalUsedWater;
@@ -239,7 +266,7 @@
             }
 
             ['old_water_number','new_water_number','old_electric_number','new_electric_number',
-            'water_unit_price','electric_unit_price','house_price','wifi_price','garbage_price']
+            'water_unit_price','electric_unit_price','house_price','garbage_price']
             .forEach(id => {
                 let el = document.getElementById(id);
                 if(el) el.addEventListener('input', calculateInvoice);

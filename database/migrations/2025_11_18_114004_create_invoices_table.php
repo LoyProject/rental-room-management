@@ -19,7 +19,6 @@ return new class extends Migration
             $table->date('to_date');
 
             $table->decimal('house_price', 8, 2)->default(0);
-            $table->decimal('wifi_price', 8, 2)->default(0);
             $table->integer('garbage_price')->default(0);
 
             $table->integer('old_water_number')->default(0);

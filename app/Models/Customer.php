@@ -16,7 +16,6 @@ class Customer extends Model
         'name',
         'phone',
         'house_price',
-        'wifi_price',
         'garbage_price',
         'old_water_number',
         'old_electric_number',

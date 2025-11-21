@@ -3,26 +3,11 @@
 @section('title', 'កែប្រែអ្នកប្រើប្រាស់')
 
 @section('content')
-    <div class="bg-white shadow-md rounded-lg p-6">
+    <div class="bg-white shadow-md rounded-lg p-6 min-h-full">
         <form action="{{ route('users.update', $user) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
-
-            <div class="grid grid-cols-1 gap-6">
-                <div>
-                    <label for="site_id" class="block text-sm font-medium text-gray-700">ឈ្មោះតំបន់ <span class="text-red-600">*</span></label>
-                    <select id="site_id" name="site_id" required autofocus
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                        <option value="" disabled {{ old('site_id', $user->site_id) ? '' : 'selected' }}>ជ្រើសរើសតំបន់​​</option>
-                        @foreach($sites as $site)
-                            <option value="{{ $site->id }}" {{ (old('site_id', $user->site_id) == $site->id) ? 'selected' : '' }}>{{ $site->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('site_id')
-                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
+            <div class="grid flex-col sm:grid-cols-2 gap-6">
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700">ឈ្មោះអ្នកប្រើប្រាស់<span class="text-red-600">*</span></label>
                     <input id="name" name="name" type="text" value="{{ old('name', $user->name) }}" required autofocus
@@ -41,16 +26,32 @@
                     @enderror
                 </div>
 
-                <div>
-                    <label for="role" class="block text-sm font-medium text-gray-700">តួនាទី <span class="text-red-600">*</span></label>
-                    <select id="role" name="role" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                        <option value="" disabled {{ old('role', $user->role) ? '' : 'selected' }}>ជ្រើសរើសតួនាទី</option>
-                        <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>User</option>
-                        <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
-                    </select>
-                    @error('role')
-                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                    @enderror
+                <div class="grid grid-cols-1 {{ old('role', $user->role) == 'admin' ? '' : 'md:grid-cols-2' }} gap-6">
+                    <div>
+                        <label for="role" class="block text-sm font-medium text-gray-700">តួនាទី <span class="text-red-600">*</span></label>
+                        <select id="role" name="role" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                            <option value="" disabled {{ old('role', $user->role) ? '' : 'selected' }}>ជ្រើសរើសតួនាទី</option>
+                            <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>User</option>
+                        </select>
+                        @error('role')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="{{ old('role', $user->role) == 'admin' ? 'hidden' : '' }}">
+                        <label for="site_id" class="block text-sm font-medium text-gray-700">ឈ្មោះតំបន់ <span class="text-red-600">*</span></label>
+                        <select id="site_id" name="site_id" required autofocus
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                            <option value="" disabled {{ old('site_id', $user->site_id) ? '' : 'selected' }}>ជ្រើសរើសតំបន់​​</option>
+                            @foreach($sites as $site)
+                                <option value="{{ $site->id }}" {{ (old('site_id', $user->site_id) == $site->id) ? 'selected' : '' }}>{{ $site->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('site_id')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -122,5 +123,34 @@
                 if (eyeClosed) eyeClosed.classList.remove('hidden');
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var roleSelect = document.getElementById('role');
+            var siteSelect = document.getElementById('site_id');
+            if (!roleSelect || !siteSelect) return;
+            var siteContainer = siteSelect.closest('div');
+            var formContainer = siteContainer.closest('.grid');
+
+            function updateSiteVisibility() {
+                if (roleSelect.value === 'admin') {
+                    siteContainer.classList.add('hidden');
+                    siteSelect.required = false;
+                    formContainer.classList.remove('md:grid-cols-2');
+                } else if (roleSelect.value === '') {
+                    siteContainer.classList.add('hidden');
+                    siteSelect.required = false;
+                    siteSelect.value = '';
+                    formContainer.classList.remove('md:grid-cols-2');
+                } else {
+                    siteContainer.classList.remove('hidden');
+                    siteSelect.required = true;
+                    siteSelect.value = '';
+                    formContainer.classList.add('md:grid-cols-2');
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', updateSiteVisibility);
+            roleSelect.addEventListener('change', updateSiteVisibility);
+        });
     </script>
 @endsection

@@ -33,7 +33,6 @@
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ឈ្មោះ</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ទូរស័ព្ទ</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">តម្លៃផ្ទះ</th>
-                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">តម្លៃអ៊ីនធឺណិត</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">តម្លៃសំរាម</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">លេខកុងទ័រចាស់(ទឹក)</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">លេខកុងទ័រចាស់(អគ្គិសនី)</th>
@@ -48,7 +47,6 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->phone }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->house_price, 2, '.', ',') }} USD</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->wifi_price, 2, '.', ',') }} USD</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->garbage_price, 0, '.', ',') }} KHR</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->old_water_number, 0, '.', ',') }} m³</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->old_electric_number, 0, '.', ',') }} kWh</td>
@@ -63,7 +61,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10" class="text-center px-6 py-4">គ្មានអតិថិជនទេ</td>
+                            <td colspan="9" class="text-center px-6 py-4">គ្មានអតិថិជនទេ</td>
                         </tr>
                     @endforelse
                 </tbody>

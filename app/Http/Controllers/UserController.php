@@ -69,7 +69,7 @@ class UserController extends Controller
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
-            'role'     => ['required', Rule::in(['user','admin','super_admin'])],
+            'role'     => ['required', Rule::in(['user','admin'])],
         ]);
 
         if (!empty($data['password'])) {
@@ -80,7 +80,11 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return redirect()->route('users.index', $user)->with('success', "User {$user->name} updated.");
+        if ($data['role'] === 'admin') {
+            $user->update(['site_id' => null]);
+        }
+
+        return redirect()->route('users.index')->with('success', "User {$user->name} updated.");
     }
 
     public function destroy(User $user)

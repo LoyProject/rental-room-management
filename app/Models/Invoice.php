@@ -17,7 +17,6 @@ class Invoice extends Model
         'from_date',
         'to_date',
         'house_price',
-        'wifi_price',
         'garbage_price',
         'old_water_number',
         'new_water_number',

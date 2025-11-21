@@ -8,7 +8,7 @@
             @csrf
             @method('PUT')
 
-            <div class="grid grid-cols-1 gap-6">
+            <div class="grid grid-cols-2 gap-6">
                 <div>
                     <label for="block_id" class="block text-sm font-medium text-gray-700">
                         តំបន់ <span class="text-red-600">*</span>
@@ -27,7 +27,6 @@
                         <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                     @enderror
                 </div>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700">
@@ -53,8 +52,7 @@
                         @enderror
                     </div>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="house_price" class="block text-sm font-medium text-gray-700">
                             តម្លៃផ្ទះ (ដុល្លារ) <span class="text-red-600">*</span>
@@ -63,18 +61,6 @@
                                value="{{ old('house_price', $customer->house_price) }}" required
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                         @error('house_price')
-                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="wifi_price" class="block text-sm font-medium text-gray-700">
-                            តម្លៃអ៊ីនធឺណិត (ដុល្លារ) <span class="text-red-600">*</span>
-                        </label>
-                        <input id="wifi_price" name="wifi_price" type="number" step="0.01" min="0"
-                               value="{{ old('wifi_price', $customer->wifi_price) }}" required
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                        @error('wifi_price')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
@@ -91,8 +77,7 @@
                         @enderror
                     </div>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="old_water_number" class="block text-sm font-medium text-gray-700">
                             កុងទ័រចាស់(ទឹក) (m³)
@@ -117,18 +102,17 @@
                         @enderror
                     </div>
                 </div>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3 mt-4">
+                <a href="{{ route('customers.index') }}"
+                    class="w-full sm:w-auto text-center sm:text-left text-sm text-gray-600 hover:underline px-3 py-2 rounded-md">
+                    បោះបង់
+                </a>
 
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3 mt-4">
-                    <a href="{{ route('customers.index') }}"
-                       class="w-full sm:w-auto text-center sm:text-left text-sm text-gray-600 hover:underline px-3 py-2 rounded-md">
-                        បោះបង់
-                    </a>
-
-                    <button type="submit"
-                        class="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-sm text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-200">
-                        យល់ព្រម
-                    </button>
-                </div>
+                <button type="submit"
+                    class="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-sm text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-200">
+                    យល់ព្រម
+                </button>
             </div>
         </form>
     </div>

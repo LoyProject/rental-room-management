@@ -52,7 +52,6 @@ class InvoiceController extends Controller
             'to_date'               => 'nullable|date',
 
             'house_price'           => 'nullable|numeric|min:0',
-            'wifi_price'            => 'nullable|numeric|min:0',
             'garbage_price'         => 'nullable|numeric|min:0',
 
             'old_water_number'      => 'nullable|numeric|min:0',
@@ -106,7 +105,6 @@ class InvoiceController extends Controller
             'to_date'               => 'nullable|date',
 
             'house_price'           => 'nullable|numeric|min:0',
-            'wifi_price'            => 'nullable|numeric|min:0',
             'garbage_price'         => 'nullable|numeric|min:0',
 
             'old_water_number'      => 'nullable|numeric|min:0',

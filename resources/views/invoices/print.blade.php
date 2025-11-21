@@ -31,10 +31,6 @@
                         <td class="py-2 text-right">{{ number_format($invoice->house_price, 2) }}</td>
                     </tr>
                     <tr>
-                        <td class="py-2">Wifi (USD)</td>
-                        <td class="py-2 text-right">{{ number_format($invoice->wifi_price, 2) }}</td>
-                    </tr>
-                    <tr>
                         <td class="py-2">Garbage (KHR)</td>
                         <td class="py-2 text-right">{{ number_format($invoice->garbage_price) }}</td>
                     </tr>
