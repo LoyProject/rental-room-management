@@ -4,15 +4,8 @@
 
 @section('content')
     <div class="bg-white shadow-md rounded-lg p-6">
-        <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 hidden">
-            <div class="bg-white p-6 rounded-md shadow-md flex items-center gap-3">
-                <svg class="animate-spin h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                </svg>
-                <span class="font-medium text-gray-700">កំពុងដំណើរការ...</span>
-            </div>
-        </div>
+        <x-loading-overlay />
+        
         <form action="{{ route('invoices.store') }}" method="POST">
             @csrf
 
@@ -37,7 +30,6 @@
                     <select id="customer_id" name="customer_id" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring-blue-200">
                         <option value="" disabled selected>ជ្រើសរើសអតិថិជន</option>  
-                        
                     </select>
                 </div>
 
@@ -189,7 +181,7 @@
 
                 loadingOverlay.classList.remove('hidden');
 
-                const customersPromise = fetch(`/customers-by-block/${blockId}`)
+                const customersPromise = fetch(`/customers-by-block/${blockId}?month={{ date('m') }}&year={{ date('Y') }}`)
                     .then(res => res.json())
                     .then(data => {
                         let customerSelect = document.getElementById('customer_id');
@@ -231,11 +223,11 @@
                 let totalUsedWater = Math.max(newWater - oldWater, 0);
                 let totalUsedElectric = Math.max(newElectric - oldElectric, 0);
 
-                let totalWater = Math.ceil((totalUsedWater * waterUnit) / 500) * 500;
-                let totalElectric = Math.ceil((totalUsedElectric * electricUnit) / 500) * 500;
+                let totalWater = totalUsedWater * waterUnit;
+                let totalElectric = totalUsedElectric * electricUnit;
 
                 let totalUsd = housePrice + wifiPrice;
-                let totalKhr = garbagePrice + totalWater + totalElectric;
+                let totalKhr = Math.ceil((garbagePrice + totalWater + totalElectric) / 500) * 500;
 
                 document.getElementById('total_used_water').value = totalUsedWater;
                 document.getElementById('total_used_electric').value = totalUsedElectric;

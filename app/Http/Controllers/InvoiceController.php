@@ -73,9 +73,17 @@ class InvoiceController extends Controller
             'total_amount_khr'      => 'nullable|numeric|min:0',
         ]);
 
+        $customer = Customer::find($validated['customer_id']);
+        if (isset($validated['new_water_number'])) {
+            $customer->old_water_number = $validated['new_water_number'];
+        }
+        if (isset($validated['new_electric_number'])) {
+            $customer->old_electric_number = $validated['new_electric_number'];
+        }
+
+        $customer->save();
         $invoice = Invoice::create($validated);
 
-        // After creating, redirect to the printable invoice view so user can immediately print
         return redirect()->route('invoices.print', $invoice->id)->with('success', 'Invoice created successfully.');
     }
 
@@ -119,9 +127,18 @@ class InvoiceController extends Controller
             'total_amount_khr'      => 'nullable|numeric|min:0',
         ]);
 
+        $customer = Customer::find($validated['customer_id']);
+        if (isset($validated['new_water_number'])) {
+            $customer->old_water_number = $validated['new_water_number'];
+        }
+        if (isset($validated['new_electric_number'])) {
+            $customer->old_electric_number = $validated['new_electric_number'];
+        }
+        
+        $customer->save();
         $invoice->update($validated);
 
-        return redirect()->route('invoices.index')->with('success', 'Invoice updated successfully.');
+        return redirect()->route('invoices.print', $invoice->id)->with('success', 'Invoice updated successfully.');
     }
 
     public function print(Invoice $invoice)

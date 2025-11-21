@@ -86,9 +86,19 @@ class CustomerController extends Controller
    
     public function getByBlock($block_id)
     {
-        $customers = Customer::where('block_id', $block_id)->get();
+        $month = request()->month;
+        $year  = request()->year;
+
+        $customers = Customer::where('block_id', $block_id)
+            ->whereDoesntHave('invoices', function ($query) use ($month, $year) {
+                $query->whereYear('invoice_date', $year)
+                    ->whereMonth('invoice_date', $month);
+            })
+            ->get();
+
         return response()->json($customers);
     }
+
     
     public function getCustomerInfo($id)
     {

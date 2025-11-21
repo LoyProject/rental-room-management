@@ -67,7 +67,7 @@
 
         <div class="mt-6 flex justify-end gap-3">
             <button onclick="window.print()" class="px-4 py-2 bg-green-600 text-white rounded-md">Print</button>
-            <a href="{{ route('invoices.edit', $invoice->id) }}" class="px-4 py-2 bg-gray-200 rounded-md text-gray-700">Back</a>
+            <a href="{{ route('invoices.index') }}" class="px-4 py-2 bg-gray-200 rounded-md text-gray-700">Back</a>
         </div>
     </div>
 @endsection
