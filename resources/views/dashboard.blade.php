@@ -30,7 +30,7 @@
                             </svg>
                         </div>
                         <div class="ms-4">
-                            <p class="text-sm font-medium text-gray-500">ប្លុកសរុប</p>
+                            <p class="text-sm font-medium text-gray-500">ទីតាំងសរុប</p>
                             <p class="text-2xl font-semibold text-gray-900">{{ $totalBlocks ?? 0 }}</p>
                         </div>
                     </div>

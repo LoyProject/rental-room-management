@@ -13,11 +13,11 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                         <label for="block_id" class="block text-sm font-medium text-gray-700">
-                            ប្លុក <span class="text-red-600">*</span>
+                            ទីតាំង <span class="text-red-600">*</span>
                         </label>
                         <select id="block_id" name="block_id" required
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring-blue-200">
-                            <option value="" disabled selected>ជ្រើសរើសប្លុក</option>
+                            <option value="" disabled selected>ជ្រើសរើសទីតាំង</option>
                             @foreach($blocks as $block)
                                 <option value="{{ $block->id }}">{{ $block->name }}</option>
                             @endforeach
@@ -35,22 +35,22 @@
                     </div>
 
                     <div>
-                        <label for="invoice_date" class="block text-sm font-medium text-gray-700">
-                            កាលបរិច្ឆេទវិក្កយបត្រ <span class="text-red-600">*</span>
-                        </label>
-                        <input type="date" id="invoice_date" name="invoice_date" required
-                            class="mt-1 block w-full rounded-md border-gray-300">
+                        <label for="invoice_date" class="block text-sm font-medium text-gray-700">កាលបរិច្ឆេទវិក្កយបត្រ <span class="text-red-600">*</span></label>
+                        <input type="text" id="invoice_date" name="invoice_date" class="mt-1 block w-full rounded-md border-gray-300"
+                            placeholder="dd/mm/yyyy" required>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label for="from_date" class="block text-sm font-medium text-gray-700">ពីថ្ងៃ <span class="text-red-600">*</span></label>
-                        <input type="date" name="from_date" class="mt-1 block w-full border-gray-300 rounded-md" required>
+                        <input type="text" id="from_date" name="from_date" class="mt-1 block w-full border-gray-300 rounded-md" 
+                           placeholder="dd/mm/yyyy" required>
                     </div>
                     <div>
                         <label for="to_date" class="block text-sm font-medium text-gray-700">ដល់ថ្ងៃ <span class="text-red-600">*</span></label>
-                        <input type="date" name="to_date" class="mt-1 block w-full border-gray-300 rounded-md" required>
+                        <input type="text" id="to_date" name="to_date" class="mt-1 block w-full border-gray-300 rounded-md"
+                           placeholder="dd/mm/yyyy" required>
                     </div>
                 </div>
 
@@ -116,16 +116,16 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t pt-4 mt-4">
                     <div>
-                        <label for="total_amount_usd" class="block text-sm font-bold">ចំនួនទឹកប្រាក់សរុប (ដុល្លារ)</label>
+                        <label for="total_amount_usd" class="block text-base font-bold">ចំនួនទឹកប្រាក់សរុប (ដុល្លារ)</label>
                         <input type="number" id="total_amount_usd" name="total_amount_usd" 
-                            class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md font-bold text-green-600" readonly> 
+                            class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md text-lg font-bold text-green-600" readonly> 
                     </div>
                     <div>
-                        <label for="total_amount_khr" class="block text-sm font-bold">ចំនួនទឹកប្រាក់សរុប (រៀល)</label>
+                        <label for="total_amount_khr" class="block text-base font-bold">ចំនួនទឹកប្រាក់សរុប (រៀល)</label>
                         <input type="number" id="total_amount_khr" name="total_amount_khr" 
-                            class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md font-bold text-green-600" readonly> 
+                            class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md text-lg font-bold text-green-600" readonly> 
                     </div>
                 </div>
 
@@ -141,7 +141,44 @@
         </form>
     </div>
     <script>
-        document.getElementById('invoice_date').value = new Date().toISOString().slice(0, 10);
+        flatpickr("#invoice_date", {
+            dateFormat: "d/m/Y",
+            defaultDate: new Date(),
+            allowInput: true,
+            onClose: function(selectedDates, dateStr, instance) {
+                if (dateStr === "") {
+                    instance.input.setCustomValidity("This field is required.");
+                } else {
+                    instance.input.setCustomValidity("");
+                }
+            }
+        });
+
+        flatpickr("#from_date", {
+            dateFormat: "d/m/Y",
+            defaultDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+            allowInput: true,
+            onClose: function(selectedDates, dateStr, instance) {
+                if (dateStr === "") {
+                    instance.input.setCustomValidity("This field is required.");
+                } else {
+                    instance.input.setCustomValidity("");
+                }
+            }
+        });
+
+        flatpickr("#to_date", {
+            dateFormat: "d/m/Y",
+            defaultDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0),
+            allowInput: true,
+            onClose: function(selectedDates, dateStr, instance) {
+                if (dateStr === "") {
+                    instance.input.setCustomValidity("This field is required.");
+                } else {
+                    instance.input.setCustomValidity("");
+                }
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', function() {
             const loadingOverlay = document.getElementById('loading-overlay');

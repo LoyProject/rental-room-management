@@ -31,7 +31,7 @@
                     <tr>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ល.រ</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">កាលបរិច្ឆេទ</th>
-                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ប្លុក</th>
+                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ទីតាំង</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">អតិថិជន</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ទឹក (រៀល)</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">អគ្គិសនី (រៀល)</th>

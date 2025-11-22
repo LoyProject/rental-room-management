@@ -29,7 +29,7 @@
                 <thead class="bg-gray-300">
                     <tr>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ល.រ</th>
-                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ឈ្មោះប្លុក</th>
+                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ឈ្មោះទីតាំង</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ឈ្មោះ</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ទូរស័ព្ទ</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">តម្លៃផ្ទះ</th>
@@ -45,7 +45,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->id }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->block->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->phone }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->phone ?? 'N/A' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->house_price, 2, '.', ',') }} USD</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->garbage_price, 0, '.', ',') }} KHR</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->old_water_number, 0, '.', ',') }} m³</td>

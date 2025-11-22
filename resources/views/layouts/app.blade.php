@@ -7,6 +7,8 @@
     <title>Room Rental Management</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-100 font-sans antialiased">
@@ -65,7 +67,7 @@
                         <rect x="3" y="13" width="8" height="8"/>
                         <rect x="13" y="13" width="8" height="8"/>
                     </svg>
-                    <span>ប្លុក</span>
+                    <span>ទីតាំង</span>
                 </a>
 
                 <a href="{{ route('customers.index') }}" 

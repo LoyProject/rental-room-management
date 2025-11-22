@@ -12,11 +12,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('block_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->string('phone');
+            $table->string('phone')->nullable();
             $table->decimal('house_price', 8, 2)->default(0);
             $table->integer('garbage_price')->default(0);
-            $table->integer('old_water_number')->nullable();
-            $table->integer('old_electric_number')->nullable();
+            $table->integer('old_water_number')->default(0);
+            $table->integer('old_electric_number')->default(0);
             $table->timestamps();
         });
     }

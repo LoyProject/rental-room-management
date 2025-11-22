@@ -41,13 +41,15 @@ class CustomerController extends Controller
         $validated = $request->validate([
             'block_id' => 'required|exists:blocks,id',
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:25',
+            'phone' => 'nullable|string|max:25',
             'house_price' => 'required|numeric|min:0',
             'garbage_price' => 'required|integer|min:0',
             'old_water_number' => 'nullable|integer|min:0',
             'old_electric_number' => 'nullable|integer|min:0',
-            
         ]);
+
+        $validated['old_water_number'] = $validated['old_water_number'] ?? 0;
+        $validated['old_electric_number'] = $validated['old_electric_number'] ?? 0;
 
         Customer::create($validated);
         return redirect()->route('customers.index')->with('success', 'Customer created successfully.');
@@ -64,12 +66,15 @@ class CustomerController extends Controller
         $validated = $request->validate([
             'block_id' => 'required|exists:blocks,id',
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:25',
+            'phone' => 'nullable|string|max:25',
             'house_price' => 'required|numeric|min:0',
             'garbage_price' => 'required|integer|min:0',
             'old_water_number' => 'nullable|integer|min:0',
             'old_electric_number' => 'nullable|integer|min:0',
         ]);
+
+        $validated['old_water_number'] = $validated['old_water_number'] ?? 0;
+        $validated['old_electric_number'] = $validated['old_electric_number'] ??
 
         $customer->update($validated);
         return redirect()->route('customers.index')->with('success', 'Customer updated successfully.');

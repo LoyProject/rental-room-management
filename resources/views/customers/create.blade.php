@@ -8,10 +8,10 @@
             @csrf
             <div class="grid flex-col sm:grid-cols-2 gap-6">
                 <div>
-                    <label for="block_id" class="block text-sm font-medium text-gray-700">ប្លុក <span class="text-red-600">*</span></label>
+                    <label for="block_id" class="block text-sm font-medium text-gray-700">ទីតាំង <span class="text-red-600">*</span></label>
                     <select id="block_id" name="block_id" required autofocus
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                        <option value="" disabled {{ old('block_id') ? '' : 'selected' }}>​ជ្រើសរើសប្លុក</option>
+                        <option value="" disabled {{ old('block_id') ? '' : 'selected' }}>​ជ្រើសរើសទីតាំង</option>
                         @foreach($blocks as $block)
                             <option value="{{ $block->id }}" {{ old('block_id') == $block->id ? 'selected' : '' }}>{{ $block->name }}</option>
                         @endforeach
@@ -32,8 +32,8 @@
                     </div>
 
                     <div>
-                        <label for="phone" class="block text-sm font-medium text-gray-700">ទូរស័ព្ទ <span class="text-red-600">*</span></label>
-                        <input id="phone" name="phone" type="tel" value="{{ old('phone') }}" required
+                        <label for="phone" class="block text-sm font-medium text-gray-700">ទូរស័ព្ទ</label>
+                        <input id="phone" name="phone" type="tel" value="{{ old('phone') }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                         @error('phone')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>

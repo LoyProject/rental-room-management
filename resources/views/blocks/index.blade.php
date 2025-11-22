@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'អំពីប្លុក')
+@section('title', 'អំពីទីតាំង')
 
 @section('content')
     <x-success-alert />
@@ -8,7 +8,7 @@
     <div class="mb-4 p-4 bg-white shadow-md rounded-md flex flex-col sm:flex-row justify-between items-center gap-4">
         <form action="{{ route('blocks.index') }}" method="GET" class="w-full sm:max-w-md">
             <div class="flex flex-row items-center gap-2 w-full">
-                <input type="text" name="search" placeholder="ស្វែងរកប្លុក... "
+                <input type="text" name="search" placeholder="ស្វែងរកទីតាំង... "
                     class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
                     value="{{ request('search') }}">
                 <button type="submit" class="bg-gray-800 text-white px-6 py-2 hover:bg-gray-900 rounded-md">ស្វែងរក</button>
@@ -18,7 +18,7 @@
 
         <div class="w-full sm:w-auto flex justify-end">
             <a href="{{ route('blocks.create') }}" class="bg-blue-100 text-blue-700 px-4 py-2 rounded-md hover:bg-blue-700 hover:text-white w-full sm:w-auto text-center whitespace-nowrap">
-                ប្លុកថ្មី
+                ទីតាំងថ្មី
             </a>
         </div>
     </div>
@@ -30,7 +30,7 @@
                     <tr>
                         <th class="px-6 py-3 text-left font-semibold text-gray-700">ល.រ</th>
                         <th class="px-6 py-3 text-left font-semibold text-gray-700">ឈ្មោះតំបន់</th>
-                        <th class="px-6 py-3 text-left font-semibold text-gray-700">ឈ្មោះប្លុក</th>
+                        <th class="px-6 py-3 text-left font-semibold text-gray-700">ឈ្មោះទីតាំង</th>
                         <th class="px-6 py-3 text-left font-semibold text-gray-700">តម្លៃទឹក</th>
                         <th class="px-6 py-3 text-left font-semibold text-gray-700">តម្លៃអគ្គិសនី</th>
                         <th class="px-6 py-3 text-left font-semibold text-gray-700">ពណ៌នា</th>
@@ -57,7 +57,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center px-6 py-4">មិនមានប្លុកណាមួយទេ</td>
+                            <td colspan="7" class="text-center px-6 py-4">មិនមានទីតាំងណាមួយទេ</td>
                         </tr>
                     @endforelse
                 </tbody>

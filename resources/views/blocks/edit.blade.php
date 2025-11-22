@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'កែប្រែប្លុក​')
+@section('title', 'កែប្រែទីតាំង​')
 
 @section('content')
     <div class="bg-white shadow-md rounded-lg p-6">
@@ -24,7 +24,7 @@
                 </div>
 
                 <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700">ឈ្មោះប្លុក​ <span class="text-red-600">*</span></label>
+                    <label for="name" class="block text-sm font-medium text-gray-700">ឈ្មោះទីតាំង​ <span class="text-red-600">*</span></label>
                     <input id="name" name="name" type="text" value="{{ old('name', $block->name) }}" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     @error('name')
