@@ -127,13 +127,13 @@
                     calculationThresholdContainer.classList.add('hidden');
                     maxElectricPrice.value = '';
                     calculationThreshold.value = '';
-                    labelElectricPrice.textContent = 'តម្លៃអគ្គិសនី (រៀល) *';
+                    labelElectricPrice.innerHTML = 'តម្លៃអគ្គិសនី (រៀល) <span class="text-red-600">*</span>';
                 } else {
                     electricContainer.classList.remove('md:grid-cols-2');
                     electricContainer.classList.add('md:grid-cols-4');
                     maxElectricContainer.classList.remove('hidden');
                     calculationThresholdContainer.classList.remove('hidden');
-                    labelElectricPrice.textContent = 'តម្លៃអគ្គិសនីអប្បបរមា (រៀល) *';
+                    labelElectricPrice.innerHTML = 'តម្លៃអគ្គិសនីអប្បបរមា (រៀល) <span class="text-red-600">*</span>';
                 }
             }
             
