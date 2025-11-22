@@ -14,7 +14,10 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->integer('water_price')->default(0);
+            $table->string('electric_source');
             $table->integer('electric_price')->default(0);
+            $table->integer('max_electric_price')->default(0);
+            $table->integer('calculation_threshold')->default(0);
             $table->timestamps();
         });
     }

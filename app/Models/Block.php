@@ -16,7 +16,10 @@ class Block extends Model
         'name',
         'description',
         'water_price',
+        'electric_source',
         'electric_price',
+        'max_electric_price',
+        'calculation_threshold',
     ];
 
     public function site()

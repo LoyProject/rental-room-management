@@ -70,8 +70,14 @@ class BlockController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'water_price' => 'required|numeric|min:0',
+            'electric_source' => 'required|string',
             'electric_price' => 'required|numeric|min:0',
+            'max_electric_price' => 'nullable|numeric|min:0',
+            'calculation_threshold' => 'nullable|numeric|min:1',
         ]);
+
+        $validated['max_electric_price'] = $validated['max_electric_price'] ?? 0;
+        $validated['calculation_threshold'] = $validated['calculation_threshold'] ?? 0;
 
         Block::create($validated);
 
@@ -96,8 +102,14 @@ class BlockController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'water_price' => 'required|numeric|min:0',
+            'electric_source' => 'required|string',
             'electric_price' => 'required|numeric|min:0',
+            'max_electric_price' => 'nullable|numeric|min:0',
+            'calculation_threshold' => 'nullable|numeric|min:1',
         ]);
+
+        $validated['max_electric_price'] = $validated['max_electric_price'] ?? 0;
+        $validated['calculation_threshold'] = $validated['calculation_threshold'] ?? 0;
 
         $block->update($validated);
 
