@@ -4,33 +4,62 @@ namespace App\Http\Controllers;
 
 use App\Models\Block;
 use App\Models\Site;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class BlockController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
         $query = Block::query();
 
-        if (request('search')) {
-            $searchTerm = '%' . request('search') . '%';
-            $query->where('name', 'like', $searchTerm)
-                ->orWhere('description', 'like', $searchTerm)
-                ->orWhere('water_price', 'like', $searchTerm)
-                ->orWhere('electric_price', 'like', $searchTerm)
-                ->orWhereHas('site', function ($q) use ($searchTerm) {
-                    $q->where('name', 'like', $searchTerm);
-                });
+        if (request()->filled('site')) {
+            if (!$user->isAdmin()) {
+                abort(404, 'Not Found');
+            }
+
+            $query->where('site_id', request('site'));
+        } else {
+            if (!$user->isAdmin()) {
+                $query->where('site_id', $user->site_id);
+            }
         }
 
+        if (request()->filled('search')) {
+            $search = '%' . request('search') . '%';
+            $numeric = '%' . str_replace(',', '', request('search')) . '%';
+
+            $query->where(function ($q) use ($search, $numeric) {
+                $q->where('name', 'like', $search)
+                ->orWhere('description', 'like', $search)
+                ->orWhereRaw('CAST(water_price AS CHAR) LIKE ?', [$search])
+                ->orWhereRaw('CAST(water_price AS CHAR) LIKE ?', [$numeric])
+                ->orWhereRaw('CAST(electric_price AS CHAR) LIKE ?', [$search])
+                ->orWhereRaw('CAST(electric_price AS CHAR) LIKE ?', [$numeric])
+                ->orWhereHas('site', function ($q2) use ($search) {
+                    $q2->where('name', 'like', $search);
+                });
+            });
+        }
+
+        $sites = $user->isAdmin()
+            ? Site::all()
+            : Site::where('id', $user->site_id)->get();
+
         $blocks = $query->with('site')->latest()->paginate(10)->withQueryString();
-        
-        return view('blocks.index', compact('blocks'));
+
+        return view('blocks.index', compact('blocks', 'sites'));
     }
 
     public function create()
     {
-        $sites = Site::all();
+        $user = auth()->user();
+        
+        $sites = $user->isAdmin() 
+            ? Site::all() 
+            : Site::where('id', $user->site_id)->get();
+        
         return view('blocks.create', compact('sites'));
     }
 
@@ -51,7 +80,12 @@ class BlockController extends Controller
 
     public function edit(Block $block)
     {
-        $sites = Site::all();
+        $user = auth()->user();
+        
+        $sites = $user->isAdmin() 
+            ? Site::all() 
+            : Site::where('id', $user->site_id)->get();
+
         return view('blocks.edit', compact('block', 'sites'));
     }
 

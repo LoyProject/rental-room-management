@@ -3,18 +3,19 @@
 @section('title', 'ទីតាំងថ្មី')
 
 @section('content')
-    <div class="bg-white shadow-md rounded-lg p-6">
+    <div class="bg-white shadow-md rounded-lg p-6 min-h-full">
         <form action="{{ route('blocks.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="grid grid-cols-1 gap-6">
-                <div>
-                    <label for="site_id" class="block text-sm font-medium text-gray-700">ឈ្មោះតំបន់ <span class="text-red-600">*</span></label>
+                <div class="{{ auth()->user()->isAdmin() ? '' : 'hidden' }}">
+                    <label for="site_id" class="block mb-1 text-sm font-medium text-gray-700">ឈ្មោះតំបន់ <span class="text-red-600">*</span></label>
                     <select id="site_id" name="site_id" required autofocus
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                         <option value="" disabled {{ old('site_id') ? '' : 'selected' }}>ជ្រើសរើសតំបន់​​</option>
+                        @php $userSiteId = optional(auth()->user())->site_id; @endphp
                         @foreach($sites as $site)
-                            <option value="{{ $site->id }}" {{ old('site_id') == $site->id ? 'selected' : '' }}>{{ $site->name }}</option>
+                            <option value="{{ $site->id }}" {{ (old('site_id') == $site->id) || (old('site_id') === null && $userSiteId == $site->id) ? 'selected' : '' }}>{{ $site->name }}</option>
                         @endforeach
                     </select>
                     @error('site_id')
@@ -42,7 +43,7 @@
 
                 <div>
                     <label for="water_price" class="block text-sm font-medium text-gray-700">តម្លៃទឹក (រៀល) <span class="text-red-600">*</span></label>
-                    <input id="water_price" name="water_price" type="number" step="100" min="0" value="{{ old('water_price') }}" required
+                    <input id="water_price" name="water_price" type="number" step="10" min="0" value="{{ old('water_price') }}" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     @error('water_price')
                         <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -51,7 +52,7 @@
 
                 <div>
                     <label for="electric_price" class="block text-sm font-medium text-gray-700">តម្លៃអគ្គិសនី (រៀល) <span class="text-red-600">*</span></label>
-                    <input id="electric_price" name="electric_price" type="number" step="100" min="0" value="{{ old('electric_price') }}" required
+                    <input id="electric_price" name="electric_price" type="number" step="10" min="0" value="{{ old('electric_price') }}" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     @error('electric_price')
                         <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -72,4 +73,13 @@
             </div>
         </form>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#site_id').select2({
+                allowClear: false,
+                width: '100%',
+            });
+        });
+    </script>
 @endsection

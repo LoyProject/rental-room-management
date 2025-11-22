@@ -3,25 +3,31 @@
 @section('title', 'កែប្រែទីតាំង​')
 
 @section('content')
-    <div class="bg-white shadow-md rounded-lg p-6">
+    <div class="bg-white shadow-md rounded-lg p-6 min-h-full">
         <form action="{{ route('blocks.update', $block) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
             <div class="grid grid-cols-1 gap-6">
-                <div>
-                    <label for="site_id" class="block text-sm font-medium text-gray-700">ឈ្មោះតំបន់ <span class="text-red-600">*</span></label>
-                    <select id="site_id" name="site_id" required autofocus
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                        <option value="" disabled {{ old('site_id', $block->site_id) ? '' : 'selected' }}>ជ្រើសរើសតំបន់​​</option>
-                        @foreach($sites as $site)
-                            <option value="{{ $site->id }}" {{ (old('site_id', $block->site_id) == $site->id) ? 'selected' : '' }}>{{ $site->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('site_id')
-                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+                @if(auth()->user()->isAdmin())
+                    <div>
+                        <label for="site_id" class="mb-1 block text-sm font-medium text-gray-700">ឈ្មោះតំបន់ <span class="text-red-600">*</span></label>
+                        <select id="site_id" name="site_id" required autofocus
+                                class="select2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                            <option value="" disabled {{ old('site_id', $block->site_id) ? '' : 'selected' }}>ជ្រើសរើសតំបន់​​</option>
+                            @foreach($sites as $site)
+                                <option value="{{ $site->id }}" {{ (string) old('site_id', $block->site_id) === (string) $site->id ? 'selected' : '' }}>
+                                    {{ $site->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('site_id')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                @else
+                    <input type="hidden" name="site_id" value="{{ old('site_id', $block->site_id ?? optional(auth()->user())->site_id) }}">
+                @endif
 
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700">ឈ្មោះទីតាំង​ <span class="text-red-600">*</span></label>
@@ -43,7 +49,7 @@
 
                 <div>
                     <label for="water_price" class="block text-sm font-medium text-gray-700">តម្លៃទឹក (រៀល) <span class="text-red-600">*</span></label>
-                    <input id="water_price" name="water_price" type="number" step="100" min="0" value="{{ old('water_price', $block->water_price) }}" required
+                    <input id="water_price" name="water_price" type="number" step="10" min="0" value="{{ old('water_price', $block->water_price) }}" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     @error('water_price')
                         <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -52,7 +58,7 @@
 
                 <div>
                     <label for="electric_price" class="block text-sm font-medium text-gray-700">តម្លៃអគ្គិសនី (រៀល) <span class="text-red-600">*</span></label>
-                    <input id="electric_price" name="electric_price" type="number" step="100" min="0" value="{{ old('electric_price', $block->electric_price) }}" required
+                    <input id="electric_price" name="electric_price" type="number" step="10" min="0" value="{{ old('electric_price', $block->electric_price) }}" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     @error('electric_price')
                         <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -73,4 +79,13 @@
             </div>
         </form>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#site_id').select2({
+                allowClear: false,
+                width: '100%',
+            });
+        });
+    </script>
 @endsection

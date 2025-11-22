@@ -3,7 +3,7 @@
 @section('title', 'កែសម្រួលតំបន់')
 
 @section('content')
-    <div class="bg-white shadow-md rounded-lg p-6">
+    <div class="bg-white shadow-md rounded-lg p-6 min-h-full">
         <form action="{{ route('sites.update', $site->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')

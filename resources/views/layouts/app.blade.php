@@ -9,12 +9,15 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-100 font-sans antialiased">
     <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-200">
         <aside 
-            class="fixed inset-y-0 left-0 z-30 w-64 bg-gray-800 text-white transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0"
+            class="fixed inset-y-0 left-0 z-30 w-64 bg-gray-800 text-white transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0"
             :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}">
             <div class="p-4 border-b border-gray-700 items-center flex justify-start space-x-4">
                 <a href="{{ route('dashboard') }}"><x-application-logo class="h-10 w-auto" /></a>
@@ -49,14 +52,18 @@
                     <span>វិក្កយបត្រ</span>
                 </a>
 
-                <a href="{{ route('sites.index') }}" 
-                    class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
-                        {{ Route::is('sites.*') ? 'bg-purple-700' : '' }}">
-                    <svg class="w-5 h-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M3 6l7-3 7 3 7-3v14l-7 3-7-3-7 3V6z"/>
-                    </svg>
-                    <span>តំបន់</span>
-                </a>
+                @auth
+                    @if(auth()->user()->role === 'admin')
+                        <a href="{{ route('sites.index') }}" 
+                            class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
+                                {{ Route::is('sites.*') ? 'bg-purple-700' : '' }}">
+                            <svg class="w-5 h-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M3 6l7-3 7 3 7-3v14l-7 3-7-3-7 3V6z"/>
+                            </svg>
+                            <span>តំបន់</span>
+                        </a>
+                    @endif
+                @endauth
 
                 <a href="{{ route('blocks.index') }}" 
                     class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
@@ -81,15 +88,19 @@
                     <span>អតិថិជន</span>
                 </a>
 
-                <a href="{{ route('users.index') }}" 
-                    class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
-                        {{ Route::is('users.*') ? 'bg-purple-700' : '' }}">
-                    <svg class="w-5 h-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <circle cx="12" cy="8" r="3"/>
-                        <path d="M6 20c0-3 3-5 6-5s6 2 6 5"/>
-                    </svg>
-                    <span>អ្នកប្រើប្រាស់</span>
-                </a>
+                @auth
+                    @if(auth()->user()->role === 'admin')
+                        <a href="{{ route('users.index') }}" 
+                            class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700
+                                {{ Route::is('users.*') ? 'bg-purple-700' : '' }}">
+                            <svg class="w-5 h-5 mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="12" cy="8" r="3"/>
+                                <path d="M6 20c0-3 3-5 6-5s6 2 6 5"/>
+                            </svg>
+                            <span>អ្នកប្រើប្រាស់</span>
+                        </a>
+                    @endif
+                @endauth
             </nav>
 
             <div class="p-4 border-t border-gray-700">
@@ -105,13 +116,13 @@
         <div class="flex-1 min-w-0 flex flex-col">
             <header class="bg-white shadow p-4 flex justify-between items-center">
                 <div class="flex items-center space-x-4">
-                    <button @click="sidebarOpen = !sidebarOpen" class="md:hidden text-gray-500 focus:outline-none">
+                    <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-500 focus:outline-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
                     <h1 class="text-xl font-semibold">@yield('title', 'ទំព័រដើម')</h1>
                 </div>
 
-            <div class="md:hidden w-6"></div>
+            <div class="lg:hidden w-6"></div>
             </header>
 
             <main class="flex-1 p-6 overflow-y-auto">
@@ -129,7 +140,6 @@
 <script>
     function openInvoicePrint(url) {
         try {
-            // Reuse previously opened print window if available and not closed
             if (window._invoicePrintWindow && !window._invoicePrintWindow.closed) {
                 window._invoicePrintWindow.location.href = url;
                 window._invoicePrintWindow.focus();
@@ -137,7 +147,6 @@
                 window._invoicePrintWindow = window.open(url, 'invoicePrint');
             }
         } catch (e) {
-            // Fallback to a simple open call
             window.open(url, 'invoicePrint');
         }
     }

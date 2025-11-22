@@ -36,4 +36,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Site::class);
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
 }

@@ -24,13 +24,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/customers-by-block/{block_id}', [CustomerController::class, 'getByBlock']);
     Route::get('/customer-info/{id}', [CustomerController::class, 'getCustomerInfo']);
     Route::get('/block-info/{id}', [BlockController::class, 'getBlockInfo']);
+    Route::get('/invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
 
-    Route::resource('sites', SiteController::class);
+    Route::resource('invoices', InvoiceController::class);
     Route::resource('blocks', BlockController::class);
     Route::resource('customers', CustomerController::class);
     Route::resource('users', UserController::class);
-    Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
-    Route::resource('invoices', InvoiceController::class);
+});
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::resource('sites', SiteController::class);
+    Route::resource('users', UserController::class);
 });
 
 require __DIR__.'/auth.php';

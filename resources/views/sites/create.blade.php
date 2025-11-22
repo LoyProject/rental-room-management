@@ -3,7 +3,7 @@
 @section('title', 'តំបន់ថ្មី')
 
 @section('content')
-    <div class="bg-white shadow-md rounded-lg p-6">
+    <div class="bg-white shadow-md rounded-lg p-6 min-h-full">
         <form action="{{ route('sites.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
