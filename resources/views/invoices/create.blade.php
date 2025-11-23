@@ -12,9 +12,7 @@
             <div class="grid grid-cols-1 gap-4">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                        <label for="block_id" class="block text-sm font-medium text-gray-700">
-                            ទីតាំង <span class="text-red-600">*</span>
-                        </label>
+                        <label for="block_id" class="mb-1 block text-sm font-medium text-gray-700">ទីតាំង <span class="text-red-600">*</span></label>
                         <select id="block_id" name="block_id" required
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring-blue-200">
                             <option value="" disabled selected>ជ្រើសរើសទីតាំង</option>
@@ -25,9 +23,7 @@
                     </div>
 
                     <div>
-                        <label for="customer_id" class="block text-sm font-medium text-gray-700">
-                            អតិថិជន <span class="text-red-600">*</span>
-                        </label>
+                        <label for="customer_id" class="mb-1 block text-sm font-medium text-gray-700">អតិថិជន <span class="text-red-600">*</span></label>
                         <select id="customer_id" name="customer_id" required
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring-blue-200">
                             <option value="" disabled selected>ជ្រើសរើសអតិថិជន</option>  
@@ -97,7 +93,7 @@
                     <div>
                         <label class="block text-sm font-medium">តម្លៃទឹក / ១ m³ (រៀល) <span class="text-red-600">*</span></label>
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="number" id="water_unit_price" name="water_unit_price" min="0" 
+                            <input type="number" id="water_unit_price" name="water_unit_price" min="0" step="10"
                                 class="mt-1 block w-full border-gray-300 rounded-md" required>
 
                             <input type="number" id="total_amount_water" name="total_amount_water" 
@@ -107,7 +103,12 @@
                     <div>
                         <label class="block text-sm font-medium">តម្លៃអគ្គិសនី / ១ kWh (រៀល) <span class="text-red-600">*</span></label>
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="number" id="electric_unit_price" name="electric_unit_price" min="0" 
+                            <input id="min_electric_unit_price" name="min_electric_unit_price" class="hidden" readonly disabled>
+                            <input id="max_electric_unit_price" name="max_electric_unit_price" class="hidden" readonly disabled>
+                            <input id="calculation_threshold" name="calculation_threshold" class="hidden" readonly disabled>
+                            <input id="electric_source" name="electric_source" class="hidden" readonly disabled>
+
+                            <input type="number" id="electric_unit_price" name="electric_unit_price" min="0" step="10"
                                 class="mt-1 block w-full border-gray-300 rounded-md" required>
 
                             <input type="number" id="total_amount_electric" name="total_amount_electric" 
@@ -141,6 +142,16 @@
         </form>
     </div>
     <script>
+        $('#block_id').select2({
+            allowClear: false,
+            width: '100%'
+        });
+
+        $('#customer_id').select2({
+            allowClear: false,
+            width: '100%'
+        });
+
         flatpickr("#invoice_date", {
             dateFormat: "d/m/Y",
             defaultDate: new Date(),
@@ -183,91 +194,78 @@
         document.addEventListener('DOMContentLoaded', function() {
             const loadingOverlay = document.getElementById('loading-overlay');
 
-            document.getElementById('customer_id').addEventListener('change', function () {
-                let customerId = this.value;
-                if(!customerId) return;
+            $('#customer_id').on('change', function () {
+                let customerId = $(this).val();
+                if (!customerId) return;
 
                 loadingOverlay.classList.remove('hidden');
 
-                const customerInfoPromise = fetch(`/customer-info/${customerId}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        document.querySelector('input[name="house_price"]').value = data.house_price ?? '';
-                        document.querySelector('input[name="garbage_price"]').value = data.garbage_price ?? '';
-                        document.querySelector('input[name="old_water_number"]').value = data.old_water_number ?? '';
-                        document.querySelector('input[name="old_electric_number"]').value = data.old_electric_number ?? '';
-                    });
+                $.ajax({
+                    url: `/customer-info/${customerId}`,
+                    method: 'GET',
+                    dataType: 'json'
+                }).done(function(data) {
+                    $('input[name="house_price"]').val(data.house_price ?? '');
+                    $('input[name="garbage_price"]').val(data.garbage_price ?? '');
+                    $('input[name="old_water_number"]').val(data.old_water_number ?? '');
+                    $('input[name="old_electric_number"]').val(data.old_electric_number ?? '');
 
-                Promise.all([customerInfoPromise])
-                    .finally(() => {
-                        loadingOverlay.classList.add('hidden');
-                    });
+                    $('#house_price,#garbage_price,#old_water_number,#old_electric_number').trigger('input');
+                }).fail(function() {
+                    console.error('Failed to load customer info for', customerId);
+                }).always(function() {
+                    loadingOverlay.classList.add('hidden');
+                });
             });
         });
 
         document.addEventListener('DOMContentLoaded', function() {
             const loadingOverlay = document.getElementById('loading-overlay');
 
-            document.getElementById('block_id').addEventListener('change', function () {
-                let blockId = this.value;
-                if(!blockId) return;
+            $('#block_id').on('change', function () {
+                let blockId = $(this).val();
+                if (!blockId) return;
 
                 loadingOverlay.classList.remove('hidden');
 
-                const customersPromise = fetch(`/customers-by-block/${blockId}?month={{ date('m') }}&year={{ date('Y') }}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        let customerSelect = document.getElementById('customer_id');
-                        customerSelect.innerHTML = '<option value="" disabled selected>ជ្រើសរើសអតិថិជន</option>';
-
-                        data.forEach(customer => {
-                            customerSelect.innerHTML += `<option value="${customer.id}">${customer.name}</option>`;
-                        });
-
-                        let oldWaterInput = document.getElementById('old_water_number');
-                        let oldElectricInput = document.getElementById('old_electric_number');
-                        let housePriceInput = document.getElementById('house_price');
-                        let garbagePriceInput = document.getElementById('garbage_price');
-                        let newWaterInput = document.getElementById('new_water_number');
-                        let newElectricInput = document.getElementById('new_electric_number');
-                        let waterUnitInput = document.getElementById('water_unit_price');
-                        let electricUnitInput = document.getElementById('electric_unit_price');
-                        let totalUsedWaterInput = document.getElementById('total_used_water');
-                        let totalUsedElectricInput = document.getElementById('total_used_electric');
-                        let totalAmountWaterInput = document.getElementById('total_amount_water');
-                        let totalAmountElectricInput = document.getElementById('total_amount_electric');
-                        let totalAmountUsdInput = document.getElementById('total_amount_usd');
-                        let totalAmountKhrInput = document.getElementById('total_amount_khr');
-                        
-                        totalAmountUsdInput.value = '';
-                        totalAmountKhrInput.value = '';
-                        totalUsedWaterInput.value = '';
-                        totalUsedElectricInput.value = '';
-                        totalAmountWaterInput.value = '';
-                        totalAmountElectricInput.value = '';
-                        waterUnitInput.value = '';
-                        electricUnitInput.value = '';
-                        newWaterInput.value = '';
-                        newElectricInput.value = '';
-                        housePriceInput.value = '';
-                        garbagePriceInput.value = '';
-                        oldWaterInput.value = '';
-                        oldElectricInput.value = '';
+                let customersAjax = $.ajax({
+                    url: `/customers-by-block/${blockId}?month={{ date('m') }}&year={{ date('Y') }}`,
+                    method: 'GET',
+                    dataType: 'json'
+                }).done(function (data) {
+                    let $customer = $('#customer_id');
+                    $customer.empty().append('<option value="" disabled selected>ជ្រើសរើសអតិថិជន</option>');
+                    $.each(data, function (_, customer) {
+                        $customer.append($('<option>').val(customer.id).text(customer.name));
                     });
+                    $customer.trigger('change.select2');
 
-                const blockInfoPromise = fetch(`/block-info/${blockId}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        document.getElementById('customer_id').addEventListener('change', function () {
-                            document.querySelector('input[name="water_unit_price"]').value = data.water_unit_price ?? '';
-                            document.querySelector('input[name="electric_unit_price"]').value = data.electric_unit_price ?? '';
-                        });
-                    });
+                    $('#old_water_number, #old_electric_number, #house_price, #garbage_price, #new_water_number, #new_electric_number, #water_unit_price, #electric_unit_price, #total_used_water, #total_used_electric, #total_amount_water, #total_amount_electric, #total_amount_usd, #total_amount_khr').val('');
 
-                Promise.all([customersPromise, blockInfoPromise])
-                    .finally(() => {
-                        loadingOverlay.classList.add('hidden');
+                }).fail(function () {
+                    console.error('Failed to load customers for block', blockId);
+                });
+
+                let blockInfoAjax = $.ajax({
+                    url: `/block-info/${blockId}`,
+                    method: 'GET',
+                    dataType: 'json'
+                }).done(function (data) {
+                    $('#customer_id').off('change.blockinfo').on('change.blockinfo', function () {
+                        $('input[name="water_unit_price"]').val(data.water_unit_price ?? '');
+                        $('input[name="electric_unit_price"]').val(data.electric_unit_price ?? '');
+                        $('input[name="min_electric_unit_price"]').val(data.electric_unit_price ?? '');
+                        $('input[name="max_electric_unit_price"]').val(data.max_electric_unit_price ?? '');
+                        $('input[name="calculation_threshold"]').val(data.calculation_threshold ?? '');
+                        $('input[name="electric_source"]').val(data.electric_source ?? '');
                     });
+                }).fail(function () {
+                    console.error('Failed to load block info for', blockId);
+                });
+
+                $.when(customersAjax, blockInfoAjax).always(function () {
+                    loadingOverlay.classList.add('hidden');
+                });
             });
         });
 
@@ -280,12 +278,24 @@
 
                 let waterUnit = parseFloat(document.getElementById('water_unit_price').value) || 0;
                 let electricUnit = parseFloat(document.getElementById('electric_unit_price').value) || 0;
+                let minElectricUnit = parseFloat(document.getElementById('min_electric_unit_price').value) || 0;
+                let maxElectricUnit = parseFloat(document.getElementById('max_electric_unit_price').value) || 0;
+                let calculationThreshold = parseFloat(document.getElementById('calculation_threshold').value) || 0;
+                let electricSource = document.getElementById('electric_source').value || '';
 
                 let housePrice = parseFloat(document.getElementById('house_price').value) || 0;
                 let garbagePrice = parseFloat(document.getElementById('garbage_price').value) || 0;
 
                 let totalUsedWater = Math.max(newWater - oldWater, 0);
                 let totalUsedElectric = Math.max(newElectric - oldElectric, 0);
+
+                if (electricSource === 'S' && totalUsedElectric >= calculationThreshold) {
+                    document.getElementById('electric_unit_price').value = maxElectricUnit;
+                    electricUnit = parseFloat(maxElectricUnit) || 0;
+                } else {
+                    document.getElementById('electric_unit_price').value = minElectricUnit;
+                    electricUnit = parseFloat(minElectricUnit) || 0;
+                }
 
                 let totalWater = totalUsedWater * waterUnit;
                 let totalElectric = totalUsedElectric * electricUnit;
@@ -302,13 +312,11 @@
                 document.getElementById('total_amount_khr').value = totalKhr;
             }
 
-            ['old_water_number','new_water_number','old_electric_number','new_electric_number',
-            'water_unit_price','electric_unit_price','house_price','garbage_price']
+            ['old_water_number', 'new_water_number', 'old_electric_number', 'new_electric_number', 'water_unit_price', 'electric_unit_price', 'house_price', 'garbage_price', 'min_electric_unit_price', 'max_electric_unit_price', 'calculation_threshold', 'electric_source']
             .forEach(id => {
                 let el = document.getElementById(id);
                 if(el) el.addEventListener('input', calculateInvoice);
             });
-
         });
     </script>
 @endsection

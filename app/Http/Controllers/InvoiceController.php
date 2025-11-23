@@ -120,11 +120,11 @@ class InvoiceController extends Controller
             'garbage_price'         => 'required|numeric|min:0',
 
             'old_water_number'      => 'required|numeric|min:0',
-            'new_water_number'      => 'required|numeric|min:0',
+            'new_water_number'      => 'required|numeric|min:0|gte:old_water_number',
             'total_used_water'      => 'required|numeric|min:0',
 
             'old_electric_number'   => 'required|numeric|min:0',
-            'new_electric_number'   => 'required|numeric|min:0',
+            'new_electric_number'   => 'required|numeric|min:0|gte:old_electric_number',
             'total_used_electric'   => 'required|numeric|min:0',
 
             'water_unit_price'      => 'required|numeric|min:0',
@@ -150,6 +150,13 @@ class InvoiceController extends Controller
         if (isset($validated['new_electric_number'])) {
             $customer->old_electric_number = $validated['new_electric_number'];
         }
+
+        $oldCustomer = Customer::find($invoice->customer_id);
+        if ($oldCustomer->id !== $customer->id) {
+            $oldCustomer->old_water_number = $invoice->old_water_number;
+            $oldCustomer->old_electric_number = $invoice->old_electric_number;
+            $oldCustomer->save();
+        }
         
         $customer->save();
         $invoice->update($validated);
@@ -166,6 +173,14 @@ class InvoiceController extends Controller
 
     public function destroy(Invoice $invoice)
     {
+        $customer = Customer::find($invoice->customer_id);
+
+        if ($customer) {
+            $customer->old_water_number = $invoice->old_water_number;
+            $customer->old_electric_number = $invoice->old_electric_number;
+            $customer->save();
+        }
+
         $invoice->delete();
 
         return redirect()->route('invoices.index')->with('success', 'Invoice deleted successfully.');

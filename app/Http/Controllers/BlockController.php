@@ -133,6 +133,9 @@ class BlockController extends Controller
         return response()->json([
             'water_unit_price' => $block->water_price,
             'electric_unit_price' => $block->electric_price,
+            'electric_source' => $block->electric_source,
+            'max_electric_unit_price' => $block->max_electric_price,
+            'calculation_threshold' => $block->calculation_threshold,
         ]);
     }
 
