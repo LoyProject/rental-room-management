@@ -68,19 +68,19 @@
                     </div>     
                     <div>
                         <label id="label_electric_price" for="electric_price" class="block text-sm font-medium text-gray-700">តម្លៃអគ្គិសនីអប្បបរមា (រៀល) <span class="text-red-600">*</span></label>
-                        <input id="electric_price" name="electric_price" type="number" 
+                        <input id="electric_price" name="electric_price" type="number" required
                             step="10" min="0" value="{{ old('electric_price', $block->electric_price) }}" 
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     </div>                        
                     <div id="max_electric_container" class="{{ (string) old('electric_source', $block->electric_source) === 'P' ? 'hidden' : '' }}">
                         <label for="max_electric_price" class="block text-sm font-medium text-gray-700">តម្លៃអគ្គិសនីអតិបរមា (រៀល) <span class="text-red-600">*</span></label>
-                        <input id="max_electric_price" name="max_electric_price" type="number" 
+                        <input id="max_electric_price" name="max_electric_price" type="number" required
                             step="10" min="0" value="{{ old('max_electric_price', $block->max_electric_price) }}" 
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     </div>
                     <div id="calculation_threshold_container" class="{{ (string) old('electric_source', $block->electric_source) === 'P' ? 'hidden' : '' }}">
                         <label for="calculation_threshold" class="block text-sm font-medium text-gray-700">ចំនួនការគណនាសម្រាប់តម្លៃអតិបរមា <span class="text-red-600">*</span></label>
-                        <input id="calculation_threshold" name="calculation_threshold" type="number" 
+                        <input id="calculation_threshold" name="calculation_threshold" type="number" required
                             min="1" value="{{ old('calculation_threshold', $block->calculation_threshold) }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     </div>
@@ -128,12 +128,16 @@
                     maxElectricPrice.value = '';
                     calculationThreshold.value = '';
                     labelElectricPrice.innerHTML = 'តម្លៃអគ្គិសនី (រៀល) <span class="text-red-600">*</span>';
+                    maxElectricPrice.required = false;
+                    calculationThreshold.required = false;
                 } else {
                     electricContainer.classList.remove('md:grid-cols-2');
                     electricContainer.classList.add('md:grid-cols-4');
                     maxElectricContainer.classList.remove('hidden');
                     calculationThresholdContainer.classList.remove('hidden');
                     labelElectricPrice.innerHTML = 'តម្លៃអគ្គិសនីអប្បបរមា (រៀល) <span class="text-red-600">*</span>';
+                    maxElectricPrice.required = true;
+                    calculationThreshold.required = true;
                 }
             }
             

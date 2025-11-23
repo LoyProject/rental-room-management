@@ -32,7 +32,7 @@ class SiteController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:25',
+            'phone' => 'nullable|string|max:25',
             'address' => 'nullable|string',
         ]);
 
@@ -50,7 +50,7 @@ class SiteController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:25',
+            'phone' => 'nullable|string|max:25',
             'address' => 'nullable|string',
         ]);
 
