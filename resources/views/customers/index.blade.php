@@ -5,19 +5,34 @@
 @section('content')
     <x-success-alert />
     
-    <div class="mb-4 p-4 bg-white shadow-md rounded-md flex flex-col sm:flex-row justify-between items-center gap-4">
-        <form action="{{ route('customers.index') }}" method="GET" class="w-full sm:max-w-md">
+    <div class="mb-4 p-4 bg-white shadow-md rounded-md flex flex-col lg:flex-row justify-between items-center gap-4">
+        <form action="{{ route('customers.index') }}" method="GET" class="w-full lg:max-w-md">
             <div class="flex flex-row items-center gap-2 w-full">
+                <input type="hidden" name="block" value="{{ request('block') }}">
                 <input type="text" name="search" placeholder="ស្វែងរកអតិថិជន..."
                     class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
                     value="{{ request('search') }}">
-                <button type="submit" class="bg-gray-800 text-white px-6 py-2 hover:bg-gray-900 rounded-md">ស្វែងរក</button>
-                <a href="{{ route('customers.index') }}" class="font-semibold text-sm text-gray-600 hover:underline px-4 py-2 rounded-md">លុប</a>
+                <button type="submit"
+                    class="bg-gray-800 text-white px-6 py-2 hover:bg-gray-900 rounded-md">ស្វែងរក</button>
+                <a href="{{ route('customers.index') }}"
+                    class="font-semibold text-sm text-gray-600 hover:underline px-4 py-2 rounded-md">លុប</a>
             </div>
         </form>
 
-        <div class="w-full sm:w-auto flex justify-end">
-            <a href="{{ route('customers.create') }}" class="bg-blue-100 text-blue-700 px-4 py-2 rounded-md hover:bg-blue-700 hover:text-white w-full sm:w-auto text-center whitespace-nowrap">
+        <div class="w-full lg:w-auto flex justify-end lg:flex-row flex-col lg:items-center gap-4">
+            <div class="flex-grow lg:flex-grow-0 w-full lg:w-72 lg:min-w-[100px]">
+                <select id="blockFilter" name="block" class="w-full rounded-md shadow-sm border-gray-300">
+                    <option value="">ទីតាំងទាំងអស់</option>
+                    @foreach ($blocks as $block)
+                        <option value="{{ $block->id }}" @selected(request('block') == $block->id)>
+                            {{ $block->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <a href="{{ route('customers.create') }}"
+                class="bg-blue-100 text-blue-700 px-4 py-2 rounded-md hover:bg-blue-700 hover:text-white w-full sm:w-auto text-center whitespace-nowrap">
                 អតិថិជនថ្មី
             </a>
         </div>
@@ -29,9 +44,8 @@
                 <thead class="bg-gray-300">
                     <tr>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ល.រ</th>
-                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ឈ្មោះទីតាំង</th>
+                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ទីតាំង</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ឈ្មោះ</th>
-                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ទូរស័ព្ទ</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">តម្លៃផ្ទះ</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">តម្លៃសំរាម</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">លេខកុងទ័រចាស់(ទឹក)</th>
@@ -45,7 +59,6 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->id }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->block->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->phone ?? 'N/A' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->house_price, 2, '.', ',') }} USD</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->garbage_price, 0, '.', ',') }} KHR</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->old_water_number, 0, '.', ',') }} m³</td>
@@ -61,7 +74,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="text-center px-6 py-4">គ្មានអតិថិជនទេ</td>
+                            <td colspan="8" class="text-center px-6 py-4">គ្មានអតិថិជនទេ</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -72,4 +85,35 @@
     <div class="mt-6">
         {{ $customers->links() }}
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#blockFilter').select2({
+                allowClear: false,
+                width: '100%'
+            });
+
+            $('#blockFilter').on('select2:select select2:clear', function() {
+                let params = new URLSearchParams(window.location.search);
+
+                let block = $('#blockFilter').val();
+                let search = params.get('search');
+
+                if (block) {
+                    params.set('block', block);
+                } else {
+                    params.delete('block');
+                }
+
+                if (search) {
+                    params.set('search', search);
+                }
+
+                params.delete('page');
+
+                let queryString = params.toString();
+                window.location.href = window.location.pathname + (queryString ? '?' + queryString : '');
+            });
+        });
+    </script>
 @endsection

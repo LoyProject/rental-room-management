@@ -26,7 +26,7 @@
             @if (auth()->user()->isAdmin())
                 <div class="flex-grow lg:flex-grow-0 w-full lg:w-72 lg:min-w-[100px]">
                     <select id="siteFilter" name="site" class="w-full rounded-md shadow-sm border-gray-300">
-                        <option value="">ទីតាំងទាំងអស់</option>
+                        <option value="">តំបន់ទាំងអស់</option>
                         @foreach ($sites as $site)
                             <option value="{{ $site->id }}" @selected(request('site') == $site->id)>
                                 {{ $site->name }}

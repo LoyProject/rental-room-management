@@ -4,36 +4,78 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Block;
+use App\Models\Site;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
         $query = Customer::query();
 
-        if (request('search')) {
+       if (request()->filled('block')) {
+            $requestedBlockId = request('block');
+
+            $block = Block::find($requestedBlockId);
+
+            if (!$block) {
+                abort(404, 'Block not found');
+            }
+
+            if (!$user->isAdmin()) {
+                if ($block->site_id != $user->site_id) {
+                    abort(404, 'You cannot access this block');
+                }
+            }
+
+            $query->where('block_id', $requestedBlockId);
+
+        } else {
+            if (!$user->isAdmin()) {
+                $query->whereHas('block', function ($q) use ($user) {
+                    $q->where('site_id', $user->site_id);
+                });
+            }
+        }
+
+        if (request()->filled('search')) {
             $searchTerm = '%' . request('search') . '%';
-            $query->where('name', 'like', $searchTerm)
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('name', 'like', $searchTerm)
                 ->orWhere('phone', 'like', $searchTerm)
                 ->orWhere('house_price', 'like', $searchTerm)
                 ->orWhere('garbage_price', 'like', $searchTerm)
                 ->orWhere('old_water_number', 'like', $searchTerm)
                 ->orWhere('old_electric_number', 'like', $searchTerm)
-                ->orWhereHas('block', function ($q) use ($searchTerm) {
-                    $q->where('name', 'like', $searchTerm);
+                ->orWhereHas('block', function ($qb) use ($searchTerm) {
+                    $qb->where('name', 'like', $searchTerm);
                 });
+            });
         }
+
+        $blocks = $user->isAdmin()
+            ? Block::all()
+            : Block::where('site_id', $user->site_id)->get();
 
         $customers = $query->with('block')->latest()->paginate(10)->withQueryString();
 
-        return view('customers.index', compact('customers'));
+        return view('customers.index', compact('customers', 'blocks'));
     }
 
     public function create()
     {
-        $blocks = Block::all();
-        return view('customers.create', compact('blocks'));
+        $user = auth()->user();
+        
+        $sites = $user->isAdmin() 
+            ? Site::all() 
+            : Site::where('id', $user->site_id)->get();
+        
+        $blocks = Block::when(!$user->isAdmin(), function ($query) use ($user) {
+            $query->where('site_id', $user->site_id);
+        })->get();
+
+        return view('customers.create', compact('blocks', 'sites'));
     }
 
     public function store(Request $request)
@@ -57,13 +99,27 @@ class CustomerController extends Controller
 
     public function edit(Customer $customer)
     {
-        $blocks = Block::all();
-        return view('customers.edit', compact('customer', 'blocks'));
+        $user = auth()->user();
+
+        $sites = $user->isAdmin()
+            ? Site::all()
+            : Site::where('id', $user->site_id)->get();
+
+        $customerSiteId = $customer->block->site_id;
+
+        $blocks = $user->isAdmin()
+            ? Block::where('site_id', $customerSiteId)->get()
+            : Block::where('site_id', $user->site_id)->get();
+
+        return view('customers.edit', compact('customer', 'blocks', 'sites'));
     }
 
     public function update(Request $request, Customer $customer)
     {
+        $user = auth()->user();
+
         $validated = $request->validate([
+            'site_id' => $user->isAdmin() ? 'required|exists:sites,id' : '',
             'block_id' => 'required|exists:blocks,id',
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:25',
@@ -73,11 +129,39 @@ class CustomerController extends Controller
             'old_electric_number' => 'nullable|integer|min:0',
         ]);
 
-        $validated['old_water_number'] = $validated['old_water_number'] ?? 0;
-        $validated['old_electric_number'] = $validated['old_electric_number'] ??
+        if ($user->isAdmin()) {
+            $block = Block::find($validated['block_id']);
 
-        $customer->update($validated);
-        return redirect()->route('customers.index')->with('success', 'Customer updated successfully.');
+            if ($block->site_id != $validated['site_id']) {
+                return back()
+                    ->withErrors(['block_id' => 'The selected block does not belong to the selected site.'])
+                    ->withInput();
+            }
+        } else {
+            $block = Block::find($validated['block_id']);
+            if ($block->site_id != $user->site_id) {
+                return back()
+                    ->withErrors(['block_id' => 'You cannot assign a customer to a block outside your site.'])
+                    ->withInput();
+            }
+        }
+
+        $validated['old_water_number'] = $validated['old_water_number'] ?? 0;
+        $validated['old_electric_number'] = $validated['old_electric_number'] ?? 0;
+
+        $customer->update([
+            'block_id' => $validated['block_id'],
+            'name' => $validated['name'],
+            'phone' => $validated['phone'],
+            'house_price' => $validated['house_price'],
+            'garbage_price' => $validated['garbage_price'],
+            'old_water_number' => $validated['old_water_number'],
+            'old_electric_number' => $validated['old_electric_number'],
+        ]);
+
+        return redirect()
+            ->route('customers.index')
+            ->with('success', 'Customer updated successfully.');
     }
 
     public function destroy(Customer $customer)

@@ -13,7 +13,7 @@ body {
 }
 
 .select2-container {
-    min-width: 250px !important;
+    min-width: 100px !important;
 }
 
 .select2-container--default .select2-selection--single {

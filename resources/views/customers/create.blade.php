@@ -4,21 +4,41 @@
 
 @section('content')
     <div class="bg-white shadow-md rounded-lg p-6 min-h-full">
+        <x-loading-overlay />
+
         <form action="{{ route('customers.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="grid flex-col sm:grid-cols-2 gap-6">
-                <div>
-                    <label for="block_id" class="block text-sm font-medium text-gray-700">ទីតាំង <span class="text-red-600">*</span></label>
-                    <select id="block_id" name="block_id" required autofocus
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                        <option value="" disabled {{ old('block_id') ? '' : 'selected' }}>​ជ្រើសរើសទីតាំង</option>
-                        @foreach($blocks as $block)
-                            <option value="{{ $block->id }}" {{ old('block_id') == $block->id ? 'selected' : '' }}>{{ $block->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('block_id')
-                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                    @enderror
+                <div class="grid grid-cols-1 {{ Auth::user()->isAdmin() ? 'md:grid-cols-2' : 'md:grid-cols-1' }} gap-6">
+                    <div class="{{ Auth::user()->isAdmin() ? '' : 'hidden' }}">
+                        <label for="site_id" class="block mb-1 text-sm font-medium text-gray-700">តំបន់ <span class="text-red-600">*</span></label>
+                        <select id="site_id" name="site_id" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" aria-hidden="false">
+                            <option value="" disabled {{ old('site_id') ? '' : 'selected' }}>ជ្រើសរើសតំបន់​​</option>
+                            @php $userSiteId = optional(auth()->user())->site_id; @endphp
+                            @foreach($sites as $site)
+                                <option value="{{ $site->id }}" {{ (old('site_id') == $site->id) || (old('site_id') === null && $userSiteId == $site->id) ? 'selected' : '' }}>{{ $site->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('site_id')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="block_id" class="mb-1 block text-sm font-medium text-gray-700">ទីតាំង <span class="text-red-600">*</span></label>
+                        <select id="block_id" name="block_id" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" aria-hidden="false">
+                            <option value="" disabled {{ old('block_id') ? '' : 'selected' }}>​ជ្រើសរើសទីតាំង</option>
+                            @if(Auth::user()->isAdmin() == false)
+                                @foreach($blocks as $block)
+                                    <option value="{{ $block->id }}" {{ old('block_id') == $block->id ? 'selected' : '' }}>{{ $block->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                        @error('block_id')
+                            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -94,4 +114,39 @@
             </div>
         </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            $('#site_id').select2({ width: '100%' });
+            $('#block_id').select2({ width: '100%' });
+
+            const loadingOverlay = document.getElementById('loading-overlay');
+
+            $('#site_id').on('change', function () {
+                let siteId = $(this).val();
+                if (!siteId) return;
+
+                loadingOverlay.classList.remove('hidden');
+
+                $.ajax({
+                    url: '/blocks-by-site/' + siteId,
+                    type: 'GET',
+                    success: function(data) {
+                        let blockSelect = $('#block_id');
+                        blockSelect.empty();
+                        blockSelect.append('<option value="" disabled selected>ជ្រើសរើសទីតាំង</option>');
+                        $.each(data, function(i, block) {
+                            blockSelect.append(
+                                `<option value="${block.id}">${block.name}</option>`
+                            );
+                        });
+                        blockSelect.val('').trigger('change');
+                    },
+                    complete: function () {
+                        loadingOverlay.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

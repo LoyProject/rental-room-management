@@ -135,4 +135,10 @@ class BlockController extends Controller
             'electric_unit_price' => $block->electric_price,
         ]);
     }
+
+    public function getBlocksBySite($siteId)
+    {
+        $blocks = Block::where('site_id', $siteId)->get();
+        return response()->json($blocks);
+    }
 }
