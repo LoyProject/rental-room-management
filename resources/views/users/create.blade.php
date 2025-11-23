@@ -38,7 +38,7 @@
                         @enderror
                     </div>
                     <div class="hidden">
-                        <label for="site_id" class="block text-sm font-medium text-gray-700">ឈ្មោះតំបន់ <span class="text-red-600">*</span></label>
+                        <label for="site_id" class="mb-1 block text-sm font-medium text-gray-700">ឈ្មោះតំបន់ <span class="text-red-600">*</span></label>
                         <select id="site_id" name="site_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                             <option value="" disabled {{ old('site_id') ? '' : 'selected' }}>ជ្រើសរើស​តំបន់</option>
                             @foreach ($sites as $site)
@@ -119,6 +119,13 @@
                 if (eyeClosed) eyeClosed.classList.remove('hidden');
             }
         }
+
+        $(document).ready(function() {
+            $('#site_id').select2({
+                allowClear: false,
+                width: '100%'
+            });
+        });
 
         (function(){
             var roleSelect = document.getElementById('role');

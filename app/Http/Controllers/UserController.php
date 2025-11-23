@@ -19,16 +19,22 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+        $user = auth()->user();
         $query = User::query();
 
-        if ($search = $request->input('search')) {
+        if (request()->filled('role') && $user->role === 'admin') {
+            $query->where('role', request('role'));
+        }
+
+        if (request()->filled('search')) {
+            $search = '%' . request('search') . '%';
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                $q->where('name', 'like', $search)
+                ->orWhere('email', 'like', $search);
             });
         }
 
-        $users = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+        $users = $query->orderByDesc('created_at')->paginate(10)->withQueryString();
 
         return view('users.index', compact('users'));
     }

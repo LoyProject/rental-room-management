@@ -14,7 +14,7 @@ class CustomerController extends Controller
         $user = auth()->user();
         $query = Customer::query();
 
-       if (request()->filled('block')) {
+        if (request()->filled('block')) {
             $requestedBlockId = request('block');
 
             $block = Block::find($requestedBlockId);

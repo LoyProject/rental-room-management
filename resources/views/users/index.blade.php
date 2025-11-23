@@ -8,6 +8,9 @@
     <div class="mb-4 p-4 bg-white shadow-md rounded-md flex flex-col sm:flex-row justify-between items-center gap-4">
         <form action="{{ route('users.index') }}" method="GET" class="w-full sm:max-w-md">
             <div class="flex flex-row items-center gap-2 w-full">
+                @if (auth()->user()->isAdmin() && request('role'))
+                    <input type="hidden" name="role" value="{{ request('role') }}">
+                @endif
                 <input type="text" name="search" placeholder="ស្វែងរកអ្នកប្រើប្រាស់..."
                     class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
                     value="{{ request('search') }}">
@@ -16,7 +19,17 @@
             </div>
         </form>
 
-        <div class="w-full sm:w-auto flex justify-end">
+        <div class="w-full lg:w-auto flex justify-end lg:flex-row flex-col lg:items-center gap-4">
+            @if (auth()->user()->isAdmin())
+                <div class="flex-grow lg:flex-grow-0 w-full lg:w-72 lg:min-w-[100px]">
+                    <select id="roleFilter" name="role" class="w-full rounded-md shadow-sm border-gray-300">
+                        <option value="">តួនាទីទាំងអស់</option>
+                        <option value="admin" @selected(request('role') == 'admin')>Admin</option>
+                        <option value="user" @selected(request('role') == 'user')>User</option>
+                    </select>
+                </div>
+            @endif
+
             <a href="{{ route('users.create') }}" class="bg-blue-100 text-blue-700 px-4 py-2 rounded-md hover:bg-blue-700 hover:text-white w-full sm:w-auto text-center whitespace-nowrap">
                 អ្នកប្រើប្រាស់ថ្មី
             </a>
@@ -61,7 +74,36 @@
         </div>
     </div>
     <div class="p-4">
-            {{ $users->withQueryString()->links() }}
+        {{ $users->withQueryString()->links() }}
     </div>
+    <script>
+        $(document).ready(function() {
+            $('#roleFilter').select2({
+                allowClear: false,
+                width: '100%'
+            });
 
+            $('#roleFilter').on('select2:select select2:clear', function() {
+                let params = new URLSearchParams(window.location.search);
+
+                let role = $('#roleFilter').val();
+                let search = params.get('search');
+
+                if (role) {
+                    params.set('role', role);
+                } else {
+                    params.delete('role');
+                }
+
+                if (search) {
+                    params.set('search', search);
+                }
+
+                params.delete('page');
+
+                let queryString = params.toString();
+                window.location.href = window.location.pathname + (queryString ? '?' + queryString : '');
+            });
+        });
+    </script>
 @endsection
