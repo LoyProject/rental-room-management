@@ -15,25 +15,34 @@
                         <label for="block_id" class="mb-1 block text-sm font-medium text-gray-700">ទីតាំង <span class="text-red-600">*</span></label>
                         <select id="block_id" name="block_id" required
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring-blue-200">
-                            <option value="" disabled selected>ជ្រើសរើសទីតាំង</option>
+                            <option value="" disabled {{ old('block_id') ? '' : 'selected' }}>ជ្រើសរើសទីតាំង</option>
                             @foreach($blocks as $block)
-                                <option value="{{ $block->id }}">{{ $block->name }}</option>
+                                <option value="{{ $block->id }}" {{ old('block_id') == $block->id ? 'selected' : '' }}>{{ $block->name }}</option>
                             @endforeach
                         </select>
+                        @error('block_id')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
                         <label for="customer_id" class="mb-1 block text-sm font-medium text-gray-700">អតិថិជន <span class="text-red-600">*</span></label>
                         <select id="customer_id" name="customer_id" required
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring-blue-200">
-                            <option value="" disabled selected>ជ្រើសរើសអតិថិជន</option>  
+                            <option value="" disabled {{ old('customer_id') ? '' : 'selected' }}>ជ្រើសរើសអតិថិជន</option>
                         </select>
+                        @error('customer_id')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
                         <label for="invoice_date" class="block text-sm font-medium text-gray-700">កាលបរិច្ឆេទវិក្កយបត្រ <span class="text-red-600">*</span></label>
                         <input type="text" id="invoice_date" name="invoice_date" class="mt-1 block w-full rounded-md border-gray-300"
                             placeholder="dd/mm/yyyy" required>
+                        @error('invoice_date')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
@@ -42,22 +51,34 @@
                         <label for="from_date" class="block text-sm font-medium text-gray-700">ពីថ្ងៃ <span class="text-red-600">*</span></label>
                         <input type="text" id="from_date" name="from_date" class="mt-1 block w-full border-gray-300 rounded-md" 
                            placeholder="dd/mm/yyyy" required>
+                        @error('from_date')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label for="to_date" class="block text-sm font-medium text-gray-700">ដល់ថ្ងៃ <span class="text-red-600">*</span></label>
                         <input type="text" id="to_date" name="to_date" class="mt-1 block w-full border-gray-300 rounded-md"
                            placeholder="dd/mm/yyyy" required>
+                        @error('to_date')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label for="house_price" class="block text-sm font-medium">តម្លៃផ្ទះ (ដុល្លារ) <span class="text-red-600">*</span></label>
-                        <input type="number" id="house_price" name="house_price" step="0.01" min="0" class="mt-1 block w-full border-gray-300 rounded-md" required>
+                        <input type="number" id="house_price" name="house_price" value="{{ old('house_price') }}" step="0.01" min="0" class="mt-1 block w-full border-gray-300 rounded-md" required>
+                        @error('house_price')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label for="garbage_price" class="block text-sm font-medium">សំរាម (រៀល) <span class="text-red-600">*</span></label>
-                        <input type="number" id="garbage_price" name="garbage_price" step="100"  min="0" class="mt-1 block w-full border-gray-300 rounded-md" required>
+                        <input type="number" id="garbage_price" name="garbage_price" value="{{ old('garbage_price') }}" step="100"  min="0" class="mt-1 block w-full border-gray-300 rounded-md" required>
+                        @error('garbage_price')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
@@ -65,27 +86,39 @@
                     <div>
                         <label class="block text-sm font-medium">ចំនួនទឹក (ចាស់ / ថ្មី / សរុប) <span class="text-red-600">*</span></label>
                         <div class="grid grid-cols-3 gap-2">
-                            <input type="number" id="old_water_number" name="old_water_number" min="0"
+                            <input type="number" id="old_water_number" name="old_water_number" value="{{ old('old_water_number') }}" min="0"
                                 class="mt-1 block w-full border-gray-300 rounded-md" required>
-                            <input type="number" id="new_water_number" name="new_water_number" min="0"
+                            <input type="number" id="new_water_number" name="new_water_number" value="{{ old('new_water_number') }}" min="0"
                                 class="mt-1 block w-full border-gray-300 rounded-md" required>
 
-                            <input type="number" id="total_used_water" name="total_used_water" 
+                            <input type="number" id="total_used_water" name="total_used_water" value="{{ old('total_used_water') }}"
                                 class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" readonly>
                         </div>
+                        @error('old_water_number')
+                            <p class="text-red-500 text-xs mt-1 col-span-3">{{ $message }}</p>
+                        @enderror
+                        @error('new_water_number')
+                            <p class="text-red-500 text-xs mt-1 col-span-3">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium">ចំនួនអគ្គិសនី (ចាស់ / ថ្មី / សរុប) <span class="text-red-600">*</span></label>
                         <div class="grid grid-cols-3 gap-2">
-                            <input type="number" id="old_electric_number" name="old_electric_number" min="0"
+                            <input type="number" id="old_electric_number" name="old_electric_number" min="0" value="{{ old('old_electric_number') }}"
                                 class="mt-1 block w-full border-gray-300 rounded-md" required>
-                            <input type="number" id="new_electric_number" name="new_electric_number" min="0"
+                            <input type="number" id="new_electric_number" name="new_electric_number" min="0" value="{{ old('new_electric_number') }}"
                                 class="mt-1 block w-full border-gray-300 rounded-md" required>
 
-                            <input type="number" id="total_used_electric" name="total_used_electric" 
+                            <input type="number" id="total_used_electric" name="total_used_electric" value="{{ old('total_used_electric') }}"
                                 class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" readonly>
                         </div>
+                        @error('old_electric_number')
+                            <p class="text-red-500 text-xs mt-1 col-span-3">{{ $message }}</p>
+                        @enderror
+                        @error('new_electric_number')
+                            <p class="text-red-500 text-xs mt-1 col-span-3">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
@@ -93,39 +126,45 @@
                     <div>
                         <label class="block text-sm font-medium">តម្លៃទឹក / ១ m³ (រៀល) <span class="text-red-600">*</span></label>
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="number" id="water_unit_price" name="water_unit_price" min="0" step="10"
+                            <input type="number" id="water_unit_price" name="water_unit_price" min="0" step="10" value="{{ old('water_unit_price') }}"
                                 class="mt-1 block w-full border-gray-300 rounded-md" required>
 
-                            <input type="number" id="total_amount_water" name="total_amount_water" 
+                            <input type="number" id="total_amount_water" name="total_amount_water" value="{{ old('total_amount_water') }}"
                                 class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" readonly>
                         </div>
+                        @error('water_unit_price')
+                            <p class="text-red-500 text-xs mt-1 col-span-2">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium">តម្លៃអគ្គិសនី / ១ kWh (រៀល) <span class="text-red-600">*</span></label>
                         <div class="grid grid-cols-2 gap-2">
-                            <input id="min_electric_unit_price" name="min_electric_unit_price" class="hidden" readonly disabled>
-                            <input id="max_electric_unit_price" name="max_electric_unit_price" class="hidden" readonly disabled>
-                            <input id="calculation_threshold" name="calculation_threshold" class="hidden" readonly disabled>
-                            <input id="electric_source" name="electric_source" class="hidden" readonly disabled>
+                            <input id="min_electric_unit_price" name="min_electric_unit_price" value="{{ old('min_electric_unit_price') }}" class="hidden" readonly disabled>
+                            <input id="max_electric_unit_price" name="max_electric_unit_price" value="{{ old('max_electric_unit_price') }}" class="hidden" readonly disabled>
+                            <input id="calculation_threshold" name="calculation_threshold" value="{{ old('calculation_threshold') }}" class="hidden" readonly disabled>
+                            <input id="electric_source" name="electric_source" value="{{ old('electric_source') }}" class="hidden" readonly disabled>
 
-                            <input type="number" id="electric_unit_price" name="electric_unit_price" min="0" step="10"
+                            <input type="number" id="electric_unit_price" name="electric_unit_price" min="0" step="10" value="{{ old('electric_unit_price') }}"
                                 class="mt-1 block w-full border-gray-300 rounded-md" required>
 
-                            <input type="number" id="total_amount_electric" name="total_amount_electric" 
+                            <input type="number" id="total_amount_electric" name="total_amount_electric" value="{{ old('total_amount_electric') }}"
                                 class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" readonly>
                         </div>
+                        @error('electric_unit_price')
+                            <p class="text-red-500 text-xs mt-1 col-span-2">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t pt-4 mt-4">
                     <div>
                         <label for="total_amount_usd" class="block text-base font-bold">ចំនួនទឹកប្រាក់សរុប (ដុល្លារ)</label>
-                        <input type="number" id="total_amount_usd" name="total_amount_usd" 
+                        <input type="number" id="total_amount_usd" name="total_amount_usd" value="{{ old('total_amount_usd') }}"
                             class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md text-lg font-bold text-green-600" readonly> 
                     </div>
                     <div>
                         <label for="total_amount_khr" class="block text-base font-bold">ចំនួនទឹកប្រាក់សរុប (រៀល)</label>
-                        <input type="number" id="total_amount_khr" name="total_amount_khr" 
+                        <input type="number" id="total_amount_khr" name="total_amount_khr" value="{{ old('total_amount_khr') }}"
                             class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md text-lg font-bold text-green-600" readonly> 
                     </div>
                 </div>
@@ -234,9 +273,8 @@
                     dataType: 'json'
                 }).done(function (data) {
                     let $customer = $('#customer_id');
-                    $customer.empty().append('<option value="" disabled selected>ជ្រើសរើសអតិថិជន</option>');
                     $.each(data, function (_, customer) {
-                        $customer.append($('<option>').val(customer.id).text(customer.name));
+                        $customer.append($('<option {{ old("customer_id") == ' + customer.id + ' ? "selected" : "" }}>').val(customer.id).text(customer.name));
                     });
                     $customer.trigger('change.select2');
 
@@ -277,7 +315,6 @@
                 let newElectric = parseFloat(document.getElementById('new_electric_number').value) || 0;
 
                 let waterUnit = parseFloat(document.getElementById('water_unit_price').value) || 0;
-                let electricUnit = parseFloat(document.getElementById('electric_unit_price').value) || 0;
                 let minElectricUnit = parseFloat(document.getElementById('min_electric_unit_price').value) || 0;
                 let maxElectricUnit = parseFloat(document.getElementById('max_electric_unit_price').value) || 0;
                 let calculationThreshold = parseFloat(document.getElementById('calculation_threshold').value) || 0;
@@ -289,6 +326,7 @@
                 let totalUsedWater = Math.max(newWater - oldWater, 0);
                 let totalUsedElectric = Math.max(newElectric - oldElectric, 0);
 
+                let electricUnit;
                 if (electricSource === 'S' && totalUsedElectric >= calculationThreshold) {
                     document.getElementById('electric_unit_price').value = maxElectricUnit;
                     electricUnit = parseFloat(maxElectricUnit) || 0;

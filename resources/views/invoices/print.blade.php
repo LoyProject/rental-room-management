@@ -111,7 +111,7 @@
             </div>
 
             <div class="flex justify-end gap-4 no-print mt-4 mb-4">
-                <a href="{{ url()->previous() }}" onclick="event.preventDefault(); window.history.back();"
+                <a href="{{ route('invoices.index') }}"
                        class="inline-flex items-center px-3 py-2 rounded-md bg-white border border-gray-200 text-gray-600 text-sm hover:bg-gray-50">
                         ត្រឡប់
                     </a>

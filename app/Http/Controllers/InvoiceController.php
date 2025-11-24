@@ -12,31 +12,65 @@ class InvoiceController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth()->user();
         $query = Invoice::query()->with(['block', 'customer']);
 
-        if ($request->search) {
-            $searchTerm = '%' . $request->search . '%';
+        if (request()->filled('block')) {
+            $requestedBlockId = request('block');
 
-            $query->where('id', 'like', $searchTerm)
+            $block = Block::find($requestedBlockId);
+
+            if (!$block) {
+                abort(404, 'Block not found');
+            }
+
+            if (!$user->isAdmin()) {
+                if ($block->site_id != $user->site_id) {
+                    abort(404, 'You cannot access this block');
+                }
+            }
+
+            $query->where('block_id', $requestedBlockId);
+
+        } else {
+            if (!$user->isAdmin()) {
+                $query->whereHas('block', function ($q) use ($user) {
+                    $q->where('site_id', $user->site_id);
+                });
+            }
+        }
+
+        if ($request->filled('search')) {
+            $searchTerm = '%' . $request->search . '%';
+            $searchNumber = '%' . str_replace(',', '', $request->search) . '%';
+
+            $query->where(function ($q) use ($searchTerm, $searchNumber) {
+                $q->where('id', 'like', $searchTerm)
                 ->orWhereRaw("DATE_FORMAT(invoice_date, '%d/%m/%Y') LIKE ?", [$searchTerm])
-                ->orWhereHas('block', function ($q) use ($searchTerm) {
-                    $q->where('name', 'like', $searchTerm);
+                ->orWhereHas('block', function ($b) use ($searchTerm) {
+                    $b->where('name', 'like', $searchTerm);
                 })
-                ->orWhereHas('customer', function ($q) use ($searchTerm) {
-                    $q->where('name', 'like', $searchTerm);
+                ->orWhereHas('customer', function ($c) use ($searchTerm) {
+                    $c->where('name', 'like', $searchTerm);
                 })
                 ->orWhereRaw('CAST(total_amount_water AS CHAR) LIKE ?', [$searchTerm])
-                ->orWhereRaw("CAST(total_amount_water AS CHAR) LIKE ?", ['%' . str_replace(',', '', $request->search) . '%'])
+                ->orWhereRaw('CAST(total_amount_water AS CHAR) LIKE ?', [$searchNumber])
                 ->orWhereRaw('CAST(total_amount_electric AS CHAR) LIKE ?', [$searchTerm])
-                ->orWhereRaw("CAST(total_amount_electric AS CHAR) LIKE ?", ['%' . str_replace(',', '', $request->search) . '%'])
+                ->orWhereRaw('CAST(total_amount_electric AS CHAR) LIKE ?', [$searchNumber])
                 ->orWhere('total_amount_usd', 'like', $searchTerm)
-                ->orWhereRaw("CAST(total_amount_khr AS CHAR) LIKE ?", [$searchTerm])
-                ->orWhereRaw("CAST(total_amount_khr AS CHAR) LIKE ?", ['%' . str_replace(',', '', $request->search) . '%']);
+                ->orWhereRaw('CAST(total_amount_khr AS CHAR) LIKE ?', [$searchTerm])
+                ->orWhereRaw('CAST(total_amount_khr AS CHAR) LIKE ?', [$searchNumber]);
+            });
         }
+
+
+        $blocks = $user->isAdmin()
+            ? Block::all()
+            : Block::where('site_id', $user->site_id)->get();
 
         $invoices = $query->latest()->paginate(10)->withQueryString();
 
-        return view('invoices.index', compact('invoices'));
+        return view('invoices.index', compact('invoices', 'blocks'));
     }
 
     public function create()
@@ -66,11 +100,11 @@ class InvoiceController extends Controller
             'garbage_price'         => 'required|numeric|min:0',
 
             'old_water_number'      => 'required|numeric|min:0',
-            'new_water_number'      => 'required|numeric|min:0',
+            'new_water_number'      => 'required|numeric|min:0|gte:old_water_number',
             'total_used_water'      => 'required|numeric|min:0',
 
             'old_electric_number'   => 'required|numeric|min:0',
-            'new_electric_number'   => 'required|numeric|min:0',
+            'new_electric_number'   => 'required|numeric|min:0|gte:old_electric_number',
             'total_used_electric'   => 'required|numeric|min:0',
 
             'water_unit_price'      => 'required|numeric|min:0',
