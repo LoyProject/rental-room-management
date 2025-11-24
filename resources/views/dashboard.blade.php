@@ -14,6 +14,18 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a1 1 0 001 1h16a1 1 0 001-1V7M7 7V5a2 2 0 012-2h6a2 2 0 012 2v2" />
                             </svg>
                         </div>
+                        @php
+                            use App\Models\Site;
+                            use App\Models\Block;
+                            use App\Models\Customer;
+                            use App\Models\Invoice;
+
+                            $totalSites = Site::count();
+                            $totalBlocks = Block::count();
+                            $totalCustomers = Customer::count();
+                            $totalIncomes = Invoice::sum('total_amount_usd');
+                        @endphp
+
                         <div class="ms-4">
                             <p class="text-sm font-medium text-gray-500">តំបន់សរុប</p>
                             <p class="text-2xl font-semibold text-gray-900">{{ $totalSites ?? 0 }}</p>

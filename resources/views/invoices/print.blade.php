@@ -6,21 +6,29 @@
     <div class="items-center">
         <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-8 print:p-6 invoice-print" style="border-radius:12px;">
             <div class="text-4xl font-bold text-gray-400 tracking-wide text-center mb-8">វិក្កយបត្រ
-                
+
             </div>
             <style>
-                /* Print: hide everything except the invoice container to remove app header/footer */
+
                 @media print {
                     html, body { height: auto !important; }
                     body * { visibility: hidden !important; }
                     .invoice-print, .invoice-print * { visibility: visible !important; }
-                    .invoice-print { position: absolute !important; left: 0; top: 0; width: 100% !important; }
+                    .invoice-print { position: absolute !important; left: 0; top: 0; width: 148mm !important; box-shadow: none !important; border-radius: 0 !important; }
                     .no-print { display: none !important; }
-                    @page { size: A5 portrait; margin: 10mm; }
+                    @page { size: A5 portrait; margin: 0.5mm; }
                 }
+
+                .invoice-print { width: 148mm; box-sizing: border-box; padding: 8mm; }
+                .invoice-print .text-4xl { font-size: 18px; }
+                .invoice-print h4 { font-size: 12px; }
+                .invoice-print .text-sm { font-size: 11px; }
+                .invoice-print table th, .invoice-print table td { padding: 6px 8px; font-size: 11px; }
+                .invoice-print .mb-8 { margin-bottom: 8px; }
+                
             </style>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 items-start">
+            <div class="grid grid-cols-2 md:grid-cols-1 gap-6 mb-6 items-start">
                 <div>
                     <h4 class="text-sm font-semibold mb-2">ឈ្មោះ​អតិថិជន:</h4>
                     <div class="text-sm font-semibold">{{ $invoice->customer->name ?? 'ឈ្មោះ​អតិថិជន' }}</div>
@@ -113,11 +121,11 @@
             <div class="flex justify-end gap-4 no-print mt-4 mb-4">
                 <a href="{{ route('invoices.index') }}"
                        class="inline-flex items-center px-3 py-2 rounded-md bg-white border border-gray-200 text-gray-600 text-sm hover:bg-gray-50">
-                        ត្រឡប់
-                    </a>
+                        បោះបង់
+                    </a>    
 
                     <button id="printBtn" type="button" onclick="printA5()"
-                            class="inline-flex items-center px-3 py-2 rounded-md bg-blue-600 text-white text-sm hover:bg-blue-500">
+                            class="inline-flex items-center px-3 py-2 rounded-md bg-green-600 text-white text-sm hover:bg-green-500">
                         បោះពុម្ព
                     </button>
             </div>
@@ -130,17 +138,22 @@
                     const invoiceEl = document.querySelector('.invoice-print');
                     if (!invoiceEl) { window.print(); return; }
 
-                    // A5 portrait dimensions: 148 x 210 mm. Use 10mm margins by default.
-                    const pageHeightMM = 210;
-                    const marginMM = 10;
-                    const printableHeightPx = mmToPx(pageHeightMM - (marginMM * 2));
+                        // A5 portrait dimensions: 148 x 210 mm. Use 10mm margins by default.
+                        const pageWidthMM = 148;
+                        const pageHeightMM = 210;
+                        const marginMM = 0.5;
+                        const printableHeightPx = mmToPx(pageHeightMM - (marginMM * 2));
+                        const printableWidthPx = mmToPx(pageWidthMM - (marginMM * 2));
 
-                    // measure current invoice height
-                    const rect = invoiceEl.getBoundingClientRect();
-                    const contentHeight = rect.height;
+                        // measure current invoice dimensions
+                        const rect = invoiceEl.getBoundingClientRect();
+                        const contentHeight = rect.height;
+                        const contentWidth = rect.width;
 
-                    // compute scale to fit into printable height (do not upscale)
-                    const scale = Math.min(1, printableHeightPx / contentHeight);
+                        // compute scale to fit into printable area (do not upscale)
+                        const scaleY = printableHeightPx / contentHeight;
+                        const scaleX = printableWidthPx / contentWidth;
+                        const scale = Math.min(1, scaleX, scaleY);
 
                     // apply transform and force reflow
                     const prevTransform = invoiceEl.style.transform || '';

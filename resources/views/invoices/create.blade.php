@@ -273,8 +273,9 @@
                     dataType: 'json'
                 }).done(function (data) {
                     let $customer = $('#customer_id');
+                    $customer.empty().append('<option value="" disabled selected>ជ្រើសរើសអតិថិជន</option>');
                     $.each(data, function (_, customer) {
-                        $customer.append($('<option {{ old("customer_id") == ' + customer.id + ' ? "selected" : "" }}>').val(customer.id).text(customer.name));
+                        $customer.append($('<option>').val(customer.id).text(customer.name));
                     });
                     $customer.trigger('change.select2');
 
@@ -289,13 +290,19 @@
                     method: 'GET',
                     dataType: 'json'
                 }).done(function (data) {
+                    $('#customer_id').data('blockInfo', data);     
                     $('#customer_id').off('change.blockinfo').on('change.blockinfo', function () {
-                        $('input[name="water_unit_price"]').val(data.water_unit_price ?? '');
-                        $('input[name="electric_unit_price"]').val(data.electric_unit_price ?? '');
-                        $('input[name="min_electric_unit_price"]').val(data.electric_unit_price ?? '');
-                        $('input[name="max_electric_unit_price"]').val(data.max_electric_unit_price ?? '');
-                        $('input[name="calculation_threshold"]').val(data.calculation_threshold ?? '');
-                        $('input[name="electric_source"]').val(data.electric_source ?? '');
+                        let blockInfo = $(this).data('blockInfo');
+                        if (blockInfo) {
+                            $('input[name="water_unit_price"]').val(blockInfo.water_unit_price ?? '');
+                            $('input[name="electric_unit_price"]').val(blockInfo.electric_unit_price ?? '');
+                            $('input[name="min_electric_unit_price"]').val(blockInfo.electric_unit_price ?? '');
+                            $('input[name="max_electric_unit_price"]').val(blockInfo.max_electric_unit_price ?? '');
+                            $('input[name="calculation_threshold"]').val(blockInfo.calculation_threshold ?? '');
+                            $('input[name="electric_source"]').val(blockInfo.electric_source ?? '');
+                            
+                            $('#water_unit_price, #electric_unit_price').trigger('input');
+                        }
                     });
                 }).fail(function () {
                     console.error('Failed to load block info for', blockId);
@@ -305,6 +312,45 @@
                     loadingOverlay.classList.add('hidden');
                 });
             });
+            
+            @if(old('block_id'))
+                const oldBlockId = '{{ old('block_id') }}';
+                const oldCustomerId = '{{ old('customer_id') }}';
+                
+                const oldValues = {
+                    house_price: '{{ old('house_price') }}',
+                    garbage_price: '{{ old('garbage_price') }}',
+                    old_water_number: '{{ old('old_water_number') }}',
+                    new_water_number: '{{ old('new_water_number') }}',
+                    old_electric_number: '{{ old('old_electric_number') }}',
+                    new_electric_number: '{{ old('new_electric_number') }}',
+                    water_unit_price: '{{ old('water_unit_price') }}',
+                    electric_unit_price: '{{ old('electric_unit_price') }}',
+                    min_electric_unit_price: '{{ old('min_electric_unit_price') }}',
+                    max_electric_unit_price: '{{ old('max_electric_unit_price') }}',
+                    calculation_threshold: '{{ old('calculation_threshold') }}',
+                    electric_source: '{{ old('electric_source') }}'
+                };
+                
+                if (oldBlockId) {
+                    $('#block_id').val(oldBlockId).trigger('change');             
+                    setTimeout(function() {
+                        if (oldCustomerId) {
+                            $('#customer_id').val(oldCustomerId).trigger('change');
+                        }
+                        
+                        setTimeout(function() {
+                            Object.keys(oldValues).forEach(function(key) {
+                                if (oldValues[key]) {
+                                    $(`input[name="${key}"]`).val(oldValues[key]);
+                                }
+                            });
+                            
+                            $('#house_price').trigger('input');
+                        }, 500);
+                    }, 1200);
+                }
+            @endif
         });
 
         document.addEventListener('DOMContentLoaded', function() {
