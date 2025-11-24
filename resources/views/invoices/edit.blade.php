@@ -276,6 +276,7 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             const loadingOverlay = document.getElementById('loading-overlay');
+            const isEditMode = '{{ isset($invoice) && $invoice->id ? "true" : "false" }}' === 'true';
 
             $('#customer_id').on('change', function () {
                 let customerId = $(this).val();
@@ -293,7 +294,10 @@
                     $('input[name="old_water_number"]').val(data.old_water_number ?? '');
                     $('input[name="old_electric_number"]').val(data.old_electric_number ?? '');
 
-                    $('#new_water_number, #new_electric_number, #total_used_water, #total_used_electric, #total_amount_water, #total_amount_electric, #total_amount_usd, #total_amount_khr').val('');
+                    if (!isEditMode) {
+                        $('#new_water_number, #new_electric_number, #total_used_water, #total_used_electric, #total_amount_water, #total_amount_electric, #total_amount_usd, #total_amount_khr').val('');
+                    }
+                    
                     $('#house_price,#garbage_price,#old_water_number,#old_electric_number').trigger('input');
                 }).fail(function() {
                     console.error('Failed to load customer info for', customerId);
@@ -305,20 +309,13 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             const loadingOverlay = document.getElementById('loading-overlay');
-            const originalCustomerId = '{{ $invoice->customer_id }}';
+            const isEditMode = '{{ isset($invoice) && $invoice->id ? "true" : "false" }}' === 'true';
+            const originalCustomerId = '{{ $invoice->customer_id ?? "" }}';
             const originalCustomerName = '{{ $invoice->customer->name ?? "" }}';
-            const originalBlockId = '{{ $invoice->customer->block_id ?? "" }}';
-            let hasChangedBlock = false;
-            let isInitialLoad = true;
-            let hasChangedCustomer = false;
 
             $('#block_id').on('change', function () {
                 let blockId = $(this).val();
                 if (!blockId) return;
-
-                if ($('#block_id').data('initialized')) {
-                    hasChangedBlock = true;
-                }
 
                 loadingOverlay.classList.remove('hidden');
 
@@ -328,25 +325,22 @@
                     dataType: 'json'
                 }).done(function (data) {
                     let $customer = $('#customer_id');
-                    let previousCustomerId = $customer.val();
                     
                     $customer.empty().append('<option value="" disabled>ជ្រើសរើសអតិថិជន</option>');
                     
-                    let originalCustomerInList = data.some(c => c.id == originalCustomerId);
-                    if (originalCustomerId && originalCustomerName && !originalCustomerInList && blockId == originalBlockId && !hasChangedCustomer) {
-                        $customer.append($('<option>').val(originalCustomerId).text(originalCustomerName));
+                    if (isEditMode && originalCustomerId && originalCustomerName) {
+                        let originalCustomerInList = data.some(c => c.id == originalCustomerId);
+                        if (!originalCustomerInList) {
+                            $customer.append($('<option>').val(originalCustomerId).text(originalCustomerName));
+                        }
                     }
                     
                     $.each(data, function (_, customer) {
                         $customer.append($('<option>').val(customer.id).text(customer.name));
                     });
                     
-                    if (previousCustomerId && $customer.find(`option[value="${previousCustomerId}"]`).length > 0) {
-                        $customer.val(previousCustomerId);
-                    } else if (originalCustomerId && blockId == originalBlockId && !hasChangedBlock) {
+                    if (isEditMode && originalCustomerId) {
                         $customer.val(originalCustomerId);
-                    } else {
-                        $customer.val('');
                     }
                     
                     $customer.trigger('change.select2');
@@ -380,34 +374,28 @@
                 });
 
                 $.when(customersAjax, blockInfoAjax).done(function () {
-                    let $customer = $('#customer_id');
-                    
-                    if (!isInitialLoad && (!$customer.val() || $customer.val() != originalCustomerId)) {
-                        $('#old_water_number, #old_electric_number, #house_price, #garbage_price, #new_water_number, #new_electric_number, #total_used_water, #total_used_electric, #total_amount_water, #total_amount_electric, #total_amount_usd, #total_amount_khr').val('');
-                    }
-                    
-                    if ($customer.val() == originalCustomerId && typeof window.calculateInvoice === 'function') {
+                    if (isEditMode && typeof window.calculateInvoice === 'function') {
                         setTimeout(function() {
                             window.calculateInvoice();
                         }, 100);
                     }
-                    
-                    isInitialLoad = false;
                 }).always(function () {
                     loadingOverlay.classList.add('hidden');
                 });
             });
 
-            $('#customer_id').on('change', function() {
-                let selectedCustomerId = $(this).val();
-                if (selectedCustomerId && selectedCustomerId != originalCustomerId) {
-                    hasChangedCustomer = true;
+            if (isEditMode) {
+                $('#block_id').prop('disabled', true);
+                $('#customer_id').prop('disabled', true);
+                
+                if ($('#block_id').val()) {
+                    $('#block_id').trigger('change');
                 }
-            });
-
-            if ($('#block_id').val()) {
-                $('#block_id').trigger('change');
-                $('#block_id').data('initialized', true);
+                
+                $('form').on('submit', function(e) {
+                    $('#block_id').prop('disabled', false);
+                    $('#customer_id').prop('disabled', false);
+                });
             }
         });
 

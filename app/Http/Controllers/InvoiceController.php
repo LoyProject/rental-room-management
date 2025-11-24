@@ -41,7 +41,12 @@ class InvoiceController extends Controller
 
     public function create()
     {
-        $blocks = Block::all();
+        $user = auth()->user();
+
+        $blocks = $user->isAdmin() 
+                    ? Block::all()
+                    : Block::where('site_id', $user->site_id)->get();
+                    
         $customers = Customer::all();
         
         return view('invoices.create', compact('blocks', 'customers'));
@@ -100,7 +105,12 @@ class InvoiceController extends Controller
 
     public function edit(Invoice $invoice)
     {
-        $blocks = Block::all();
+        $user = auth()->user();
+        
+        $blocks = $user->isAdmin() 
+                    ? Block::all()
+                    : Block::where('site_id', $user->site_id)->get();
+
         $customers = Customer::all();
         
         return view('invoices.edit', compact('invoice', 'blocks', 'customers'));
