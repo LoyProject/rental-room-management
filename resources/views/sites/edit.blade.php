@@ -20,8 +20,8 @@
 
                 <div>
                     <label for="phone" class="block text-sm font-medium text-gray-700">ទូរស័ព្ទ</label>
-                    <input id="phone" name="phone" type="tel" value="{{ old('phone', $site->phone) }}"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <textarea id="phone" name="phone" rows="3"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">{{ old('phone', $site->phone) }}</textarea>
                     @error('phone')
                         <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                     @enderror
