@@ -5,11 +5,11 @@
 @tailwind utilities;
 
 :root {
-  --app-font: 'Hanuman', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    --app-font: 'Hanuman', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
 body {
-	font-family: var(--app-font);
+    font-family: var(--app-font);
 }
 
 .select2-container {
@@ -61,4 +61,63 @@ body {
     .select2-container {
         min-width: 100% !important;
     }
+}
+
+@media print {
+    html, body {
+        height: auto !important;
+    }
+
+    body * {
+        visibility: hidden !important;
+    }
+
+    .invoice-print, .invoice-print * {
+        visibility: visible !important;
+    }
+
+    .invoice-print {
+        position: absolute !important;
+        left: 0;
+        top: 0;
+        width: 148mm !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    @page {
+        size: A5 portrait;
+        margin: 0.5mm;
+    }
+}
+
+.invoice-print {
+    width: 148mm;
+    box-sizing: border-box;
+    padding: 8mm;
+}
+
+.invoice-print .text-4xl {
+    font-size: 18px;
+}
+
+.invoice-print h4 {
+    font-size: 12px;
+}
+
+.invoice-print .text-sm {
+    font-size: 11px;
+}
+
+.invoice-print table th, .invoice-print table td {
+    padding: 6px 8px;
+    font-size: 11px;
+}
+
+.invoice-print .mb-8 {
+    margin-bottom: 8px;
 }

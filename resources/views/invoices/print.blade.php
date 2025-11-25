@@ -5,114 +5,102 @@
 @section('content')
     <div class="items-center">
         <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-8 print:p-6 invoice-print" style="border-radius:12px;">
-            <div class="text-4xl font-bold text-gray-400 tracking-wide text-center mb-8">វិក្កយបត្រ
-
-            </div>
-            <style>
-
-                @media print {
-                    html, body { height: auto !important; }
-                    body * { visibility: hidden !important; }
-                    .invoice-print, .invoice-print * { visibility: visible !important; }
-                    .invoice-print { position: absolute !important; left: 0; top: 0; width: 148mm !important; box-shadow: none !important; border-radius: 0 !important; }
-                    .no-print { display: none !important; }
-                    @page { size: A5 portrait; margin: 0.5mm; }
-                }
-
-                .invoice-print { width: 148mm; box-sizing: border-box; padding: 8mm; }
-                .invoice-print .text-4xl { font-size: 18px; }
-                .invoice-print h4 { font-size: 12px; }
-                .invoice-print .text-sm { font-size: 11px; }
-                .invoice-print table th, .invoice-print table td { padding: 6px 8px; font-size: 11px; }
-                .invoice-print .mb-8 { margin-bottom: 8px; }
-                
-            </style>
-
-            <div class="grid grid-cols-2 md:grid-cols-1 gap-6 mb-6 items-start">
-                <div>
-                    <h4 class="text-sm font-semibold mb-2">ឈ្មោះ​អតិថិជន:</h4>
-                    <div class="text-sm font-semibold">{{ $invoice->customer->name ?? 'ឈ្មោះ​អតិថិជន' }}</div>
-                    @php
-                        $site = $invoice->site->name ?? $invoice->site_name ?? null;
-                        $block = $invoice->block->name ?? $invoice->block_name ?? null;
-                    @endphp
-                    <div class="text-sm text-gray-600">
-                        {{ $site && $block ? $site . ' + ' . $block : ($site ?? $block ?? 'អាសយដ្ឋាន​អតិថិជន') }}
-                    </div>
-                    <div class="text-sm text-gray-600">{{ $invoice->customer->phone ?? '' }}</div>
-                    <div class="text-sm text-gray-600">{{ $invoice->customer->email ?? '' }}</div>
+            <div class="text-4xl font-bold text-blue-500 tracking-wide text-center mb-8">វិក្កយបត្រ បន្ទប់ជួល</div>
+            <div class="flex justify-between mb-4">
+                <div class="text-sm">
+                    <div class="text-blue-500 font-bold">បន្ទប់លេខ: {{ $invoice->room_number ?? '.........................' }}</div>
+                    <div>ចាប់​ពី​ថ្ងៃទី​: {{$invoice->from_date ??'......'}}</div>
+                    <div>ដល់​ថ្ងៃទី​: {{$invoice->to_date ??'......'}}</div>
                 </div>
-
-                <div class="text-sm text-right">
-                    <div>លេខវិក្កយបត្រ: <span class="font-semibold">#{{ $invoice->id }}</span></div>
-                    <div>កាលបរិច្ឆេទ: {{ \Carbon\Carbon::parse($invoice->invoice_date)->format('Y-m-d') }}</div>
-                    <div>កាលបរិច្ឆេទផុតកំណត់: {{ \Carbon\Carbon::parse($invoice->invoice_date)->addDays(30)->format('Y-m-d') }}</div>
+                <div class="text-sm">
+                    <div class="text-blue-500 font-bold">លេខទំនាក់ទំនង</div>
+                    <div>096 56 49 666</div>
+                    <div>086 22 00 96</div>
+                    <div>010 88 77 00</div>
                 </div>
             </div>
 
-            <div class="border border-gray-200">
+            <div class="border border-blue-200">
                 <table class="w-full table-auto">
+                    @php
+                        $electric_usge = ($invoice->new_electric_number ?? 0) - ($invoice->old_electric_number ?? 0);
+                    @endphp
                     <thead>
-                        <tr class="bg-gray-50">
-                            <th class="text-left px-5 py-3 border-b">ពណ៌នា</th>
-                            <th class="text-center px-5 py-3 border-b">បរិមាណ</th>
-                            <th class="text-right px-5 py-3 border-b">តម្លៃ</th>
-                            <th class="text-right px-5 py-3 border-b">សរុប</th>
+                        <tr class="bg-gray-50 text-blue-500 font-bold">
+                            <th class="text-left px-5 py-3 border-b">លេខ</th>
+                            <th class="text-center px-5 py-3 border-b">កុងទ័រ</th>
+                            <th class="text-right px-5 py-3 border-b">ចំនួន</th>
+                            <th class="text-right px-5 py-3 border-b">តម្លៃរាយ</th>
+                            <th class="text-right px-5 py-3 border-b">តម្លៃសរុប</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white">
                         <tr class="border-b">
-                            <td class="px-5 py-4">ជួលបន្ទប់ (USD)</td>
-                            <td class="text-center px-5 py-4">1</td>
-                            <td class="text-right px-5 py-4">{{ number_format($invoice->house_price ?? 0, 2) }} USD</td>
-                            <td class="text-right px-5 py-4">{{ number_format($invoice->house_price ?? 0, 2) }} USD</td>
-                        </tr>
-
-                        @php
-                            $electric_usge = ($invoice->new_electric_number ?? 0) - ($invoice->old_electric_number ?? 0);
-                        @endphp
-
-                        <tr class="border-b">
-                            <td class="px-5 py-4">ការប្រើប្រាស់​អគ្គិសនី {{ $electric_usge ?? 0}}kwh</td>
-                            <td class="text-center px-5 py-4">1</td>
-                            <td class="text-right px-5 py-4">{{ number_format($invoice->total_amount_electric ?? 0) }} KHR</td>
-                            <td class="text-right px-5 py-4">{{ number_format($invoice->total_amount_electric ?? 0) }} KHR</td>
-                        </tr>
-
-                        @php
-                            $water_usge = ($invoice->new_water_number ?? 0) - ($invoice->old_water_number ?? 0);
-                        @endphp
-
-                        <tr class="border-b">
-                            <td class="px-5 py-4">ការប្រើទឹក {{$water_usge}}m³</td>
-                            <td class="text-center px-5 py-4">1</td>
-                            <td class="text-right px-5 py-4">{{ number_format($invoice->total_amount_water ?? 0) }} KHR</td>
-                            <td class="text-right px-5 py-4">{{ number_format($invoice->total_amount_water ?? 0) }} KHR</td>
+                            <td class="px-5 py-4">ភ្លើង​ ​ថ្មី</td>
+                            <td class="text-center px-5 py-4">{{ $invoice->new_electric_number ?? 0}} kw</td>
+                            <td class="text-right px-5 py-4">--</td>
+                            <td class="text-right px-5 py-4">--</td>
+                            <td class="text-right px-5 py-4">--</td>
                         </tr>
 
                         <tr class="border-b">
-                            <td class="px-5 py-4">សំរាម (KHR)</td>
-                            <td class="text-center px-5 py-4">1</td>
-                            <td class="text-right px-5 py-4">{{ number_format($invoice->garbage_price ?? 0) }} KHR</td>
-                            <td class="text-right px-5 py-4">{{ number_format($invoice->garbage_price ?? 0) }} KHR</td> 
+                            <td class="px-5 py-4">ភ្លើង​ ​ចាស់</td>
+                            <td class="text-center px-5 py-4">{{ $invoice->old_electric_number ?? 0}} kw</td>
+                            <td class="text-right px-5 py-4">--</td>
+                            <td class="text-right px-5 py-4">--</td>
+                            <td class="text-right px-5 py-4">--</td>
                         </tr>
 
-                        @php
-                            $subtotal_khr = ($invoice->garbage_price ?? 0) + ($invoice->total_amount_water ?? 0) + ($invoice->total_amount_electric ?? 0) + ($invoice->internet_fee ?? 0);
-                        @endphp
+                        <tr class="border-b">
+                            <td class="px-5 py-4">ការប្រើប្រាស់</td>
+                            <td class="text-center px-5 py-4">{{$invoice->total_used_electric}} kw</td>
+                            <td class="text-right px-5 py-4">--</td>
+                            <td class="text-right font-bold px-5 py-4">{{$invoice->electric_unit_price}} រៀល</td>
+                            <td class="text-right font-bold px-5 py-4">{{$invoice->total_used_electric * $invoice->electric_unit_price}} រៀល</td>
+                        </tr>
+
+                        <tr class="border-b">
+                            <td class="px-5 py-4"></td>
+                        </tr>
+
+                        <tr class="border-b">
+                            <td class="px-5 py-4">ទឹក​ ​ថ្មី</td>
+                            <td class="text-center px-5 py-4">{{ $invoice->new_water_number ?? 0}} m³</td>
+                            <td class="text-right px-5 py-4">--</td>
+                            <td class="text-right px-5 py-4">--</td>
+                            <td class="text-right px-5 py-4">--</td>
+                        </tr>
+                        <tr class="border-b">
+                            <td class="px-5 py-4">ទឹក​ ចាស់</td>
+                            <td class="text-center px-5 py-4">{{ $invoice->old_water_number ?? 0}} m³</td>
+                            <td class="text-right px-5 py-4">--</td>
+                            <td class="text-right px-5 py-4">--</td>
+                            <td class="text-right px-5 py-4">--</td>
+                        </tr>
+
+                        <tr class="border-b">
+                            <td class="px-5 py-4">ការប្រើប្រាស់</td>
+                            <td class="text-center px-5 py-4">{{$invoice->total_used_water}} m³</td>
+                            <td class="text-right px-5 py-4">--</td>
+                            <td class="text-right font-bold px-5 py-4">{{$invoice->water_unit_price}} រៀល</td>
+                            <td class="text-right font-bold px-5 py-4">{{($invoice->total_used_water) * ($invoice->water_unit_price)}} រៀល</td>
+                        </tr>
 
                         <tr>
-                            <td colspan="3" class="text-right px-5 py-3 font-semibold border-t">សរុប​ (USD)</td>
-                            <td class="text-right px-5 py-3 font-semibold border-t">{{ number_format($invoice->house_price ?? 0, 2) }} USD</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-right px-5 py-3 font-semibold">សរុប​ (KHR)</td>
-                            <td class="text-right px-5 py-3 font-semibold">{{ number_format($subtotal_khr ?? 0) }} KHR</td>
+                            <td colspan="3">1. ហាមផឹកស៊ី ឡូឡារំខានអ្នកជិតខាង</td>
+                            <td class="text-right font-bold px-5 py-4">សំរាម</td>
+                            <td class="text-right font-bold px-5 py-4">{{$invoice->garbage_price ?? 0}} រៀល</td>
                         </tr>
 
+                        <tr>
+                            <td colspan="3">2. ហាមលក់ និងប្រើប្រាស់គ្រឿងញៀន</td>
+                            <td class="text-right font-bold px-5 py-4">សរុប</td>
+                            <td class="text-right font-bold text-green-500 px-5 py-4">{{$invoice->total_amount_khr}} រៀល</td>
+                        </tr>
                         <tr class="bg-gray-50">
-                            <td colspan="3" class="text-right px-5 py-3 font-bold">ប្រាក់ត្រូវបង់សរុប</td>
-                            <td class="text-right px-5 py-3 font-bold">{{ number_format($invoice->total_amount_usd ?? 0, 2) }} USD / {{ number_format($invoice->total_amount_khr ?? 0) }} KHR</td>
+                            <td colspan="3">3. ឈប់ជួល​ត្រូវផ្តល់ដំណឹង១ខែមុន​បើពុំនោះទេប្រាក់កក់ទុកជាអាសាបង់​</td>
+                            <td class="text-right font-bold px-5 py-4">តម្លៃបន្ទប់</td>
+                            <td class="text-right font-bold px-5 py-4 text-red-500">{{number_format($invoice->total_amount_usd ?? 0, 2)}} ដុល្លា</td>
                         </tr>
                     </tbody>
                 </table>
@@ -131,31 +119,25 @@
             </div>
 
             <script>
-                // Convert millimeters to CSS pixels (approx at 96dpi)
                 function mmToPx(mm) { return mm * (96 / 25.4); }
 
                 function printA5() {
                     const invoiceEl = document.querySelector('.invoice-print');
                     if (!invoiceEl) { window.print(); return; }
-
-                        // A5 portrait dimensions: 148 x 210 mm. Use 10mm margins by default.
                         const pageWidthMM = 148;
                         const pageHeightMM = 210;
                         const marginMM = 0.5;
                         const printableHeightPx = mmToPx(pageHeightMM - (marginMM * 2));
                         const printableWidthPx = mmToPx(pageWidthMM - (marginMM * 2));
 
-                        // measure current invoice dimensions
                         const rect = invoiceEl.getBoundingClientRect();
                         const contentHeight = rect.height;
                         const contentWidth = rect.width;
 
-                        // compute scale to fit into printable area (do not upscale)
                         const scaleY = printableHeightPx / contentHeight;
                         const scaleX = printableWidthPx / contentWidth;
                         const scale = Math.min(1, scaleX, scaleY);
 
-                    // apply transform and force reflow
                     const prevTransform = invoiceEl.style.transform || '';
                     const prevTransformOrigin = invoiceEl.style.transformOrigin || '';
                     const prevHtmlHeight = document.documentElement.style.height || '';
@@ -166,7 +148,6 @@
                     document.documentElement.style.height = (printableHeightPx) + 'px';
                     document.body.style.height = (printableHeightPx) + 'px';
 
-                    // Ensure print styles are applied, then print
                     setTimeout(function() {
                         function cleanup() {
                             invoiceEl.style.transform = prevTransform;
