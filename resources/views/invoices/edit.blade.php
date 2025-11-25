@@ -104,7 +104,7 @@
                         <label class="block text-sm font-medium">ចំនួនទឹក (ចាស់ / ថ្មី / សរុប) <span class="text-red-600">*</span></label>
                         <div class="grid grid-cols-3 gap-2">
                             <input type="number" id="old_water_number" name="old_water_number" min="0"
-                                class="mt-1 block w-full border-gray-300 rounded-md" required
+                                class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" required readonly
                                 value="{{ old('old_water_number', $invoice->old_water_number) }}">
                             <input type="number" id="new_water_number" name="new_water_number" min="0"
                                 class="mt-1 block w-full border-gray-300 rounded-md" required
@@ -128,7 +128,7 @@
                         <label class="block text-sm font-medium">ចំនួនអគ្គិសនី (ចាស់ / ថ្មី / សរុប) <span class="text-red-600">*</span></label>
                         <div class="grid grid-cols-3 gap-2">
                             <input type="number" id="old_electric_number" name="old_electric_number" min="0"
-                                class="mt-1 block w-full border-gray-300 rounded-md" required
+                                class="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md" required readonly
                                 value="{{ old('old_electric_number', $invoice->old_electric_number) }}">
                             <input type="number" id="new_electric_number" name="new_electric_number" min="0"
                                 class="mt-1 block w-full border-gray-300 rounded-md" required

@@ -6,6 +6,7 @@ use App\Http\Controllers\BlockController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,9 +17,8 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/customers-by-block/{block_id}', [CustomerController::class, 'getByBlock']);
@@ -30,7 +30,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('invoices', InvoiceController::class);
     Route::resource('blocks', BlockController::class);
     Route::resource('customers', CustomerController::class);
-    Route::resource('users', UserController::class);
+    
+    Route::get('/api/chart/monthly-revenue', [DashboardController::class, 'getMonthlyRevenueData'])
+        ->name('api.chart.monthly-revenue');
+    Route::get('/api/chart/monthly-revenue/{year}', [DashboardController::class, 'getMonthlyRevenueByYear'])
+        ->name('api.chart.monthly-revenue.year');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {

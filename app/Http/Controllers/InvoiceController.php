@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\Block;
 use App\Models\Customer;
+use App\Models\Site;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -15,54 +16,73 @@ class InvoiceController extends Controller
         $user = auth()->user();
         $query = Invoice::query()->with(['block', 'customer']);
 
-        if (request()->filled('block')) {
-            $requestedBlockId = request('block');
+        if ($user->isAdmin()) {
+            if ($request->filled('site')) {
+                $query->whereHas('block', function ($q) use ($request) {
+                    $q->where('site_id', $request->site);
+                });
+            }
+        } else {
+            if (request()->filled('site') && request('site') != $user->site_id) {
+                abort(404, 'You cannot access this site');
+            }
+            
+            $query->whereHas('block', function ($q) use ($user) {
+                $q->where('site_id', $user->site_id);
+            });
+        }
 
-            $block = Block::find($requestedBlockId);
+        if ($request->filled('block')) {
+
+            $blockId = $request->block;
+            $block = Block::find($blockId);
 
             if (!$block) {
                 abort(404, 'Block not found');
             }
 
-            if (!$user->isAdmin()) {
-                if ($block->site_id != $user->site_id) {
-                    abort(404, 'You cannot access this block');
-                }
+            if (!$user->isAdmin() && $block->site_id != $user->site_id) {
+                abort(404, 'You cannot access this block');
             }
 
-            $query->where('block_id', $requestedBlockId);
+            $query->where('block_id', $blockId);
+        }
 
-        } else {
-            if (!$user->isAdmin()) {
-                $query->whereHas('block', function ($q) use ($user) {
-                    $q->where('site_id', $user->site_id);
-                });
-            }
+        if ($request->filled('from_date')) {
+            $from = Carbon::createFromFormat('d/m/Y', $request->from_date)->startOfDay();
+            $query->whereDate('from_date', '>=', $from);
+        }
+
+        if ($request->filled('to_date')) {
+            $to = Carbon::createFromFormat('d/m/Y', $request->to_date)->endOfDay();
+            $query->whereDate('to_date', '<=', $to);
         }
 
         if ($request->filled('search')) {
-            $searchTerm = '%' . $request->search . '%';
+            $searchTerm   = '%' . $request->search . '%';
             $searchNumber = '%' . str_replace(',', '', $request->search) . '%';
-
             $query->where(function ($q) use ($searchTerm, $searchNumber) {
                 $q->where('id', 'like', $searchTerm)
-                ->orWhereRaw("DATE_FORMAT(invoice_date, '%d/%m/%Y') LIKE ?", [$searchTerm])
-                ->orWhereHas('block', function ($b) use ($searchTerm) {
-                    $b->where('name', 'like', $searchTerm);
-                })
-                ->orWhereHas('customer', function ($c) use ($searchTerm) {
-                    $c->where('name', 'like', $searchTerm);
-                })
-                ->orWhereRaw('CAST(total_amount_water AS CHAR) LIKE ?', [$searchTerm])
-                ->orWhereRaw('CAST(total_amount_water AS CHAR) LIKE ?', [$searchNumber])
-                ->orWhereRaw('CAST(total_amount_electric AS CHAR) LIKE ?', [$searchTerm])
-                ->orWhereRaw('CAST(total_amount_electric AS CHAR) LIKE ?', [$searchNumber])
-                ->orWhere('total_amount_usd', 'like', $searchTerm)
-                ->orWhereRaw('CAST(total_amount_khr AS CHAR) LIKE ?', [$searchTerm])
-                ->orWhereRaw('CAST(total_amount_khr AS CHAR) LIKE ?', [$searchNumber]);
+                    ->orWhereRaw("DATE_FORMAT(invoice_date, '%d/%m/%Y') LIKE ?", [$searchTerm])
+                    ->orWhereHas('block', function ($b) use ($searchTerm) {
+                        $b->where('name', 'like', $searchTerm);
+                    })
+                    ->orWhereHas('customer', function ($c) use ($searchTerm) {
+                        $c->where('name', 'like', $searchTerm);
+                    })
+                    ->orWhereRaw('CAST(total_amount_water AS CHAR) LIKE ?', [$searchTerm])
+                    ->orWhereRaw('CAST(total_amount_water AS CHAR) LIKE ?', [$searchNumber])
+                    ->orWhereRaw('CAST(total_amount_electric AS CHAR) LIKE ?', [$searchTerm])
+                    ->orWhereRaw('CAST(total_amount_electric AS CHAR) LIKE ?', [$searchNumber])
+                    ->orWhere('total_amount_usd', 'like', $searchTerm)
+                    ->orWhereRaw('CAST(total_amount_khr AS CHAR) LIKE ?', [$searchTerm])
+                    ->orWhereRaw('CAST(total_amount_khr AS CHAR) LIKE ?', [$searchNumber]);
             });
         }
 
+        $sites = $user->isAdmin()
+            ? Site::all()
+            : Site::where('id', $user->site_id)->get();
 
         $blocks = $user->isAdmin()
             ? Block::all()
@@ -70,7 +90,7 @@ class InvoiceController extends Controller
 
         $invoices = $query->latest()->paginate(10)->withQueryString();
 
-        return view('invoices.index', compact('invoices', 'blocks'));
+        return view('invoices.index', compact('invoices', 'sites', 'blocks'));
     }
 
     public function create()

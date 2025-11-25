@@ -79,7 +79,7 @@
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     </div>
                     <div id="calculation_threshold_container" class="{{ (string) old('electric_source', $block->electric_source) === 'P' ? 'hidden' : '' }}">
-                        <label for="calculation_threshold" class="block text-sm font-medium text-gray-700">ចំនួនការគណនាសម្រាប់តម្លៃអតិបរមា <span class="text-red-600">*</span></label>
+                        <label for="calculation_threshold" class="block text-sm font-medium text-gray-700">ចំនួនគណនាតម្លៃអតិបរមា (kWh) <span class="text-red-600">*</span></label>
                         <input id="calculation_threshold" name="calculation_threshold" type="number" required
                             min="1" value="{{ old('calculation_threshold', $block->calculation_threshold) }}"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">

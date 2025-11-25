@@ -12,55 +12,66 @@ class CustomerController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $query = Customer::query();
+        $query = Customer::query()->with('block');
 
-        if (request()->filled('block')) {
-            $requestedBlockId = request('block');
-
-            $block = Block::find($requestedBlockId);
-
-            if (!$block) {
-                abort(404, 'Block not found');
+        if ($user->isAdmin()) {
+            if (request()->filled('site')) {
+                $query->whereHas('block', function ($q) {
+                    $q->where('site_id', request('site'));
+                });
             }
-
-            if (!$user->isAdmin()) {
-                if ($block->site_id != $user->site_id) {
-                    abort(404, 'You cannot access this block');
-                }
-            }
-
-            $query->where('block_id', $requestedBlockId);
-
         } else {
-            if (!$user->isAdmin()) {
-                $query->whereHas('block', function ($q) use ($user) {
-                    $q->where('site_id', $user->site_id);
-                });
+            if (request()->filled('site') && request('site') != $user->site_id) {
+                abort(404, 'You cannot access this site');
             }
-        }
-
-        if (request()->filled('search')) {
-            $searchTerm = '%' . request('search') . '%';
-            $query->where(function ($q) use ($searchTerm) {
-                $q->where('name', 'like', $searchTerm)
-                ->orWhere('phone', 'like', $searchTerm)
-                ->orWhere('house_price', 'like', $searchTerm)
-                ->orWhere('garbage_price', 'like', $searchTerm)
-                ->orWhere('old_water_number', 'like', $searchTerm)
-                ->orWhere('old_electric_number', 'like', $searchTerm)
-                ->orWhereHas('block', function ($qb) use ($searchTerm) {
-                    $qb->where('name', 'like', $searchTerm);
-                });
+            
+            $query->whereHas('block', function ($q) use ($user) {
+                $q->where('site_id', $user->site_id);
             });
         }
 
+        if (request()->filled('block')) {
+            $blockId = request('block');
+
+            $block = Block::find($blockId);
+            if (!$block) {
+                abort(404, "Block not found");
+            }
+
+            if (!$user->isAdmin() && $block->site_id != $user->site_id) {
+                abort(404, "You cannot access this block");
+            }
+
+            $query->where('block_id', $blockId);
+        }
+
+        if (request()->filled('search')) {
+            $search = '%' . request('search') . '%';
+
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', $search)
+                    ->orWhere('phone', 'like', $search)
+                    ->orWhere('house_price', 'like', $search)
+                    ->orWhere('garbage_price', 'like', $search)
+                    ->orWhere('old_water_number', 'like', $search)
+                    ->orWhere('old_electric_number', 'like', $search)
+                    ->orWhereHas('block', function ($b) use ($search) {
+                        $b->where('name', 'like', $search);
+                    });
+            });
+        }
+
+        $sites = $user->isAdmin()
+                    ? Site::all()
+                    : Site::where('id', $user->site_id)->get();
+
         $blocks = $user->isAdmin()
-            ? Block::all()
-            : Block::where('site_id', $user->site_id)->get();
+                    ? Block::all()
+                    : Block::where('site_id', $user->site_id)->get();
 
-        $customers = $query->with('block')->latest()->paginate(10)->withQueryString();
+        $customers = $query->latest()->paginate(10)->withQueryString();
 
-        return view('customers.index', compact('customers', 'blocks'));
+        return view('customers.index', compact('customers', 'sites', 'blocks'));
     }
 
     public function create()
