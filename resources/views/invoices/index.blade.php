@@ -6,33 +6,42 @@
     <x-success-alert />
 
     <div class="mb-4 p-4 bg-white shadow-md rounded-md flex flex-col gap-4">
-        <form action="{{ route('invoices.index') }}" method="GET" class="w-full">
-            <div class="flex flex-col sm:flex-row items-center gap-3">
-                @if (auth()->user()->isAdmin() && request('site'))
-                    <input type="hidden" name="site" value="{{ request('site') }}">
-                @endif
-                <input type="hidden" name="block" value="{{ request('block') }}">
-                <input type="hidden" name="from_date" value="{{ request('from_date') }}">
-                <input type="hidden" name="to_date" value="{{ request('to_date') }}">
+        <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
+            <form action="{{ route('invoices.index') }}" method="GET" class="w-full lg:max-w-md">
+                <div class="flex flex-col sm:flex-row items-center gap-3 w-full">
+                    @if (auth()->user()->isAdmin() && request('site'))
+                        <input type="hidden" name="site" value="{{ request('site') }}">
+                    @endif
+                    <input type="hidden" name="block" value="{{ request('block') }}">
+                    <input type="hidden" name="from_date" value="{{ request('from_date') }}">
+                    <input type="hidden" name="to_date" value="{{ request('to_date') }}">
 
-                <input type="text" name="search" placeholder="ស្វែងរកវិក្កយបត្រ..." class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" value="{{ request('search') }}">
-                
-                <button type="submit"
-                    class="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900 w-full sm:w-auto">
-                    ស្វែងរក
-                </button>
+                    <input type="text" name="search" placeholder="ស្វែងរកវិក្កយបត្រ..." class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" value="{{ request('search') }}">
+                    
+                    <button type="submit"
+                        class="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900 w-full sm:w-auto">
+                        ស្វែងរក
+                    </button>
 
-                <a href="{{ route('invoices.index') }}"
-                    class="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 w-full sm:w-auto text-center">
-                    លុប
+                    <a href="{{ route('invoices.index') }}"
+                        class="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 w-full sm:w-auto text-center">
+                        លុប
+                    </a>
+                </div>
+            </form>
+
+            <div class="lg:self-end w-full lg:w-auto">
+                <a href="{{ route('invoices.create') }}"
+                    class="bg-blue-100 text-blue-700 px-4 py-2 rounded-md hover:bg-blue-700 hover:text-white w-full sm:w-auto block text-center whitespace-nowrap">
+                    វិក្កយបត្រថ្មី
                 </a>
             </div>
-        </form>
+        </div>
 
         <div class="flex flex-col lg:flex-row gap-4 w-full">
             @if (auth()->user()->isAdmin())
                 <div class="w-full lg:w-1/4 min-w-[150px]">
-                    <label class="text-sm text-gray-600 mb-1 block">តំបន់</label>
+                    <!-- <label class="text-sm text-gray-600 mb-1 block">តំបន់</label> -->
                     <select id="siteFilter" name="site" class="w-full rounded-md shadow-sm border-gray-300">
                         <option value="">តំបន់ទាំងអស់</option>
                         @foreach ($sites as $site)
@@ -45,7 +54,7 @@
             @endif
 
             <div class="w-full {{ auth()->user()->isAdmin() ? 'lg:w-1/4' : 'lg:w-1/3' }} min-w-[150px]">
-                <label class="text-sm text-gray-600 mb-1 block">ទីតាំង</label>
+                <!-- <label class="text-sm text-gray-600 mb-1 block">ទីតាំង</label> -->
                 <select id="blockFilter" name="block" class="w-full rounded-md shadow-sm border-gray-300">
                     <option value="">ទីតាំងទាំងអស់</option>
                     @foreach ($blocks as $block)
@@ -57,20 +66,13 @@
             </div>
 
             <div class="w-full {{ auth()->user()->isAdmin() ? 'lg:w-1/4' : 'lg:w-1/3' }} min-w-[150px]">
-                <label class="text-sm text-gray-600 mb-1 block">ពីថ្ងៃ</label>
-                <input type="text" id="from_date" name="from_date" placeholder="dd/mm/yyyy" value="{{ request('from_date') }}" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-600" autocomplete="off">
+                <!-- <label class="text-sm text-gray-600 mb-1 block">ពីថ្ងៃ</label> -->
+                <input type="text" id="from_date" name="from_date" placeholder="ពីថ្ងៃ" value="{{ request('from_date') }}" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-600" autocomplete="off">
             </div>
 
             <div class="w-full {{ auth()->user()->isAdmin() ? 'lg:w-1/4' : 'lg:w-1/3' }} min-w-[150px]">
-                <label class="text-sm text-gray-600 mb-1 block">ដល់ថ្ងៃ</label>
-                <input type="text" id="to_date" name="to_date" placeholder="dd/mm/yyyy" value="{{ request('to_date') }}" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-600" autocomplete="off">
-            </div>
-
-            <div class="lg:self-end w-full lg:w-auto">
-                <a href="{{ route('invoices.create') }}"
-                    class="bg-blue-100 text-blue-700 px-4 py-2 rounded-md hover:bg-blue-700 hover:text-white w-full sm:w-auto block text-center whitespace-nowrap">
-                    វិក្កយបត្រថ្មី
-                </a>
+                <!-- <label class="text-sm text-gray-600 mb-1 block">ដល់ថ្ងៃ</label> -->
+                <input type="text" id="to_date" name="to_date" placeholder="ដល់ថ្ងៃ" value="{{ request('to_date') }}" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-600" autocomplete="off">
             </div>
         </div>
     </div>
