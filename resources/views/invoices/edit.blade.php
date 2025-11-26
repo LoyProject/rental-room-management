@@ -13,7 +13,7 @@
             <div class="grid grid-cols-1 gap-4">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                        <label for="block_id" class="block text-sm font-medium text-gray-700">ទីតាំង <span class="text-red-600">*</span></label>
+                        <label for="block_id" class="mb-1 block text-sm font-medium text-gray-700">ទីតាំង <span class="text-red-600">*</span></label>
                         <select id="block_id" name="block_id" required
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring-blue-200">
                             <option value="" disabled {{ old('block_id', $invoice->block_id) ? '' : 'selected' }}>ជ្រើសរើសទីតាំង</option>
@@ -29,7 +29,7 @@
                     </div>
 
                     <div>
-                        <label for="customer_id" class="block text-sm font-medium text-gray-700">អតិថិជន <span class="text-red-600">*</span></label>
+                        <label for="customer_id" class="mb-1 block text-sm font-medium text-gray-700">អតិថិជន <span class="text-red-600">*</span></label>
                         <select id="customer_id" name="customer_id" required
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring-blue-200">
                             <option value="" disabled {{ old('customer_id', $invoice->customer_id) ? '' : 'selected' }}>ជ្រើសរើសអតិថិជន</option>
@@ -52,8 +52,8 @@
 
                     <div>
                         <label for="invoice_date" class="block text-sm font-medium text-gray-700">កាលបរិច្ឆេទវិក្កយបត្រ <span class="text-red-600">*</span></label>
-                        <input type="text" id="invoice_date" name="invoice_date" required
-                            class="mt-1 block w-full rounded-md border-gray-300"
+                        <input type="text" id="invoice_date" name="invoice_date" required readonly
+                            class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100"
                             placeholder="dd/mm/yyyy" value="{{ old('invoice_date', \Carbon\Carbon::parse($invoice->invoice_date)->format('d/m/Y')) }}">
                         @error('invoice_date')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -238,18 +238,6 @@
             width: '100%'
         });
 
-        flatpickr("#invoice_date", {
-            dateFormat: "d/m/Y",
-            allowInput: true,
-            onClose: function(selectedDates, dateStr, instance) {
-                if (dateStr === "") {
-                    instance.input.setCustomValidity("This field is required.");
-                } else {
-                    instance.input.setCustomValidity("");
-                }
-            }
-        });
-
         flatpickr("#from_date", {
             dateFormat: "d/m/Y",
             allowInput: true,
@@ -319,8 +307,22 @@
 
                 loadingOverlay.classList.remove('hidden');
 
+                const invoiceDate = document.getElementById('invoice_date').value;
+
+                if (!invoiceDate) {
+                    alert('Please select invoice date');
+                    return;
+                }
+
+                const [day, month, year] = invoiceDate.split('/'); 
+                const formattedDate = `${year}-${month}-${day}`;
+
+                const dateObj = new Date(formattedDate);
+                const monthFormatted = String(dateObj.getMonth() + 1).padStart(2, '0');
+                const yearFormatted  = dateObj.getFullYear();
+
                 let customersAjax = $.ajax({
-                    url: `/customers-by-block/${blockId}?month={{ date('m') }}&year={{ date('Y') }}`,
+                    url: `/customers-by-block/${blockId}?month=${monthFormatted}&year=${yearFormatted}`,
                     method: 'GET',
                     dataType: 'json'
                 }).done(function (data) {

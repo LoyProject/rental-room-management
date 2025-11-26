@@ -267,8 +267,22 @@
 
                 loadingOverlay.classList.remove('hidden');
 
+                const invoiceDate = document.getElementById('invoice_date').value;
+
+                if (!invoiceDate) {
+                    alert('Please select invoice date');
+                    return;
+                }
+
+                const [day, month, year] = invoiceDate.split('/'); 
+                const formattedDate = `${year}-${month}-${day}`;
+
+                const dateObj = new Date(formattedDate);
+                const monthFormatted = String(dateObj.getMonth() + 1).padStart(2, '0');
+                const yearFormatted  = dateObj.getFullYear();
+
                 let customersAjax = $.ajax({
-                    url: `/customers-by-block/${blockId}?month={{ date('m') }}&year={{ date('Y') }}`,
+                    url: `/customers-by-block/${blockId}?month=${monthFormatted}&year=${yearFormatted}`,
                     method: 'GET',
                     dataType: 'json'
                 }).done(function (data) {

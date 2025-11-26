@@ -16,6 +16,12 @@
 </head>
 <body class="bg-gray-100 font-sans antialiased">
     <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-200">
+        <div 
+            x-show="sidebarOpen" 
+            x-transition.opacity
+            @click="sidebarOpen = false"
+            class="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden">
+        </div>
         <aside 
             class="fixed inset-y-0 left-0 z-30 w-64 bg-gray-800 text-white transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0"
             :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}">
