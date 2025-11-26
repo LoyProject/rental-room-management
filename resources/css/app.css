@@ -91,7 +91,7 @@ body {
 
     @page {
         size: A5 portrait;
-        margin: 0.5mm;
+        margin: 0.2mm;
     }
 }
 
@@ -102,7 +102,7 @@ body {
 }
 
 .invoice-print .text-4xl {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .invoice-print h4 {
@@ -110,12 +110,14 @@ body {
 }
 
 .invoice-print .text-sm {
-    font-size: 11px;
+    font-size: 12px;
+}
+.invoice-print .text-xl {
+    font-size: 14px;
 }
 
 .invoice-print table th, .invoice-print table td {
     padding: 6px 8px;
-    font-size: 11px;
 }
 
 .invoice-print .mb-8 {
