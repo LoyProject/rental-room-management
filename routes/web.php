@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/block-info/{id}', [BlockController::class, 'getBlockInfo']);
     Route::get('/invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
     Route::get('/blocks-by-site/{site_id}', [BlockController::class, 'getBlocksBySite']);
+    Route::get('/default-date-by-site/{site_id}', [BlockController::class, 'getDateBySite']);
 
     Route::resource('invoices', InvoiceController::class);
     Route::resource('blocks', BlockController::class);

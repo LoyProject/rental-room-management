@@ -144,4 +144,19 @@ class BlockController extends Controller
         $blocks = Block::where('site_id', $siteId)->get();
         return response()->json($blocks);
     }
+
+    
+    public function getDateBySite($blockId)
+    {
+        $block = Block::find($blockId);
+        $site = Site::where('id', $block->site_id)->first();
+
+        $defaultDateFrom = $site->from_date ?? date('Y-m-01');
+        $defaultDateTo   = $site->to_date   ?? date('Y-m-t');
+
+        return response()->json([
+            'defaultDateFrom' => date('d/m/Y', strtotime($defaultDateFrom)),
+            'defaultDateTo'   => date('d/m/Y', strtotime($defaultDateTo))
+        ]);
+    }
 }

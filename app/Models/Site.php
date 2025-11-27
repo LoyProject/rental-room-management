@@ -14,5 +14,7 @@ class Site extends Model
         'name',
         'phone',
         'address',
+        'from_date',
+        'to_date'
     ];
 }

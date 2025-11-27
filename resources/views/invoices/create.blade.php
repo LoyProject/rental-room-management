@@ -204,32 +204,6 @@
             }
         });
 
-        flatpickr("#from_date", {
-            dateFormat: "d/m/Y",
-            defaultDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-            allowInput: true,
-            onClose: function(selectedDates, dateStr, instance) {
-                if (dateStr === "") {
-                    instance.input.setCustomValidity("This field is required.");
-                } else {
-                    instance.input.setCustomValidity("");
-                }
-            }
-        });
-
-        flatpickr("#to_date", {
-            dateFormat: "d/m/Y",
-            defaultDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0),
-            allowInput: true,
-            onClose: function(selectedDates, dateStr, instance) {
-                if (dateStr === "") {
-                    instance.input.setCustomValidity("This field is required.");
-                } else {
-                    instance.input.setCustomValidity("");
-                }
-            }
-        });
-
         document.addEventListener('DOMContentLoaded', function() {
             const loadingOverlay = document.getElementById('loading-overlay');
 
@@ -266,6 +240,39 @@
                 if (!blockId) return;
 
                 loadingOverlay.classList.remove('hidden');
+                
+                let dateAjax = $.ajax({
+                    url: `/default-date-by-site/${blockId}`,
+                    method: 'GET',
+                    dataType: 'json'
+                }).done(function(data) {
+                    flatpickr("#from_date", {
+                        dateFormat: "d/m/Y",
+                        defaultDate: data.defaultDateFrom,
+                        allowInput: true,
+                        onClose: function(selectedDates, dateStr, instance) {
+                            if (dateStr === "") {
+                                instance.input.setCustomValidity("This field is required.");
+                            } else {
+                                instance.input.setCustomValidity("");
+                            }
+                        }
+                    });
+                    flatpickr("#to_date", {
+                        dateFormat: "d/m/Y",
+                        defaultDate: data.defaultDateTo,
+                        allowInput: true,
+                        onClose: function(selectedDates, dateStr, instance) {
+                            if (dateStr === "") {
+                                instance.input.setCustomValidity("This field is required.");
+                            } else {
+                                instance.input.setCustomValidity("");
+                            }
+                        }
+                    });
+                }).fail(function() {
+                    console.error('Failed to load date info for', blockId);
+                });
 
                 const invoiceDate = document.getElementById('invoice_date').value;
 
@@ -322,7 +329,7 @@
                     console.error('Failed to load block info for', blockId);
                 });
 
-                $.when(customersAjax, blockInfoAjax).always(function () {
+                $.when(customersAjax, blockInfoAjax, dateAjax).always(function () {
                     loadingOverlay.classList.add('hidden');
                 });
             });

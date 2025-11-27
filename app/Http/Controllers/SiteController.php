@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Site;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SiteController extends Controller
@@ -34,7 +35,14 @@ class SiteController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:100',
             'address' => 'nullable|string',
+            'from_date' => 'required|string',
+            'to_date' => 'required|string',
         ]);
+
+        if ($request->from_date && $request->to_date) {
+            $validated['from_date'] = Carbon::createFromFormat('d/m/Y', $request->from_date)->format('Y-m-d');
+            $validated['to_date'] = Carbon::createFromFormat('d/m/Y', $request->to_date)->format('Y-m-d');
+        }
 
         Site::create($validated);
 
@@ -52,7 +60,14 @@ class SiteController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:100',
             'address' => 'nullable|string',
+            'from_date' => 'required|string',
+            'to_date' => 'required|string',
         ]);
+
+        if ($request->from_date && $request->to_date) {
+            $validated['from_date'] = Carbon::createFromFormat('d/m/Y', $request->from_date)->format('Y-m-d');
+            $validated['to_date'] = Carbon::createFromFormat('d/m/Y', $request->to_date)->format('Y-m-d');
+        }
 
         $site->update($validated);
 

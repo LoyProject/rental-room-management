@@ -35,6 +35,25 @@
                     @enderror
                 </div>
 
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="from_date" class="block text-sm font-medium text-gray-700">ពីថ្ងៃ <span class="text-red-600">*</span></label>
+                        <input type="text" id="from_date" name="from_date" class="mt-1 block w-full border-gray-300 rounded-md" 
+                           placeholder="dd/mm/yyyy" required>
+                        @error('from_date')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="to_date" class="block text-sm font-medium text-gray-700">ដល់ថ្ងៃ <span class="text-red-600">*</span></label>
+                        <input type="text" id="to_date" name="to_date" class="mt-1 block w-full border-gray-300 rounded-md"
+                           placeholder="dd/mm/yyyy" required>
+                        @error('to_date')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3 mt-4">
                     <a href="{{ route('sites.index') }}"
                     class="w-full sm:w-auto text-center sm:text-left text-sm text-gray-600 hover:underline px-3 py-2 rounded-md">
@@ -49,4 +68,31 @@
             </div>
         </form>
     </div>
+    <script>
+        flatpickr("#from_date", {
+            dateFormat: "d/m/Y",
+            defaultDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+            allowInput: true,
+            onClose: function(selectedDates, dateStr, instance) {
+                if (dateStr === "") {
+                    instance.input.setCustomValidity("This field is required.");
+                } else {
+                    instance.input.setCustomValidity("");
+                }
+            }
+        });
+
+        flatpickr("#to_date", {
+            dateFormat: "d/m/Y",
+            defaultDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0),
+            allowInput: true,
+            onClose: function(selectedDates, dateStr, instance) {
+                if (dateStr === "") {
+                    instance.input.setCustomValidity("This field is required.");
+                } else {
+                    instance.input.setCustomValidity("");
+                }
+            }
+        });
+    </script>
 @endsection

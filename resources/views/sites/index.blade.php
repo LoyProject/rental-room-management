@@ -32,6 +32,8 @@
                         <th class="px-6 py-3 text-left font-semibold text-gray-700">ឈ្មោះ</th>
                         <th class="px-6 py-3 text-left font-semibold text-gray-700">ទូរស័ព្ទ</th>
                         <th class="px-6 py-3 text-left font-semibold text-gray-700">អាសយដ្ឋាន</th>
+                        <th class="px-6 py-3 text-left font-semibold text-gray-700">ពីថ្ងៃ</th>
+                        <th class="px-6 py-3 text-left font-semibold text-gray-700">ដល់ថ្ងៃ</th>
                         <th class="px-6 py-3 text-left font-semibold text-gray-700">សកម្មភាព</th>
                     </tr>
                 </thead>
@@ -42,6 +44,8 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $site->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $site->phone ?? 'N/A' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $site->address ?? 'N/A' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ \Carbon\Carbon::parse($site->from_date)->format('d/m/Y') }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ \Carbon\Carbon::parse($site->to_date)->format('d/m/Y') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <a href="{{ route('sites.edit', $site) }}" class="text-blue-600 hover:text-blue-900 mr-4">កែប្រែ</a>
                                 <form action="{{ route('sites.destroy', $site) }}" method="POST" class="inline">
@@ -53,7 +57,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center px-6 py-4">មិនមានតំបន់ណាមួយទេ</td>
+                            <td colspan="7" class="text-center px-6 py-4">មិនមានតំបន់ណាមួយទេ</td>
                         </tr>
                     @endforelse
                 </tbody>

@@ -13,12 +13,6 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        Site::factory()->create([
-            'name' => 'Default Site',
-            'phone' => '0123456789',
-            'address' => '123 Default St, City, Country',
-        ]);
-
         User::factory()->create([
             'name' => 'Super Admin',
             'email' => 'admin@gmail.com',
