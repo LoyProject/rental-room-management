@@ -36,6 +36,14 @@ Route::middleware('auth')->group(function () {
         ->name('api.chart.monthly-revenue');
     Route::get('/api/chart/monthly-revenue/{year}', [DashboardController::class, 'getMonthlyRevenueByYear'])
         ->name('api.chart.monthly-revenue.year');
+    Route::get('/dashboard/filter-revenue', [DashboardController::class, 'filterRevenue'])
+        ->name('dashboard.filterRevenue');
+    Route::get('/api/chart/monthly-expense', [DashboardController::class, 'getMonthlyExpenseData'])
+        ->name('api.chart.monthly-expense');
+    Route::get('/api/chart/monthly-expense/{year}', [DashboardController::class, 'getMonthlyExpenseByYear'])
+        ->name('api.chart.monthly-expense.year');
+    Route::get('/dashboard/filter-expense', [DashboardController::class, 'filterExpense'])
+        ->name('dashboard.filterexpense');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {

@@ -72,9 +72,9 @@
                     </div>
 
                     <div>
-                        <label for="garbage_price" class="block text-sm font-medium text-gray-700">តម្លៃសំរាម (រៀល) <span class="text-red-600">*</span></label>
-                        <input id="garbage_price" name="garbage_price" type="number" step="100" min="0" value="{{ old('garbage_price') }}" required
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        <label id="editableLabel" for="garbage_price" class="cursor-pointer block text-sm font-medium text-gray-700">តម្លៃសំរាម (រៀល) <span class="text-red-600">*</span></label>
+                        <input type="hidden" id="label_value" name="label_value" value="សំរាម">
+                        <input id="garbage_price" name="garbage_price" type="number" step="100" min="0" value="{{ old('garbage_price') }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                         @error('garbage_price')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
@@ -148,5 +148,17 @@
                 });
             });
         });
+
+        document.getElementById('editableLabel').onclick = () => {
+            let currentText = document.getElementById('editableLabel').innerText;
+            let base = "តម្លៃ";
+            let suffix = " (រៀល) *";
+            let middle = currentText.replace(base, "").replace("(រៀល) *", "").trim();
+            let newWord = prompt("បញ្ចូលឈ្មោះជំនួស:", middle);
+            if (newWord !== null && newWord.trim() !== "") {
+                document.getElementById('editableLabel').innerHTML = `${base}${newWord} (រៀល) <span class="text-red-600">*</span>`;
+                document.getElementById('label_value').value = newWord.trim();
+            }
+        };
     </script>
 @endsection

@@ -12,6 +12,7 @@
 
         <div class="flex justify-between mb-4">
             <div class="text-lg font-semibold">
+                <input id="customer_id" class="hidden" value="{{$invoice->customer_id}}">
                 <div style="font-size: 22px;">បន្ទប់លេខ:  {{ $invoice->customer->name ??'..............' }}</div>
                 <div>តំបន់: {{ $invoice->block->name ?? '..............' }}</div>
             </div>
@@ -87,20 +88,20 @@
                 <td class="border border-blue-100 text-center"></td>
                 <td class="border border-blue-100 text-center">{{ $invoice -> total_used_water }} m³</td>
                 <td class="border border-blue-100 text-center">{{ $invoice -> total_used_water }} m³</td>
-                <td class="border border-blue-100 text-center">{{ number_format($invoice->water_unit_price) ?? 0 }} រៀល</td>
-                <td class="border border-blue-100 text-center">{{ number_format($invoice->total_amount_water) ?? 0 }} រៀល</td>
+                <td class="border whitespace-nowrap border-blue-100 text-center">{{ number_format($invoice->water_unit_price) ?? 0 }} រៀល</td>
+                <td class="border whitespace-nowrap border-blue-100 text-center">{{ number_format($invoice->total_amount_water) ?? 0 }} រៀល</td>
             </tr>
             <tr>
-                <td colspan="3" rowspan="3" class="border border-blue-100 p-2">១. ហាមផឹកស៊ី ឡូឡារំខានអ្នកជិតខាង។<br>២.
+                <td colspan="3" rowspan="3" class="border whitespace-nowrap border-blue-100 p-2">១. ហាមផឹកស៊ី ឡូឡារំខានអ្នកជិតខាង។<br>២.
                     ហាមលក់ និងប្រើប្រាស់គ្រឿងញៀន។<br>៣. ឈប់ជួលត្រូវឲ្យដំណឹង១ខែមុខ បើពុំនោះទេ ប្រាក់កក់ ទុកជាអាសាបង់។
                 </td>
-                <td class="border border-blue-100 p-2 text-center">សម្រាម</td>
+                <td id="label_value" class="border border-blue-100 p-2 text-center">សម្រាម</td>
                 <td class="border border-blue-100 p-2 text-center">{{ number_format($invoice->garbage_price ?? 0) }} រៀល
                 </td>
             </tr>
             <tr>
                 <td class="border border-blue-100 p-2 text-center">សរុប</td>
-                <td class="border border-blue-100 p-2 text-center">{{ number_format($invoice->total_amount_khr ?? 0) }}
+                <td class="border whitespace-nowrap border-blue-100 p-2 text-center">{{ number_format($invoice->total_amount_khr ?? 0) }}
                     រៀល</td>
             </tr>
             <tr>
@@ -186,6 +187,21 @@
                 window.print();
             }, 120);
         }
+
+        $(document).ready(function () {
+            let customerId = $('#customer_id').val();
+            if (!customerId) return;
+
+            $.ajax({
+                url: `/customer-info/${customerId}`,
+                method: 'GET',
+                dataType: 'json'
+            }).done(function(data) {
+                document.getElementById('label_value').innerHTML = `${data.label_value}`;
+            }).fail(function() {
+                console.error('Failed to load customer info for', customerId);
+            });
+        });
         </script>
     </div>
 </div>

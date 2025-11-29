@@ -63,7 +63,7 @@
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ទីតាំង</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">ឈ្មោះ</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">តម្លៃផ្ទះ</th>
-                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">តម្លៃសំរាម</th>
+                        <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">តម្លៃផ្សេងៗ</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">លេខកុងទ័រចាស់(ទឹក)</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">លេខកុងទ័រចាស់(អគ្គិសនី)</th>
                         <th class="px-6 py-3 whitespace-nowrap text-left font-semibold text-gray-700">សកម្មភាព</th>
@@ -76,7 +76,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->block->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $customer->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->house_price, 2, '.', ',') }} USD</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->garbage_price, 0, '.', ',') }} KHR</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->garbage_price, 0, '.', ',') }} KHR ({{$customer->label_value}})</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->old_water_number, 0, '.', ',') }} m³</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($customer->old_electric_number, 0, '.', ',') }} kWh</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">

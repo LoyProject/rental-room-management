@@ -96,6 +96,7 @@ class CustomerController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:25',
             'house_price' => 'required|numeric|min:0',
+            'label_value'   => 'required|string|max:255',
             'garbage_price' => 'required|integer|min:0',
             'old_water_number' => 'nullable|integer|min:0',
             'old_electric_number' => 'nullable|integer|min:0',
@@ -135,6 +136,7 @@ class CustomerController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:25',
             'house_price' => 'required|numeric|min:0',
+            'label_value'   => 'required|string|max:255',
             'garbage_price' => 'required|integer|min:0',
             'old_water_number' => 'nullable|integer|min:0',
             'old_electric_number' => 'nullable|integer|min:0',
@@ -165,6 +167,7 @@ class CustomerController extends Controller
             'name' => $validated['name'],
             'phone' => $validated['phone'],
             'house_price' => $validated['house_price'],
+            'label_value' => $validated['label_value'],
             'garbage_price' => $validated['garbage_price'],
             'old_water_number' => $validated['old_water_number'],
             'old_electric_number' => $validated['old_electric_number'],
@@ -203,6 +206,7 @@ class CustomerController extends Controller
 
         return response()->json([
             'house_price' => $customer->house_price,
+            'label_value' => $customer->label_value,
             'garbage_price' => $customer->garbage_price,
             'old_water_number' => $customer->old_water_number,
             'old_electric_number' => $customer->old_electric_number,

@@ -90,7 +90,7 @@
                         @enderror
                     </div>
                     <div>
-                        <label for="garbage_price" class="block text-sm font-medium">សំរាម (រៀល) <span class="text-red-600">*</span></label>
+                        <label id="label_value" for="garbage_price" class="block text-sm font-medium">សំរាម (រៀល) <span class="text-red-600">*</span></label>
                         <input type="number" id="garbage_price" name="garbage_price" step="100"  min="0" class="mt-1 block w-full border-gray-300 rounded-md" required
                             value="{{ old('garbage_price', $invoice->garbage_price) }}">
                         @error('garbage_price')
@@ -266,8 +266,8 @@
             const loadingOverlay = document.getElementById('loading-overlay');
             const isEditMode = '{{ isset($invoice) && $invoice->id ? "true" : "false" }}' === 'true';
 
-            $('#customer_id').on('change', function () {
-                let customerId = $(this).val();
+            function updateCustomerData() {
+                let customerId = $('#customer_id').val();
                 if (!customerId) return;
 
                 loadingOverlay.classList.remove('hidden');
@@ -278,6 +278,7 @@
                     dataType: 'json'
                 }).done(function(data) {
                     $('input[name="house_price"]').val(data.house_price ?? '');
+                    document.getElementById('label_value').innerHTML = `${data.label_value} (រៀល) <span class="text-red-600">*</span>`;
                     $('input[name="garbage_price"]').val(data.garbage_price ?? '');
                     $('input[name="old_water_number"]').val(data.old_water_number ?? '');
                     $('input[name="old_electric_number"]').val(data.old_electric_number ?? '');
@@ -292,7 +293,13 @@
                 }).always(function() {
                     loadingOverlay.classList.add('hidden');
                 });
+            }
+
+            $(document).ready(function () {
+                updateCustomerData();
             });
+
+            $('#customer_id').on('change', updateCustomerData);
         });
 
         document.addEventListener('DOMContentLoaded', function() {

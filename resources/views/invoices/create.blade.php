@@ -74,7 +74,7 @@
                         @enderror
                     </div>
                     <div>
-                        <label for="garbage_price" class="block text-sm font-medium">សំរាម (រៀល) <span class="text-red-600">*</span></label>
+                        <label id="label_value" for="garbage_price" class="block text-sm font-medium">សំរាម (រៀល) <span class="text-red-600">*</span></label>
                         <input type="number" id="garbage_price" name="garbage_price" value="{{ old('garbage_price') }}" step="100"  min="0" class="mt-1 block w-full border-gray-300 rounded-md" required>
                         @error('garbage_price')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -219,11 +219,12 @@
                     dataType: 'json'
                 }).done(function(data) {
                     $('input[name="house_price"]').val(data.house_price ?? '');
+                    document.getElementById('label_value').innerHTML = `${data.label_value} (រៀល) <span class="text-red-600">*</span>`;
                     $('input[name="garbage_price"]').val(data.garbage_price ?? '');
                     $('input[name="old_water_number"]').val(data.old_water_number ?? '');
                     $('input[name="old_electric_number"]').val(data.old_electric_number ?? '');
 
-                    $('#house_price,#garbage_price,#old_water_number,#old_electric_number').trigger('input');
+                    $('#house_price,#label_value,#garbage_price,#old_water_number,#old_electric_number').trigger('input');
                 }).fail(function() {
                     console.error('Failed to load customer info for', customerId);
                 }).always(function() {
